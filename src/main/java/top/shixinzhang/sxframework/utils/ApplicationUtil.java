@@ -4,6 +4,9 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import java.util.List;
@@ -77,8 +80,62 @@ public final class ApplicationUtil {
         return null;
     }
 
-    private static void killCurrentProcess() {
+    public static void killCurrentProcess() {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);
+    }
+
+    /**
+     * 获取 apk 信息
+     *
+     * @param context
+     * @param path
+     * @return
+     */
+    public static PackageInfo getApkInfo(Context context, String path) {
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager != null) {
+            return packageManager.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
+        }
+        return null;
+    }
+
+    /**
+     * 比较当前 package 和 指定 URI 路径文件的版本
+     *
+     * @param context
+     * @param uri
+     * @return 0 if version is same; lower than 0 if current package's version is lower; greater than 0 is current's version is greater
+     */
+    public static int compareVersion(Context context, Uri uri) {
+        PackageInfo apkInfo = getApkInfo(context, uri.getPath());   //获取指定 uri 对应 apk 的信息
+        if (apkInfo == null) {
+            return 1;
+        }
+
+        String currentPkgName = context.getPackageName();
+        if (currentPkgName.equals(apkInfo.packageName)) {    //包名相同，比较版本
+            try {
+                PackageInfo currentPkgInfo = context.getPackageManager().getPackageInfo(currentPkgName, 0);
+                return currentPkgInfo.versionCode - apkInfo.versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+
+            }
+        }
+
+        return 1;
+    }
+
+    /**
+     * 安装应用
+     * @param context
+     * @param uri
+     */
+    public static void installPackage(Context context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

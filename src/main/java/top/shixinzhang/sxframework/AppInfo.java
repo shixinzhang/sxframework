@@ -1,5 +1,9 @@
 package top.shixinzhang.sxframework;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * <br> Description: 保存一些手机、设备的基本信息
  * <p>
@@ -11,4 +15,6 @@ package top.shixinzhang.sxframework;
  */
 
 public class AppInfo {
+    //文件下载目录
+    public final static String DOWNLOAD_PATH = Environment.DIRECTORY_DOWNLOADS + File.separator + "download";   //storage/emulated/0/Android/data/your-package/files/IDownloader/
 }

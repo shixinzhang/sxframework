@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 /**
- * <br> Description: SharedPreference 工具类
+ * <br> Description: SharedPreferences 工具类
  * <p>
  * <br> Created by shixinzhang on 17/4/21.
  * <p>
@@ -15,23 +15,16 @@ import android.text.TextUtils;
  */
 
 public class SpUtil {
+
+    private static final String DEFAULT_NAME = "shixinzhang_sp";
+    private static final Object mLockObj = new Object();     // TODO: 17/4/21 改成读写锁，效率更好？
+
+    private static String mName = DEFAULT_NAME;
+
     private SpUtil() {
     }
 
-    private static final String DEFAULT_NAME = "shixinzhang_sp";
-
-    // TODO: 17/4/21 改成读写锁，效率更好？
-    private static final Object mLockObj = new Object();
-    private static String mName = DEFAULT_NAME;
-
-    private static void setName(String name) {
-        if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("SharedPreferences cannot be null!");
-        }
-
-    }
-
-    public static <T> void saveData(Context context, String key, T object) {
+    public static <T> void saveDataInDefault(Context context, String key, T object) {
         saveData(context, mName, key, object);
     }
 
@@ -69,8 +62,9 @@ public class SpUtil {
         }
     }
 
-    public static <T> T getData(Context context, String key, T defaultValue) {
-        return getData(context, mName, key, defaultValue);
+    @SuppressWarnings("unchecked")
+    public static <T> T getDataInDefault(Context context, String key, T defaultValue) {
+        return (T) getData(context, mName, key, defaultValue);
     }
 
     /**
@@ -81,28 +75,29 @@ public class SpUtil {
      * @param key
      * @param defaultValue
      */
-    public static <T> T getData(Context context, String spName, String key, T defaultValue) {
+    public static Object getData(Context context, String spName, String key, Object defaultValue) {
         synchronized (mLockObj) {
             SharedPreferences sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
+            Object result = null;
 
             switch (defaultValue.getClass().getSimpleName()) {
                 case "String":
-                    sp.getString(key, (String) defaultValue);
+                    result = sp.getString(key, (String) defaultValue);
                     break;
                 case "Integer":
-                    sp.getInt(key, (Integer) defaultValue);
+                    result = sp.getInt(key, (Integer) defaultValue);
                     break;
                 case "Boolean":
-                    sp.getBoolean(key, (Boolean) defaultValue);
+                    result = sp.getBoolean(key, (Boolean) defaultValue);
                     break;
                 case "Float":
-                    sp.getFloat(key, (Float) defaultValue);
+                    result = sp.getFloat(key, (Float) defaultValue);
                     break;
                 case "Long":
-                    sp.getLong(key, (Long) defaultValue);
+                    result = sp.getLong(key, (Long) defaultValue);
                     break;
             }
-            return null;
+            return result;
         }
     }
 
