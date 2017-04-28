@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.io.File;
+
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
@@ -12,7 +14,7 @@ import top.shixinzhang.sxframework.utils.LogUtil;
 import top.shixinzhang.sxframework.utils.SpUtil;
 
 /**
- * <br> Description:
+ * <br> Description: 测试的 apk 下载
  * <p>
  * <br> Created by shixinzhang on 17/4/27.
  * <p>
@@ -21,7 +23,7 @@ import top.shixinzhang.sxframework.utils.SpUtil;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class DownloadApk {
+public class APKDownloader {
     private final String TAG = this.getClass().getSimpleName();
 
     private Context mContext;
@@ -31,7 +33,7 @@ public class DownloadApk {
 
     private IDownloader mDownload;
 
-    private DownloadApk(Builder builder) {
+    private APKDownloader(Builder builder) {
         mContext = builder.mContext;
         mUrl = builder.mUrl;
         mTitle = builder.mTitle;
@@ -44,13 +46,14 @@ public class DownloadApk {
                 .setUrl(mUrl)
                 .setNotificationTitle(mTitle)
                 .setNotificationDesc("shixinzhang 正在下载中...")
-                .setFileName(mApkName);
+                .setFileName(mApkName)
+                .prepare();
     }
 
     public void download() {
         checkArguments();
 
-        long lastDownloadId = SpUtil.getDataInDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
+        long lastDownloadId = SpUtil.getDataFromDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
 
         if (lastDownloadId != -1L) { //之前有下载任务
             int downloadStatus = mDownload.getDownloadStatus(lastDownloadId);
@@ -60,7 +63,7 @@ public class DownloadApk {
                     if (compareVersion(getContext(), uri)) { //需要安装
                         installPackage(getContext(), uri);
                         return;
-                    }else {     //已有的版本不当前版本高，删除
+                    }else {     //文件不存在或者，已有的版本不当前版本高，删除
                         mDownload.cancel(lastDownloadId);
                     }
                 }
@@ -157,8 +160,8 @@ public class DownloadApk {
             return this;
         }
 
-        public DownloadApk build() {
-            return new DownloadApk(this);
+        public APKDownloader build() {
+            return new APKDownloader(this);
         }
     }
 

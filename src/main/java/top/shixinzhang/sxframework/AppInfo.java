@@ -15,6 +15,13 @@ import java.io.File;
  */
 
 public class AppInfo {
+    public final static String DIRECTORY_NAME = "shixinzhang";
+
+    public final static String DIRECTORY_PATH = Environment.getExternalStorageDirectory() + File.separator + DIRECTORY_NAME;
+
     //文件下载目录
-    public final static String DOWNLOAD_PATH = Environment.DIRECTORY_DOWNLOADS + File.separator + "download";   //storage/emulated/0/Android/data/your-package/files/IDownloader/
+    public final static String DOWNLOAD_PATH = DIRECTORY_NAME + File.separator + "download";
+
+    public final static String DOWNLOAD_URI = "file:///" + DIRECTORY_PATH + File.separator + "download";
+
 }

@@ -1,4 +1,4 @@
-package top.shixinzhang.sxframework.update;
+package top.shixinzhang.sxframework.network.download.imp;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -18,7 +18,7 @@ import top.shixinzhang.sxframework.utils.LogUtil;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class DownloadReceiver extends BroadcastReceiver {
+public class DefaultDownloadReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -26,6 +26,8 @@ public class DownloadReceiver extends BroadcastReceiver {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())){
             long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             LogUtil.d(TAG, "download success");
+
+
         }
     }
 }

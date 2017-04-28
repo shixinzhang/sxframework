@@ -63,7 +63,7 @@ public class SpUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getDataInDefault(Context context, String key, T defaultValue) {
+    public static <T> T getDataFromDefault(Context context, String key, T defaultValue) {
         return (T) getData(context, mName, key, defaultValue);
     }
 

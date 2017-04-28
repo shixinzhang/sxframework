@@ -2,6 +2,8 @@ package top.shixinzhang.sxframework.network.download;
 
 import android.net.Uri;
 
+import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
+
 /**
  * Description:
  * <br> 下载接口，定义规范
@@ -15,13 +17,6 @@ import android.net.Uri;
 
 public interface IDownloader {
 
-    /**
-     * 删除指定 id 的下载任务
-     *
-     * @param ids
-     */
-    void cancel(long... ids);
-
     String getDownloadPath(long id);
 
     Uri getDownloadUri(long id);
@@ -30,7 +25,35 @@ public interface IDownloader {
 
     long getDownloadProgress();
 
+    IDownloader setUrl(String url);
+
+    IDownloader setNotificationTitle(String title);
+
+    IDownloader setNotificationDesc(String desc);
+
+    IDownloader setFilePath(String filePath);
+
+    IDownloader setFileName(String fileName);
+
+    /**
+     * 最后准备工作，不是必须调用，取决于具体实现
+     * （但是在有些实现里，需要调用这个后才可以调用 startDownload）
+     * @return
+     */
+    IDownloader prepare();
+
+    /**
+     * 开始下载
+     * @return
+     */
     long startDownload();
+
+    /**
+     * 删除指定 id 的下载任务
+     *
+     * @param ids
+     */
+    void cancel(long... ids);
 
 
     final class Status {

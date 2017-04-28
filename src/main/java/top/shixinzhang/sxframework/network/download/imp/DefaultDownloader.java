@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.io.File;
+
+import top.shixinzhang.sxframework.AppInfo;
+import top.shixinzhang.sxframework.config.Config;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 
 /**
@@ -25,6 +29,7 @@ public class DefaultDownloader implements IDownloader {
 
     private final String DEFAULT_TITLE = "download_title";
     private final String DEFAULT_DESC = "downloading...";
+    private final String DEFAULT_PATH = AppInfo.DOWNLOAD_PATH;
 
     private DownloadManager mDownloadManager;
     private DownloadManager.Request mRequest;
@@ -32,17 +37,17 @@ public class DefaultDownloader implements IDownloader {
     private String mUrl;
     private String mNotificationTitle = DEFAULT_TITLE;
     private String mNotificationDesc = DEFAULT_DESC;
-    private String mDownloadFilePath;
+    private String mDownloadFilePath = DEFAULT_PATH;
     private String mDownloadFileName;
 
     private DefaultDownloader(Context context) {
-        mContext = context.getApplicationContext();
+        mContext = context.getApplicationContext() == null ? context : context.getApplicationContext();
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
     public static synchronized DefaultDownloader getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new DefaultDownloader(context.getApplicationContext());
+            mInstance = new DefaultDownloader(context);
         }
         return mInstance;
     }
@@ -54,10 +59,11 @@ public class DefaultDownloader implements IDownloader {
 
     /**
      * 可以从外部配置 Request 然后传进来
+     *
      * @param request
      * @return
      */
-    public DefaultDownloader setRequeset(DownloadManager.Request request) {
+    public DefaultDownloader setRequest(DownloadManager.Request request) {
         mRequest = request;
         return this;
     }
@@ -82,6 +88,22 @@ public class DefaultDownloader implements IDownloader {
         return this;
     }
 
+    @Override
+    public IDownloader prepare() {
+        mRequest = new DownloadManager.Request(Uri.parse(mUrl));
+        mRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);   //默认设置只允许在 WIFI 情况下下载
+        mRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //什么情况下通知栏提示
+        mRequest.setTitle(mNotificationTitle);
+        mRequest.setDescription(mNotificationDesc);
+        mRequest.setAllowedOverRoaming(false);   //是否允许漫游下载
+//        mRequest.setDestinationInExternalFilesDir(mContext, mDownloadFilePath, mDownloadFileName);
+        mRequest.setDestinationInExternalPublicDir(mDownloadFilePath, mDownloadFileName);
+
+//        String fileAbsolutePath = mDownloadFilePath + File.separator + mDownloadFileName;  //绝对路径
+//        mRequest.setDestinationUri(Uri.parse(fileAbsolutePath));
+        return this;
+    }
+
 
     /**
      * 开始下载
@@ -91,10 +113,6 @@ public class DefaultDownloader implements IDownloader {
     @Override
     public long startDownload() {
         checkProperties();
-
-        if (getRequest() == null) {
-            initDefaultRequest();
-        }
 
         return mDownloadManager.enqueue(mRequest);
     }
@@ -109,21 +127,6 @@ public class DefaultDownloader implements IDownloader {
         if (TextUtils.isEmpty(mDownloadFileName)) {
             throw new IllegalArgumentException("Please set the name of download file !");
         }
-    }
-
-    /**
-     * 初始化默认 request
-     *
-     */
-    private void initDefaultRequest() {
-        mRequest = new DownloadManager.Request(Uri.parse(mUrl));
-        mRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);   //默认设置只允许在 WIFI 情况下下载
-        mRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //什么情况下通知栏提示
-        mRequest.setTitle(mNotificationTitle);
-        mRequest.setDescription(mNotificationDesc);
-        mRequest.setAllowedOverRoaming(false);   //是否允许漫游下载
-        mRequest.setDestinationInExternalFilesDir(mContext, mDownloadFilePath, mDownloadFileName);
-//        mRequest.setDestinationUri(Uri.parse(savePath));
     }
 
     private DownloadManager.Request getRequest() {

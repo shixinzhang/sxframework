@@ -86,6 +86,22 @@ public final class ApplicationUtil {
     }
 
     /**
+     * 获取当前应用信息
+     *
+     * @param context
+     * @return
+     */
+    public static PackageInfo getCurrentAppInfo(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            return packageManager.getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 获取 apk 信息
      *
      * @param context
@@ -112,23 +128,18 @@ public final class ApplicationUtil {
         if (apkInfo == null) {
             return 1;
         }
-
-        String currentPkgName = context.getPackageName();
-        if (currentPkgName.equals(apkInfo.packageName)) {    //包名相同，比较版本
-            try {
-                PackageInfo currentPkgInfo = context.getPackageManager().getPackageInfo(currentPkgName, 0);
-                return currentPkgInfo.versionCode - apkInfo.versionCode;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-
+        PackageInfo currentAppInfo = getCurrentAppInfo(context);
+        if (currentAppInfo != null) {
+            if (currentAppInfo.packageName.equals(apkInfo.packageName)) {    //包名相同，比较版本
+                return currentAppInfo.versionCode - apkInfo.versionCode;
             }
         }
-
         return 1;
     }
 
     /**
      * 安装应用
+     *
      * @param context
      * @param uri
      */
