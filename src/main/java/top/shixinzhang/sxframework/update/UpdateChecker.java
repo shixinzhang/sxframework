@@ -10,5 +10,10 @@ package top.shixinzhang.sxframework.update;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class IUpdate {
+public class UpdateChecker {
+    public interface OnUpdateCheckListener{
+        void onUpdate();
+    }
+
+
 }
