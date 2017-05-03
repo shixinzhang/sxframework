@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.io.IOException;
+
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -25,9 +26,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okio.Buffer;
 import okio.BufferedSink;
-
-import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNotNull;
-
 
 final class RequestBuilder {
   private static final char[] HEX_DIGITS =
@@ -72,7 +70,7 @@ final class RequestBuilder {
   }
 
   void setRelativeUrl(Object relativeUrl) {
-    checkNotNull(relativeUrl, "@Url parameter is null.");
+    if (relativeUrl == null) throw new NullPointerException("@Url parameter is null.");
     this.relativeUrl = relativeUrl.toString();
   }
 

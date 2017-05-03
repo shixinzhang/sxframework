@@ -18,8 +18,8 @@ package top.shixinzhang.sxframework.network.third.retrofit2.http;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import okhttp3.HttpUrl;
-import top.shixinzhang.sxframework.network.third.retrofit2.Retrofit;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

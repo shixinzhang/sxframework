@@ -23,6 +23,10 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 响应体以流的形式返回，数据比较大时可以使用
+ *
+ * 没使用该注解的话会将返回数据全部载入内存
+ *
  * Treat the response body on methods returning {@link okhttp3.Response Response} as is,
  * i.e. without converting {@link okhttp3.Response#body() body()} to {@code byte[]}.
  */

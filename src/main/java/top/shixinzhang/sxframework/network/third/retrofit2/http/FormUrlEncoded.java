@@ -23,6 +23,9 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 请求体是一个 form 表单
+ * Content-Type: application/x-www-form-urlencoded
+ *
  * Denotes that the request body will use form URL encoding. Fields should be declared as
  * parameters and annotated with {@link Field @Field}.
  * <p>

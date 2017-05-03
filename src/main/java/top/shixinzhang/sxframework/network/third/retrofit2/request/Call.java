@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.io.IOException;
+
 import okhttp3.Request;
 
 /**

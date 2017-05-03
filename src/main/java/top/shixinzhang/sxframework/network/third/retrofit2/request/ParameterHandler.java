@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Map;
+
 import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNotNull;
-
+import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.checkNotNull;
 
 abstract class ParameterHandler<T> {
   abstract void apply(RequestBuilder builder, T value) throws IOException;
@@ -108,21 +108,6 @@ abstract class ParameterHandler<T> {
     @Override void apply(RequestBuilder builder, T value) throws IOException {
       if (value == null) return; // Skip null values.
       builder.addQueryParam(name, valueConverter.convert(value), encoded);
-    }
-  }
-
-  static final class QueryName<T> extends ParameterHandler<T> {
-    private final Converter<T, String> nameConverter;
-    private final boolean encoded;
-
-    QueryName(Converter<T, String> nameConverter, boolean encoded) {
-      this.nameConverter = nameConverter;
-      this.encoded = encoded;
-    }
-
-    @Override void apply(RequestBuilder builder, T value) throws IOException {
-      if (value == null) return; // Skip null values.
-      builder.addQueryParam(nameConverter.convert(value), null, encoded);
     }
   }
 
@@ -251,7 +236,7 @@ abstract class ParameterHandler<T> {
   }
 
   static final class RawPart extends ParameterHandler<MultipartBody.Part> {
-    static final RawPart INSTANCE = new RawPart();
+    static final ParameterHandler.RawPart INSTANCE = new ParameterHandler.RawPart();
 
     private RawPart() {
     }

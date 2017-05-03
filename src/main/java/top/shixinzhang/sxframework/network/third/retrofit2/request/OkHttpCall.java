@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.io.IOException;
+
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -24,11 +25,8 @@ import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
 
-import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNotNull;
-
-
 final class OkHttpCall<T> implements Call<T> {
-  private final ServiceMethod<T, ?> serviceMethod;
+  private final ServiceMethod<T> serviceMethod;
   private final Object[] args;
 
   private volatile boolean canceled;
@@ -38,7 +36,7 @@ final class OkHttpCall<T> implements Call<T> {
   private Throwable creationFailure; // Either a RuntimeException or IOException.
   private boolean executed;
 
-  OkHttpCall(ServiceMethod<T, ?> serviceMethod, Object[] args) {
+  OkHttpCall(ServiceMethod<T> serviceMethod, Object[] args) {
     this.serviceMethod = serviceMethod;
     this.args = args;
   }
@@ -72,7 +70,7 @@ final class OkHttpCall<T> implements Call<T> {
   }
 
   @Override public void enqueue(final Callback<T> callback) {
-    checkNotNull(callback, "callback == null");
+    if (callback == null) throw new NullPointerException("callback == null");
 
     okhttp3.Call call;
     Throwable failure;
@@ -206,7 +204,6 @@ final class OkHttpCall<T> implements Call<T> {
     }
 
     if (code == 204 || code == 205) {
-      rawBody.close();
       return Response.success(null, rawResponse);
     }
 
@@ -235,12 +232,7 @@ final class OkHttpCall<T> implements Call<T> {
   }
 
   @Override public boolean isCanceled() {
-    if (canceled) {
-      return true;
-    }
-    synchronized (this) {
-      return rawCall != null && rawCall.isCanceled();
-    }
+    return canceled;
   }
 
   static final class NoContentResponseBody extends ResponseBody {

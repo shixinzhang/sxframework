@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+
 /**
- * Adapts a {@link Call} with response type {@code R} into the type of {@code T}. Instances are
- * created by {@linkplain Factory a factory} which is
- * {@linkplain Retrofit.Builder#addCallAdapterFactory(Factory) installed} into the {@link Retrofit}
- * instance.
+ * Adapts a {@link Call} into the type of {@code T}. Instances are created by {@linkplain Factory a
+ * factory} which is {@linkplain Retrofit.Builder#addCallAdapterFactory(Factory) installed} into
+ * the {@link Retrofit} instance.
  */
-public interface CallAdapter<R, T> {
+public interface CallAdapter<T> {
   /**
    * Returns the value type that this adapter uses when converting the HTTP response body to a Java
    * object. For example, the response type for {@code Call<Repo>} is {@code Repo}. This type
@@ -53,10 +53,10 @@ public interface CallAdapter<R, T> {
    * }
    * </code></pre>
    */
-  T adapt(Call<R> call);
+  <R> T adapt(Call<R> call);
 
   /**
-   * Creates {@link CallAdapter} instances based on the return type of {@linkplain
+   * Creates {@link retrofit2.CallAdapter} instances based on the return type of {@linkplain
    * Retrofit#create(Class) the service interface} methods.
    */
   abstract class Factory {
@@ -64,8 +64,8 @@ public interface CallAdapter<R, T> {
      * Returns a call adapter for interface methods that return {@code returnType}, or null if it
      * cannot be handled by this factory.
      */
-    public abstract CallAdapter<?, ?> get(Type returnType, Annotation[] annotations,
-        Retrofit retrofit);
+    public abstract CallAdapter<?> get(Type returnType, Annotation[] annotations,
+                                                 Retrofit retrofit);
 
     /**
      * Extract the upper bound of the generic parameter at {@code index} from {@code type}. For

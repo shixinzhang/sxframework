@@ -20,13 +20,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 
-import top.shixinzhang.sxframework.network.third.retrofit2.Converter;
-import top.shixinzhang.sxframework.network.third.retrofit2.Retrofit;
-
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 非表单请求体, 会被 {@link Converter} 序列化
+ *
  * Use this annotation on a service method param when you want to directly control the request body
  * of a POST/PUT request (instead of sending in as request parameters or form-style request
  * body). The object will be serialized using the {@link Retrofit Retrofit} instance

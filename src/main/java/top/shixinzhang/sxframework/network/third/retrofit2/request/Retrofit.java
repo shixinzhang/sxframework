@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -21,10 +21,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -32,7 +33,7 @@ import okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.*;
 
 import static java.util.Collections.unmodifiableList;
-import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNotNull;
+import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.checkNotNull;
 
 /**
  * Retrofit adapts a Java interface to HTTP calls by using annotations on the declared methods to
@@ -54,14 +55,14 @@ import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNot
  * @author Jake Wharton (jw@squareup.com)
  */
 public final class Retrofit {
-  private final Map<Method, ServiceMethod<?, ?>> serviceMethodCache = new ConcurrentHashMap<>();
+  private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
 
-  final okhttp3.Call.Factory callFactory;
-  final HttpUrl baseUrl;
-  final List<Converter.Factory> converterFactories;
-  final List<CallAdapter.Factory> adapterFactories;
-  final Executor callbackExecutor;
-  final boolean validateEagerly;
+  private final okhttp3.Call.Factory callFactory;
+  private final HttpUrl baseUrl;
+  private final List<Converter.Factory> converterFactories;
+  private final List<CallAdapter.Factory> adapterFactories;
+  private final Executor callbackExecutor;
+  private final boolean validateEagerly;
 
   Retrofit(okhttp3.Call.Factory callFactory, HttpUrl baseUrl,
       List<Converter.Factory> converterFactories, List<CallAdapter.Factory> adapterFactories,
@@ -79,32 +80,32 @@ public final class Retrofit {
    * <p>
    * The relative path for a given method is obtained from an annotation on the method describing
    * the request type. The built-in methods are {@link GET GET},
-   * {@link PUT PUT}, {@link POST POST}, {@link PATCH
-   * PATCH}, {@link HEAD HEAD}, {@link DELETE DELETE} and
-   * {@link OPTIONS OPTIONS}. You can use a custom HTTP method with
+   * {@link retrofit2.http.PUT PUT}, {@link retrofit2.http.POST POST}, {@link retrofit2.http.PATCH
+   * PATCH}, {@link retrofit2.http.HEAD HEAD}, {@link retrofit2.http.DELETE DELETE} and
+   * {@link retrofit2.http.OPTIONS OPTIONS}. You can use a custom HTTP method with
    * {@link HTTP @HTTP}. For a dynamic URL, omit the path on the annotation and annotate the first
    * parameter with {@link Url @Url}.
    * <p>
    * Method parameters can be used to replace parts of the URL by annotating them with
-   * {@link Path @Path}. Replacement sections are denoted by an identifier
+   * {@link retrofit2.http.Path @Path}. Replacement sections are denoted by an identifier
    * surrounded by curly braces (e.g., "{foo}"). To add items to the query string of a URL use
-   * {@link Query @Query}.
+   * {@link retrofit2.http.Query @Query}.
    * <p>
-   * The body of a request is denoted by the {@link Body @Body} annotation. The
+   * The body of a request is denoted by the {@link retrofit2.http.Body @Body} annotation. The
    * object will be converted to request representation by one of the {@link Converter.Factory}
    * instances. A {@link RequestBody} can also be used for a raw representation.
    * <p>
    * Alternative request body formats are supported by method annotations and corresponding
    * parameter annotations:
    * <ul>
-   * <li>{@link FormUrlEncoded @FormUrlEncoded} - Form-encoded data with key-value
-   * pairs specified by the {@link Field @Field} parameter annotation.
-   * <li>{@link Multipart @Multipart} - RFC 2388-compliant multipart data with
-   * parts specified by the {@link Part @Part} parameter annotation.
+   * <li>{@link retrofit2.http.FormUrlEncoded @FormUrlEncoded} - Form-encoded data with key-value
+   * pairs specified by the {@link retrofit2.http.Field @Field} parameter annotation.
+   * <li>{@link retrofit2.http.Multipart @Multipart} - RFC 2388-compliant multipart data with
+   * parts specified by the {@link retrofit2.http.Part @Part} parameter annotation.
    * </ul>
    * <p>
    * Additional static headers can be added for an endpoint using the
-   * {@link Headers @Headers} method annotation. For per-request control over a
+   * {@link retrofit2.http.Headers @Headers} method annotation. For per-request control over a
    * header annotate a parameter with {@link Header @Header}.
    * <p>
    * By default, methods return a {@link Call} which represents the HTTP request. The generic
@@ -130,7 +131,7 @@ public final class Retrofit {
         new InvocationHandler() {
           private final Platform platform = Platform.get();
 
-          @Override public Object invoke(Object proxy, Method method, Object[] args)
+          @Override public Object invoke(Object proxy, Method method, Object... args)
               throws Throwable {
             // If the method is a method from Object then defer to normal invocation.
             if (method.getDeclaringClass() == Object.class) {
@@ -139,9 +140,8 @@ public final class Retrofit {
             if (platform.isDefaultMethod(method)) {
               return platform.invokeDefaultMethod(method, service, proxy, args);
             }
-            ServiceMethod<Object, Object> serviceMethod =
-                (ServiceMethod<Object, Object>) loadServiceMethod(method);
-            OkHttpCall<Object> okHttpCall = new OkHttpCall<>(serviceMethod, args);
+            ServiceMethod serviceMethod = loadServiceMethod(method);
+            OkHttpCall okHttpCall = new OkHttpCall<>(serviceMethod, args);
             return serviceMethod.callAdapter.adapt(okHttpCall);
           }
         });
@@ -156,14 +156,12 @@ public final class Retrofit {
     }
   }
 
-  ServiceMethod<?, ?> loadServiceMethod(Method method) {
-    ServiceMethod<?, ?> result = serviceMethodCache.get(method);
-    if (result != null) return result;
-
+  ServiceMethod loadServiceMethod(Method method) {
+    ServiceMethod result;
     synchronized (serviceMethodCache) {
       result = serviceMethodCache.get(method);
       if (result == null) {
-        result = new ServiceMethod.Builder<>(this, method).build();
+        result = new ServiceMethod.Builder(this, method).build();
         serviceMethodCache.put(method, result);
       }
     }
@@ -197,7 +195,7 @@ public final class Retrofit {
    *
    * @throws IllegalArgumentException if no call adapter available for {@code type}.
    */
-  public CallAdapter<?, ?> callAdapter(Type returnType, Annotation[] annotations) {
+  public CallAdapter<?> callAdapter(Type returnType, Annotation[] annotations) {
     return nextCallAdapter(null, returnType, annotations);
   }
 
@@ -207,14 +205,14 @@ public final class Retrofit {
    *
    * @throws IllegalArgumentException if no call adapter available for {@code type}.
    */
-  public CallAdapter<?, ?> nextCallAdapter(CallAdapter.Factory skipPast, Type returnType,
+  public CallAdapter<?> nextCallAdapter(CallAdapter.Factory skipPast, Type returnType,
       Annotation[] annotations) {
     checkNotNull(returnType, "returnType == null");
     checkNotNull(annotations, "annotations == null");
 
     int start = adapterFactories.indexOf(skipPast) + 1;
     for (int i = start, count = adapterFactories.size(); i < count; i++) {
-      CallAdapter<?, ?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
+      CallAdapter<?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
       if (adapter != null) {
         return adapter;
       }
@@ -376,10 +374,6 @@ public final class Retrofit {
     return callbackExecutor;
   }
 
-  public Builder newBuilder() {
-    return new Builder(this);
-  }
-
   /**
    * Build a new {@link Retrofit}.
    * <p>
@@ -387,11 +381,11 @@ public final class Retrofit {
    * are optional.
    */
   public static final class Builder {
-    private final Platform platform;
+    private Platform platform;
     private okhttp3.Call.Factory callFactory;
     private HttpUrl baseUrl;
-    private final List<Converter.Factory> converterFactories = new ArrayList<>();
-    private final List<CallAdapter.Factory> adapterFactories = new ArrayList<>();
+    private List<Converter.Factory> converterFactories = new ArrayList<>();
+    private List<CallAdapter.Factory> adapterFactories = new ArrayList<>();
     private Executor callbackExecutor;
     private boolean validateEagerly;
 
@@ -406,22 +400,14 @@ public final class Retrofit {
       this(Platform.get());
     }
 
-    Builder(Retrofit retrofit) {
-      platform = Platform.get();
-      callFactory = retrofit.callFactory;
-      baseUrl = retrofit.baseUrl;
-      converterFactories.addAll(retrofit.converterFactories);
-      adapterFactories.addAll(retrofit.adapterFactories);
-      // Remove the default, platform-aware call adapter added by build().
-      adapterFactories.remove(adapterFactories.size() - 1);
-      callbackExecutor = retrofit.callbackExecutor;
-      validateEagerly = retrofit.validateEagerly;
-    }
-
     /**
      * The HTTP client used for requests.
      * <p>
      * This is a convenience method for calling {@link #callFactory}.
+     * <p>
+     * Note: This method <b>does not</b> make a defensive copy of {@code client}. Changes to its
+     * settings will affect subsequent requests. Pass in a {@linkplain OkHttpClient#clone() cloned}
+     * instance to prevent this if desired.
      */
     public Builder client(OkHttpClient client) {
       return callFactory(checkNotNull(client, "client == null"));

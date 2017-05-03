@@ -23,6 +23,9 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 请求提是一个支持文件上传的 form 表单
+ * Content-Type: multipart/form-data
+ *
  * Denotes that the request body is multi-part. Parts should be declared as parameters and
  * annotated with {@link Part @Part}.
  */

@@ -23,6 +23,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 添加到 URL 后面的查询参数 key-value，如果 value 为空则忽略；默认是 URL Encoded 的
+ * <p>
  * Query parameter appended to the URL.
  * <p>
  * Values are converted to strings using {@link String#valueOf(Object)} and then URL encoded.
@@ -66,11 +68,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 public @interface Query {
-  /** The query parameter name. */
-  String value();
+    /**
+     * The query parameter name.
+     */
+    String value();
 
-  /**
-   * Specifies whether the parameter {@linkplain #value() name} and value are already URL encoded.
-   */
-  boolean encoded() default false;
+    /**
+     * Specifies whether the parameter {@linkplain #value() name} and value are already URL encoded.
+     */
+    boolean encoded() default false;
 }

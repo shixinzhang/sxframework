@@ -23,6 +23,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * URL 路径中的参数，默认是 URL Encoded 的
+ * <p>
  * Named replacement in a URL path segment. Values are converted to string using
  * {@link String#valueOf(Object)} and URL encoded.
  * <p>
@@ -50,10 +52,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(PARAMETER)
 public @interface Path {
-  String value();
+    String value();
 
-  /**
-   * Specifies whether the argument value to the annotated method parameter is already URL encoded.
-   */
-  boolean encoded() default false;
+    /**
+     * Specifies whether the argument value to the annotated method parameter is already URL encoded.
+     */
+    boolean encoded() default false;
 }

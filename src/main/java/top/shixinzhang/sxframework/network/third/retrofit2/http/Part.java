@@ -19,12 +19,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import top.shixinzhang.sxframework.network.third.retrofit2.Converter;
-
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 文件上传，与 {@link PartMap}, {@link Multipart} 配合
+ *
  * Denotes a single part of a multi-part request.
  * <p>
  * The parameter type on which this annotation exists will be processed in one of three ways:
@@ -55,11 +55,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 public @interface Part {
-  /**
-   * The name of the part. Required for all parameter types except
-   * {@link okhttp3.MultipartBody.Part}.
-   */
-  String value() default "";
-  /** The {@code Content-Transfer-Encoding} of this part. */
-  String encoding() default "binary";
+    /**
+     * The name of the part. Required for all parameter types except
+     * {@link okhttp3.MultipartBody.Part}.
+     */
+    String value() default "";
+
+    /**
+     * The {@code Content-Transfer-Encoding} of this part.
+     */
+    String encoding() default "binary";
 }

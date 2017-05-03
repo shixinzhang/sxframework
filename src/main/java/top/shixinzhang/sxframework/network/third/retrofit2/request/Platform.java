@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
+//import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
+//
+//import java.lang.invoke.MethodHandles.Lookup;
+//import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Executor;
+
 
 class Platform {
     private static final Platform PLATFORM = findPlatform();
@@ -41,6 +47,11 @@ class Platform {
             Class.forName("java.util.Optional");
 //      return new Java8();
             return null;
+        } catch (ClassNotFoundException ignored) {
+        }
+        try {
+            Class.forName("org.robovm.apple.foundation.NSObject");
+            return new IOS();
         } catch (ClassNotFoundException ignored) {
         }
         return new Platform();
@@ -102,6 +113,52 @@ class Platform {
             @Override
             public void execute(Runnable r) {
                 handler.post(r);
+            }
+        }
+    }
+
+    static class IOS extends Platform {
+        @Override
+        public Executor defaultCallbackExecutor() {
+            return new MainThreadExecutor();
+        }
+
+        @Override
+        CallAdapter.Factory defaultCallAdapterFactory(Executor callbackExecutor) {
+            return new ExecutorCallAdapterFactory(callbackExecutor);
+        }
+
+        static class MainThreadExecutor implements Executor {
+            private static Object queue;
+            private static Method addOperation;
+
+            static {
+                try {
+                    // queue = NSOperationQueue.getMainQueue();
+                    Class<?> operationQueue = Class.forName("org.robovm.apple.foundation.NSOperationQueue");
+                    queue = operationQueue.getDeclaredMethod("getMainQueue").invoke(null);
+                    addOperation = operationQueue.getDeclaredMethod("addOperation", Runnable.class);
+                } catch (Exception e) {
+                    throw new AssertionError(e);
+                }
+            }
+
+            @Override
+            public void execute(Runnable r) {
+                try {
+                    // queue.addOperation(r);
+                    addOperation.invoke(queue, r);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    throw new AssertionError(e);
+                } catch (InvocationTargetException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof RuntimeException) {
+                        throw (RuntimeException) cause;
+                    } else if (cause instanceof Error) {
+                        throw (Error) cause;
+                    }
+                    throw new RuntimeException(cause);
+                }
             }
         }
     }

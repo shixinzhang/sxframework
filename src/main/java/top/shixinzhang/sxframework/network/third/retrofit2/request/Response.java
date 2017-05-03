@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2;
+package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import okhttp3.Headers;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
-
-import static top.shixinzhang.sxframework.network.third.retrofit2.Utils.checkNotNull;
-
 
 /** An HTTP response. */
 public final class Response<T> {
@@ -40,7 +37,7 @@ public final class Response<T> {
    * deserialized body.
    */
   public static <T> Response<T> success(T body, Headers headers) {
-    checkNotNull(headers, "headers == null");
+    if (headers == null) throw new NullPointerException("headers == null");
     return success(body, new okhttp3.Response.Builder() //
         .code(200)
         .message("OK")
@@ -55,7 +52,7 @@ public final class Response<T> {
    * body.
    */
   public static <T> Response<T> success(T body, okhttp3.Response rawResponse) {
-    checkNotNull(rawResponse, "rawResponse == null");
+    if (rawResponse == null) throw new NullPointerException("rawResponse == null");
     if (!rawResponse.isSuccessful()) {
       throw new IllegalArgumentException("rawResponse must be successful response");
     }
@@ -77,8 +74,8 @@ public final class Response<T> {
 
   /** Create an error response from {@code rawResponse} with {@code body} as the error body. */
   public static <T> Response<T> error(ResponseBody body, okhttp3.Response rawResponse) {
-    checkNotNull(body, "body == null");
-    checkNotNull(rawResponse, "rawResponse == null");
+    if (body == null) throw new NullPointerException("body == null");
+    if (rawResponse == null) throw new NullPointerException("rawResponse == null");
     if (rawResponse.isSuccessful()) {
       throw new IllegalArgumentException("rawResponse should not be successful response");
     }
@@ -128,9 +125,5 @@ public final class Response<T> {
   /** The raw response body of an {@linkplain #isSuccessful() unsuccessful} response. */
   public ResponseBody errorBody() {
     return errorBody;
-  }
-
-  @Override public String toString() {
-    return rawResponse.toString();
   }
 }

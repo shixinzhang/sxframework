@@ -23,6 +23,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 没有值的查询参数  【用途何在？】
+ *
  * Query parameter appended to the URL that has no value.
  * <p>
  * Passing a {@link java.util.List List} or array will result in a query parameter for each
@@ -58,8 +60,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 public @interface QueryName {
-  /**
-   * Specifies whether the parameter is already URL encoded.
-   */
-  boolean encoded() default false;
+    /**
+     * Specifies whether the parameter is already URL encoded.
+     */
+    boolean encoded() default false;
 }
