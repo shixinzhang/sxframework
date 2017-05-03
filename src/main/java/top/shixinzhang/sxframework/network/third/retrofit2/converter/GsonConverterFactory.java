@@ -24,12 +24,11 @@ import java.lang.reflect.Type;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 /**
  * 将 请求的 T 转换成 RequestBody; 响应的 ResponseBody 转换成 T
- *
+ * <p>
  * A {@linkplain Converter.Factory converter} which uses Gson for JSON.
  * <p>
  * Because Gson is so flexible in the types it supports, this converter assumes that it can handle

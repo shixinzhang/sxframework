@@ -27,7 +27,6 @@ import java.nio.charset.Charset;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Converter;
 
 final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
   private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");

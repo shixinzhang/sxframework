@@ -21,26 +21,26 @@ import java.io.IOException;
 import java.io.Reader;
 
 import okhttp3.ResponseBody;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Converter;
 
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
-  private final TypeAdapter<T> adapter;
+    private final TypeAdapter<T> adapter;
 
-  GsonResponseBodyConverter(TypeAdapter<T> adapter) {
-    this.adapter = adapter;
-  }
-
-  @Override public T convert(ResponseBody value) throws IOException {
-    Reader reader = value.charStream();
-    try {
-      return adapter.fromJson(reader);
-    } finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (IOException ignored) {
-        }
-      }
+    GsonResponseBodyConverter(TypeAdapter<T> adapter) {
+        this.adapter = adapter;
     }
-  }
+
+    @Override
+    public T convert(ResponseBody value) throws IOException {
+        Reader reader = value.charStream();
+        try {
+            return adapter.fromJson(reader);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+    }
 }

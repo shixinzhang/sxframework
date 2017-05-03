@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 
-final class Utils {
+public final class Utils {
     static final Type[] EMPTY_TYPE_ARRAY = new Type[0];
 
     private Utils() {
@@ -283,7 +283,7 @@ final class Utils {
         }
     }
 
-    static <T> T checkNotNull(T object, String message) {
+    public static <T> T checkNotNull(T object, String message) {
         if (object == null) {
             throw new NullPointerException(message);
         }
@@ -361,7 +361,7 @@ final class Utils {
                 + "GenericArrayType, but <" + type + "> is of type " + className);
     }
 
-    static Type getCallResponseType(Type returnType) {
+    public static Type getCallResponseType(Type returnType) {
         if (!(returnType instanceof ParameterizedType)) {
             throw new IllegalArgumentException(
                     "Call return type must be parameterized as Call<Foo> or Call<? extends Foo>");

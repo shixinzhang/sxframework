@@ -34,6 +34,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.*;
 
 /**
@@ -46,7 +47,7 @@ final class ServiceMethod<T> {
     static final Pattern PARAM_NAME_REGEX = Pattern.compile(PARAM);
 
     final okhttp3.Call.Factory callFactory;
-    final CallAdapter<?> callAdapter;
+    final CallAdapter<?, ?> callAdapter;
 
     private final HttpUrl baseUrl;
     private final Converter<ResponseBody, T> responseConverter;
@@ -133,7 +134,7 @@ final class ServiceMethod<T> {
         Set<String> relativeUrlParamNames;
         ParameterHandler<?>[] parameterHandlers;
         Converter<ResponseBody, T> responseConverter;
-        CallAdapter<?> callAdapter;
+        CallAdapter<?, ?> callAdapter;
 
         public Builder(Retrofit retrofit, Method method) {
             this.retrofit = retrofit;
@@ -205,7 +206,7 @@ final class ServiceMethod<T> {
             return new ServiceMethod<>(this);
         }
 
-        private CallAdapter<?> createCallAdapter() {
+        private CallAdapter<?, ?> createCallAdapter() {
             Type returnType = method.getGenericReturnType();
             if (Utils.hasUnresolvableType(returnType)) {
                 throw methodError(

@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 
-
 /** The result of executing an HTTP request. */
 public final class Result<T> {
   public static <T> Result<T> error(Throwable error) {
