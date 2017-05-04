@@ -7,9 +7,16 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.TextUtils;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import top.shixinzhang.sxframework.AppInfo;
 
 /**
  * <br> Description: 应用管理，启动、关闭...
@@ -148,5 +155,33 @@ public final class ApplicationUtil {
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static void autoInstallApp(String appName) throws IOException {
+
+        String destDir = AppInfo.DIRECTORY_PATH + File.separator + "download" + File.separator + appName;
+        File file = new File(destDir);
+        if(!file.exists()){
+            return;
+        }
+//            try {
+//                String command;
+//                command = "adb install -r " + destDir;
+//                Process proc = Runtime.getRuntime().exec(new String[] { "su", "-c", command });
+//                proc.waitFor();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        Process su = Runtime.getRuntime().exec("su");
+        DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+////        outputStream.writeBytes("chmod 777 " + );
+////        outputStream.writeBytes("mount -o remount,rw " + dataDir + "\n");
+        outputStream.writeBytes("adb install -r " + destDir);
+        outputStream.writeBytes("sleep 1\n");
+        outputStream.writeBytes("exit\n");
+        outputStream.flush();
+        outputStream.close();
     }
 }

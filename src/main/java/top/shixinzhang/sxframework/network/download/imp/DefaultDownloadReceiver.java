@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 import top.shixinzhang.sxframework.utils.LogUtil;
 import top.shixinzhang.sxframework.utils.SpUtil;
@@ -45,7 +47,13 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
             DownloadManager downManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadFileUri = downManager.getUriForDownloadedFile(downloadSuccessId);
             if (downloadFileUri != null) {
-                ApplicationUtil.installPackage(context, downloadFileUri);
+//                ApplicationUtil.installPackage(context, downloadFileUri);
+
+                try {
+                    ApplicationUtil.autoInstallApp(downloadFileUri.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Toast.makeText(context, "下载失败", Toast.LENGTH_SHORT).show();
             }

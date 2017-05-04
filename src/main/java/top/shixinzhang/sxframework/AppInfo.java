@@ -21,6 +21,8 @@ public class AppInfo {
 
     //文件下载目录
     public final static String DOWNLOAD_PATH = DIRECTORY_NAME + File.separator + "download";
+    //文件下载绝对目录
+    public final static String DOWNLOAD_ABS_PATH = AppInfo.DIRECTORY_PATH + File.separator + "download" + File.separator;
 
     public final static String DOWNLOAD_URI = "file:///" + DIRECTORY_PATH + File.separator + "download";
 

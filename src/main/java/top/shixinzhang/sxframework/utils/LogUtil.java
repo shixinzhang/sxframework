@@ -3,6 +3,11 @@ package top.shixinzhang.sxframework.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
+
+import top.shixinzhang.sxframework.AppInfo;
+import top.shixinzhang.sxframework.config.Config;
+
 /**
  * <br> Description: 日志输出类
  * <p>
@@ -29,6 +34,16 @@ public final class LogUtil {
      * 是否显示日志，默认为 true
      */
     private volatile static boolean isDebug = true;
+
+    private volatile static boolean shouldWriteFile = true;
+
+    private static boolean isShouldWriteFile() {
+        return shouldWriteFile;
+    }
+
+    private static void setShouldWriteFile(boolean shouldWriteFile) {
+        LogUtil.shouldWriteFile = shouldWriteFile;
+    }
 
     private static boolean isDebug() {
         return isDebug;
@@ -91,6 +106,13 @@ public final class LogUtil {
             return;
         }
 
+        if (shouldWriteFile){
+            if (!log.endsWith("\n"))
+                log = log.concat("\n");
+
+            FileUtil.writeFile(getLogFilePath(), DateFormatUtil.getDateString(System.currentTimeMillis()) + " " + log, true);
+        }
+
         switch (type) {
             default:
             case VERBOSE:
@@ -109,6 +131,9 @@ public final class LogUtil {
                 Log.e(tag, log);
                 break;
         }
+    }
 
+    private static String getLogFilePath() {
+        return AppInfo.DIRECTORY_PATH + File.separator + "log.txt";
     }
 }
