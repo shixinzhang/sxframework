@@ -17,7 +17,7 @@ import java.io.File;
 public class AppInfo {
     public final static String DIRECTORY_NAME = "shixinzhang";
 
-    public final static String DIRECTORY_PATH = Environment.getExternalStorageDirectory() + File.separator + DIRECTORY_NAME;
+    public final static String DIRECTORY_PATH = Environment.getExternalStorageDirectory() + File.separator + DIRECTORY_NAME + File.separator;
 
     //文件下载目录
     public final static String DOWNLOAD_PATH = DIRECTORY_NAME + File.separator + "download";

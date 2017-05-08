@@ -2,6 +2,7 @@ package top.shixinzhang.sxframework.statistics;
 
 /**
  * <br> Description:
+ * <p> ANR 检测、处理
  * <p>
  * <br> Created by shixinzhang on 17/4/24.
  * <p>
@@ -10,5 +11,5 @@ package top.shixinzhang.sxframework.statistics;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class Test {
+public class ANRHandler {
 }
