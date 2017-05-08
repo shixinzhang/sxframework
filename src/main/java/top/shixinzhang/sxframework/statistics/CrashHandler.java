@@ -56,13 +56,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
             saveToSDCard(ex);
 //			ActivityPageManager.getInstance().finishAllActivity();
-//			MobclickAgent.onKillProcess(HaiBaoApplication.getInstance());
+//			MobclickAgent.onKillProcess(YourApplication.getInstance());
             // 联网发送
-//			MobclickAgent.reportError(HaiBaoApplication.getInstance(), str);//发给友盟统计
+//			MobclickAgent.reportError(YourApplication.getInstance(), str);//发给友盟统计
 
-//            Intent intent = new Intent(HaiBaoApplication.getInstance(), WelcomeActivity.class);
+//            Intent intent = new Intent(YourApplication.getInstance(), SplashActivity.class);
 //            PendingIntent restartIntent = PendingIntent.getActivity(HaiBaoApplication.getInstance(), 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK);
-//            //退出程序
 //            AlarmManager mgr = (AlarmManager) HaiBaoApplication.getInstance().getSystemService(Context.ALARM_SERVICE);
 //            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000,
 //                    restartIntent); // 1秒钟后重启应用
