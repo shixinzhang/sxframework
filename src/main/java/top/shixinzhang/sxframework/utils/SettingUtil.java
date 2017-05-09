@@ -1,7 +1,10 @@
 package top.shixinzhang.sxframework.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -17,17 +20,36 @@ import android.widget.Toast;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class SystemUtil {
+public class SettingUtil {
+    /**
+     * 检查是否开启悬浮窗权限
+     * @param activity
+     * @param packageName
+     */
+    public static void checkOverlayPermission(Activity activity, String packageName) {
+        if (activity == null || TextUtils.isEmpty(packageName)) {
+            throw new IllegalArgumentException("[PermissionUtil] Arguments can't be null!");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(activity)) {
+                activity.startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + packageName)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0
+                );
+                Toast.makeText(activity, "请先授予本应用悬浮窗权限", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     /**
      * 检查是否开启辅助服务
+     *
      * @param context
-     * @param serviceName
+     * @param ServiceClass
      * @return
      */
-    public static boolean checkAccessibilityOpen(Context context, String serviceName) {
+    public static boolean checkAccessibilityOpen(Context context, Class ServiceClass) {
         int enable = 0;
-//        final String service = context.getPackageName() + "/" + AutoClickService.class.getCanonicalName();
+        final String service = context.getPackageName() + "/" + ServiceClass.getCanonicalName();
         try {
             enable = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException e) {
@@ -41,7 +63,7 @@ public class SystemUtil {
                 simpleStringSplitter.setString(enabledSettingValues);
                 while (simpleStringSplitter.hasNext()) {
                     String enabledValue = simpleStringSplitter.next();
-                    if (enabledValue.equalsIgnoreCase(serviceName)) {
+                    if (enabledValue.equalsIgnoreCase(service)) {
                         return true;
                     }
                 }

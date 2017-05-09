@@ -1,4 +1,4 @@
-package top.shixinzhang.sxframework.imageloader;
+package top.shixinzhang.sxframework.image;
 
 /**
  * <br> Description:

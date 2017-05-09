@@ -1,4 +1,4 @@
-package top.shixinzhang.sxframework.statistics;
+package top.shixinzhang.sxframework.statistic;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 import top.shixinzhang.sxframework.AppInfo;
+import top.shixinzhang.sxframework.utils.AlertUtil;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 import top.shixinzhang.sxframework.utils.DateFormatUtil;
 import top.shixinzhang.sxframework.utils.FileUtil;
@@ -66,6 +67,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000,
 //                    restartIntent); // 1秒钟后重启应用
 //            System.exit(0);
+            AlertUtil.toastShort(mContext, "啊偶，奔溃了");
         } catch (Exception localException) {
 
         }
