@@ -2,7 +2,8 @@ package top.shixinzhang.sxframework.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
+
+import java.util.Set;
 
 /**
  * <br> Description: SharedPreferences 工具类
@@ -24,7 +25,7 @@ public class SpUtil {
     private SpUtil() {
     }
 
-    public static <T> void saveDataInDefault(Context context, String key, T object) {
+    public static void saveDataInDefault(Context context, String key, Object object) {
         saveData(context, mName, key, object);
     }
 
@@ -36,7 +37,10 @@ public class SpUtil {
      * @param key
      * @param object
      */
-    public static <T> void saveData(Context context, String spName, String key, T object) {
+    public static void saveData(Context context, String spName, String key, Object object) {
+        if (object == null) {
+            return;
+        }
         synchronized (mLockObj) {
             SharedPreferences sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
@@ -57,14 +61,18 @@ public class SpUtil {
                 case "Long":
                     editor.putLong(key, (Long) object);
                     break;
+                case "HashSet":
+                case "Set":
+                    editor.putStringSet(key, (Set<String>) object);
+                    break;
             }
             editor.apply();
         }
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getDataFromDefault(Context context, String key, T defaultValue) {
-        return (T) getData(context, mName, key, defaultValue);
+    public static Object getDataFromDefault(Context context, String key, Object defaultValue) {
+        return getData(context, mName, key, defaultValue);
     }
 
     /**
@@ -76,6 +84,9 @@ public class SpUtil {
      * @param defaultValue
      */
     public static Object getData(Context context, String spName, String key, Object defaultValue) {
+        if (defaultValue == null) {
+            throw new IllegalArgumentException("Default value used for get data type, so it can't be null!");
+        }
         synchronized (mLockObj) {
             SharedPreferences sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
             Object result = null;
@@ -96,6 +107,10 @@ public class SpUtil {
                 case "Long":
                     result = sp.getLong(key, (Long) defaultValue);
                     break;
+                case "HashSet":
+                case "Set":
+                    result = sp.getStringSet(key, (Set<String>) defaultValue);
+                    break;
             }
             return result;
         }
@@ -113,10 +128,12 @@ public class SpUtil {
      * @param key
      */
     public static void removeData(Context context, String spName, String key) {
+        if (context == null) {
+            return;
+        }
         synchronized (mLockObj) {
             SharedPreferences sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-
             editor.remove(key);
         }
     }
