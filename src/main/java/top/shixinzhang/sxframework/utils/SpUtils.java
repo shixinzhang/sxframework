@@ -15,14 +15,14 @@ import java.util.Set;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class SpUtil {
+public class SpUtils {
 
     private static final String DEFAULT_NAME = "shixinzhang_sp";
     private static final Object mLockObj = new Object();     // TODO: 17/4/21 改成读写锁，效率更好？
 
     private static String mName = DEFAULT_NAME;
 
-    private SpUtil() {
+    private SpUtils() {
     }
 
     public static void saveDataInDefault(Context context, String key, Object object) {

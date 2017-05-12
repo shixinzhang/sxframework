@@ -17,9 +17,9 @@ import java.io.OutputStream;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class ShellUtil {
+public class ShellUtils {
 
-    private static final String TAG = ShellUtil.class.getSimpleName();
+    private static final String TAG = ShellUtils.class.getSimpleName();
 
     public static void execCmd(String cmd) {
         try {

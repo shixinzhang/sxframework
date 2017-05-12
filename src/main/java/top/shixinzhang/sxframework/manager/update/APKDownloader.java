@@ -7,9 +7,9 @@ import android.text.TextUtils;
 
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
-import top.shixinzhang.sxframework.utils.ApplicationUtil;
-import top.shixinzhang.sxframework.utils.LogUtil;
-import top.shixinzhang.sxframework.utils.SpUtil;
+import top.shixinzhang.sxframework.utils.ApplicationUtils;
+import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.sxframework.utils.SpUtils;
 
 /**
  * <br> Description: 测试的 apk 下载
@@ -51,7 +51,7 @@ public class APKDownloader {
     public void download() {
         checkArguments();
 
-        long lastDownloadId = (long) SpUtil.getDataFromDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
+        long lastDownloadId = (long) SpUtils.getDataFromDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
 
         if (lastDownloadId != -1L) { //之前有下载任务
             int downloadStatus = mDownload.getDownloadStatus(lastDownloadId);
@@ -67,7 +67,7 @@ public class APKDownloader {
                 }
 
             }else if (downloadStatus == IDownloader.Status.RUNNING || downloadStatus == IDownloader.Status.PENDING){    //正在进行或者即将进行
-                LogUtil.i(TAG, "Download task " + lastDownloadId + " is running...");
+                LogUtils.i(TAG, "Download task " + lastDownloadId + " is running...");
                 return;
             }
         }
@@ -77,12 +77,12 @@ public class APKDownloader {
 
     private void startDownload() {
         long id = mDownload.startDownload();
-        SpUtil.saveDataInDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, id);
-        LogUtil.i(TAG, "apk start download , id is " + id);
+        SpUtils.saveDataInDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, id);
+        LogUtils.i(TAG, "apk start download , id is " + id);
     }
 
     private void installPackage(Context context, Uri uri) {
-        ApplicationUtil.installPackage(context, uri);
+        ApplicationUtils.installPackage(context, uri);
     }
 
     /**
@@ -93,7 +93,7 @@ public class APKDownloader {
      * @return 当前 pkg 比 uri 的文件版本小时返回 true
      */
     private boolean compareVersion(Context context, Uri uri) {
-        int result = ApplicationUtil.compareVersion(context, uri);
+        int result = ApplicationUtils.compareVersion(context, uri);
         return result < 0;
     }
 

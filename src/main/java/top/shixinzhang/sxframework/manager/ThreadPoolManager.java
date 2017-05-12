@@ -24,7 +24,7 @@ public class ThreadPoolManager {
     private static final int MAXIMUM_POOL_SIZE = 64;    // 线程队列最大线程数
     private static final int KEEP_ALIVE_TIME = 1;    // 保持存活时间 1秒
 
-    private final BlockingQueue<Runnable> mWorkQueue = new LinkedBlockingQueue<Runnable>(128);
+    private final BlockingQueue<Runnable> mWorkQueue = new LinkedBlockingQueue<>(128);
 
     private final ThreadFactory DEFAULT_THREAD_FACTORY = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);

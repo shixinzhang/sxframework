@@ -15,8 +15,8 @@ import java.util.Locale;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public final class DateFormatUtil {
-    private DateFormatUtil() {
+public final class DateFormatUtils {
+    private DateFormatUtils() {
     }
 
     private static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";

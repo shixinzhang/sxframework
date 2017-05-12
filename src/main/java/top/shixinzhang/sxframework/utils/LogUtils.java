@@ -6,7 +6,6 @@ import android.util.Log;
 import java.io.File;
 
 import top.shixinzhang.sxframework.AppInfo;
-import top.shixinzhang.sxframework.config.Config;
 
 /**
  * <br> Description: 日志输出类
@@ -18,8 +17,8 @@ import top.shixinzhang.sxframework.config.Config;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public final class LogUtil {
-    private static final String TAG = "LogUtil";
+public final class LogUtils {
+    private static final String TAG = "LogUtils";
 
     /**
      * Priority constant for the println method
@@ -42,7 +41,7 @@ public final class LogUtil {
     }
 
     private static void setShouldWriteFile(boolean shouldWriteFile) {
-        LogUtil.shouldWriteFile = shouldWriteFile;
+        LogUtils.shouldWriteFile = shouldWriteFile;
     }
 
     private static boolean isDebug() {
@@ -50,10 +49,10 @@ public final class LogUtil {
     }
 
     private static void setDebug(boolean isDebug) {
-        LogUtil.isDebug = isDebug;
+        LogUtils.isDebug = isDebug;
     }
 
-    private LogUtil() {
+    private LogUtils() {
     }
 
     public static void v(String log) {
@@ -110,7 +109,7 @@ public final class LogUtil {
             if (!log.endsWith("\n"))
                 log = log.concat("\n");
 
-            FileUtil.writeFile(getLogFilePath(), DateFormatUtil.getDateString(System.currentTimeMillis()) + " " + log, true);
+            FileUtils.writeFile(getLogFilePath(), DateFormatUtils.getDateString(System.currentTimeMillis()) + " " + log, true);
         }
 
         switch (type) {

@@ -14,8 +14,8 @@ import android.net.NetworkInfo;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public final class NetworkUtil {
-    private NetworkUtil() {
+public final class NetworkUtils {
+    private NetworkUtils() {
     }
 
     public static int TYPE_INT_DISCONNECT = -1;

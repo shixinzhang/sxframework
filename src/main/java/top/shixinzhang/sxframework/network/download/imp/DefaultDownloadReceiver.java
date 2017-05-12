@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-import top.shixinzhang.sxframework.utils.ApplicationUtil;
-import top.shixinzhang.sxframework.utils.LogUtil;
-import top.shixinzhang.sxframework.utils.SpUtil;
+import top.shixinzhang.sxframework.utils.ApplicationUtils;
+import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.sxframework.utils.SpUtils;
 
 /**
  * Description:
@@ -31,7 +31,7 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
             long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-            LogUtil.d(TAG, downloadId + " download success");
+            LogUtils.d(TAG, downloadId + " download success");
 
             //弹出提示用户安装
             if (downloadId != -1) {
@@ -42,15 +42,15 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
     private void installApk(Context context, long downloadSuccessId) {
 
-        long lastDownloadId = SpUtil.getDataFromDefault(context, DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
+        long lastDownloadId = SpUtils.getDataFromDefault(context, DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
         if (downloadSuccessId == lastDownloadId) {
             DownloadManager downManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadFileUri = downManager.getUriForDownloadedFile(downloadSuccessId);
             if (downloadFileUri != null) {
-//                ApplicationUtil.installPackage(context, downloadFileUri);
+//                ApplicationUtils.installPackage(context, downloadFileUri);
 
                 try {
-                    ApplicationUtil.autoInstallApp(downloadFileUri.toString());
+                    ApplicationUtils.autoInstallApp(downloadFileUri.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

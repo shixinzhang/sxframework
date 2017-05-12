@@ -9,12 +9,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
 
 import top.shixinzhang.sxframework.AppInfo;
-import top.shixinzhang.sxframework.utils.AlertUtil;
-import top.shixinzhang.sxframework.utils.ApplicationUtil;
-import top.shixinzhang.sxframework.utils.DateFormatUtil;
-import top.shixinzhang.sxframework.utils.FileUtil;
+import top.shixinzhang.sxframework.utils.AlertUtils;
+import top.shixinzhang.sxframework.utils.ApplicationUtils;
+import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.FileUtils;
 
 /**
  * <br> Description:
@@ -34,6 +36,26 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String FILE_NAME_SUFFIX = ".log";
     private static volatile CrashHandler sInstance = null;
     private Thread.UncaughtExceptionHandler mDefaultCrashHandler;
+    private static volatile List<OnCrashCallback> mCrashCallbackList = new LinkedList<>();
+
+    /**
+     * 奔溃回调观察者
+     */
+    public interface OnCrashCallback {
+        void onCrash(Throwable throwable);
+    }
+
+    public static void registerCallback(OnCrashCallback callback) {
+        if (callback != null) {
+            mCrashCallbackList.add(callback);
+        }
+    }
+
+    public static void unRegisterCallback(OnCrashCallback callback) {
+        if (callback != null) {
+            mCrashCallbackList.remove(callback);
+        }
+    }
 
     private CrashHandler(Context cxt) {
         this.mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -53,8 +75,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        try {
 
+        notifyObservers(ex);
+
+        try {
             saveToSDCard(ex);
 //			ActivityPageManager.getInstance().finishAllActivity();
 //			MobclickAgent.onKillProcess(YourApplication.getInstance());
@@ -67,16 +91,28 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000,
 //                    restartIntent); // 1秒钟后重启应用
 //            System.exit(0);
-            AlertUtil.toastShort(mContext, "啊偶，奔溃了");
+            AlertUtils.toastShort(mContext, "啊偶，奔溃了");
         } catch (Exception localException) {
 
         }
     }
 
 
+    /**
+     * 发送奔溃通知
+     *
+     * @param ex
+     */
+    private void notifyObservers(Throwable ex) {
+        for (OnCrashCallback onCrashCallback : mCrashCallbackList) {
+            onCrashCallback.onCrash(ex);
+        }
+    }
+
+
     private void saveToSDCard(Throwable ex) throws Exception {
-        String currentDate = DateFormatUtil.getDateString(System.currentTimeMillis());
-        File file = FileUtil.createFile(AppInfo.DIRECTORY_PATH + currentDate + ".log");
+        String currentDate = DateFormatUtils.getDateString(System.currentTimeMillis());
+        File file = FileUtils.createFile(AppInfo.DIRECTORY_PATH + currentDate + ".log");
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
         pw.println(currentDate);
@@ -92,7 +128,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private void dumpPhoneInfo(PrintWriter pw)
             throws PackageManager.NameNotFoundException {
-        PackageInfo pi = ApplicationUtil.getCurrentAppInfo(mContext);
+        PackageInfo pi = ApplicationUtils.getCurrentAppInfo(mContext);
         if (pi == null) {
             return;
         }

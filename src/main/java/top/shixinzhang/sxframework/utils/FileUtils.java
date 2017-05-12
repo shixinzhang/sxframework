@@ -24,12 +24,12 @@ import java.util.List;
  * @date 15/10/25
  * @description Edit it! Change it! Beat it! Whatever, just do it!
  */
-public class FileUtil {
+public class FileUtils {
 
     private static final int BUFFER_SIZE = 4 * 1024;
     public final static String FILE_EXTENSION_SEPARATOR = ".";
 
-    private FileUtil() {
+    private FileUtils() {
         throw new AssertionError();
     }
 
@@ -442,7 +442,7 @@ public class FileUtil {
      * @return true if the necessary directories have been created or the target directory already exists, false one of
      *         the directories can not be created.
      *         <ul>
-     *         <li>if {@link FileUtil#getFolderName(String)} return null, return false</li>
+     *         <li>if {@link FileUtils#getFolderName(String)} return null, return false</li>
      *         <li>if target directory already exists, return true</li>
      *         <li>return {@link File#mkdirs()}</li>
      *         </ul>
@@ -673,7 +673,7 @@ public class FileUtil {
 
         try {
             input = new FileInputStream(srcPath);
-            succeed = FileUtil.store(input, desPath);
+            succeed = FileUtils.store(input, desPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             try {

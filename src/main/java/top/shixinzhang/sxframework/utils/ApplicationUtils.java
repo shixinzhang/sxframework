@@ -28,8 +28,8 @@ import top.shixinzhang.sxframework.AppInfo;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public final class ApplicationUtil {
-    private ApplicationUtil() {
+public final class ApplicationUtils {
+    private ApplicationUtils() {
     }
 
     /**

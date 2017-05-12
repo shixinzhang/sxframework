@@ -15,7 +15,7 @@ import android.widget.Toast;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class AlertUtil {
+public class AlertUtils {
     public static void toastShort(Context context, String msg) {
         toast(context, msg, Toast.LENGTH_SHORT);
     }
@@ -33,7 +33,7 @@ public class AlertUtil {
      */
     private static void toast(Context context, String msg, int duration) {
         if (context == null) {
-            throw new IllegalArgumentException("[AlertUtil] Context can't be null!");
+            throw new IllegalArgumentException("[AlertUtils] Context can't be null!");
         }
         if (TextUtils.isEmpty(msg)) {
             return;

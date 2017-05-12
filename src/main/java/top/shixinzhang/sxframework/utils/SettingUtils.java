@@ -20,7 +20,7 @@ import android.widget.Toast;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class SettingUtil {
+public class SettingUtils {
     /**
      * 检查是否开启悬浮窗权限
      * @param activity
@@ -28,7 +28,7 @@ public class SettingUtil {
      */
     public static void checkOverlayPermission(Activity activity, String packageName) {
         if (activity == null || TextUtils.isEmpty(packageName)) {
-            throw new IllegalArgumentException("[PermissionUtil] Arguments can't be null!");
+            throw new IllegalArgumentException("[SettingUtils] Arguments can't be null!");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(activity)) {
