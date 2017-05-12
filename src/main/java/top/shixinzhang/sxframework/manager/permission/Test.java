@@ -1,9 +1,10 @@
-package top.shixinzhang.sxframework.third;
+package top.shixinzhang.sxframework.manager.permission;
 
 /**
- * <br> Description:
+ * Description:
+ * <br>
  * <p>
- * <br> Created by shixinzhang on 17/4/24.
+ * <br> Created by shixinzhang on 17/5/12.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>

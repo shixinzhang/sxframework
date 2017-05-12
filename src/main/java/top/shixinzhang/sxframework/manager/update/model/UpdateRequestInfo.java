@@ -1,4 +1,4 @@
-package top.shixinzhang.sxframework.update.model;
+package top.shixinzhang.sxframework.manager.update.model;
 
 /**
  * Description:

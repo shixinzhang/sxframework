@@ -1,4 +1,4 @@
-package top.shixinzhang.sxframework.update;
+package top.shixinzhang.sxframework.manager.update;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Callback;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
-import top.shixinzhang.sxframework.update.api.UpdateApi;
-import top.shixinzhang.sxframework.update.model.UpdateRequestInfo;
-import top.shixinzhang.sxframework.update.model.UpdateResponseInfo;
+import top.shixinzhang.sxframework.manager.update.api.UpdateApi;
+import top.shixinzhang.sxframework.manager.update.model.UpdateRequestInfo;
+import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
 
 /**
  * <br> Description:

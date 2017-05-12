@@ -1,11 +1,9 @@
-package top.shixinzhang.sxframework.update;
+package top.shixinzhang.sxframework.manager.update;
 
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-
-import java.io.File;
 
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
@@ -53,7 +51,7 @@ public class APKDownloader {
     public void download() {
         checkArguments();
 
-        long lastDownloadId = SpUtil.getDataFromDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
+        long lastDownloadId = (long) SpUtil.getDataFromDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
 
         if (lastDownloadId != -1L) { //之前有下载任务
             int downloadStatus = mDownload.getDownloadStatus(lastDownloadId);
