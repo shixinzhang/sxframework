@@ -125,7 +125,7 @@ public final class LogUtils {
             if (!log.endsWith("\n"))
                 log = log.concat("\n");
 
-            FileUtils.writeFile(getLogFilePath(), DateFormatUtils.getDateString(System.currentTimeMillis()) + " " + log, true);
+            FileUtils.writeFile(getLogFilePath(), DateUtils.getDateString(System.currentTimeMillis()) + " " + log, true);
         }
 
         switch (type) {

@@ -31,7 +31,7 @@ import java.util.List;
 import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.utils.AlertUtils;
 import top.shixinzhang.sxframework.utils.ApplicationUtils;
-import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.FileUtils;
 
 /**
@@ -127,7 +127,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
 
     private void saveToSDCard(Throwable ex) throws Exception {
-        String currentDate = DateFormatUtils.getDateString(System.currentTimeMillis());
+        String currentDate = DateUtils.getDateString(System.currentTimeMillis());
         File file = FileUtils.createFile(AppInfo.DIRECTORY_PATH + currentDate + ".log");
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 

@@ -31,11 +31,28 @@ import java.util.Locale;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public final class DateFormatUtils {
-    private DateFormatUtils() {
+public final class DateUtils {
+    private DateUtils() {
     }
 
     private static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 返回当前时间的 Calendar，你可以使用  Calendar.get(int field) 方法获取具体的年/月/日/时/分/秒/，
+     * <p>
+     * 比如这样：
+     * <p>
+     * int hour = calendar.get(Calendar.HOUR_OF_DAY)
+     * <p>
+     * int minute = calendar.get(Calendar.MINUTE);
+     *
+     * @return
+     */
+    public static Calendar getCurrentCalendar() {
+        Calendar instance = Calendar.getInstance(Locale.CHINA);
+        instance.setTimeInMillis(System.currentTimeMillis());
+        return instance;
+    }
 
     /**
      * 获取当前日期格式化
@@ -98,11 +115,12 @@ public final class DateFormatUtils {
 
     /**
      * 获取当天 + 小时和分钟 转换成的毫秒数
+     *
      * @param hourOfDay
      * @param minute
      * @return
      */
-    public static long getTimeInMillisecond(int hourOfDay, int minute){
+    public static long getTimeInMillisecond(int hourOfDay, int minute) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
