@@ -58,7 +58,7 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
     private void installApk(Context context, long downloadSuccessId) {
 
-        long lastDownloadId = SpUtils.getDataFromDefault(context, DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
+        long lastDownloadId = (long) SpUtils.getDataFromDefault(context, DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
         if (downloadSuccessId == lastDownloadId) {
             DownloadManager downManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadFileUri = downManager.getUriForDownloadedFile(downloadSuccessId);
