@@ -52,25 +52,29 @@ public final class LogUtils {
 
     private volatile static boolean shouldWriteFile = true;
 
-    private static boolean isShouldWriteFile() {
+    public static boolean isShouldWriteFile() {
         return shouldWriteFile;
     }
 
-    private static void setShouldWriteFile(boolean shouldWriteFile) {
+    public static void setShouldWriteFile(boolean shouldWriteFile) {
         LogUtils.shouldWriteFile = shouldWriteFile;
     }
 
-    private static boolean isDebug() {
+    public static boolean isDebug() {
         return isDebug;
     }
 
-    private static void setDebug(boolean isDebug) {
+    public static void setDebug(boolean isDebug) {
         LogUtils.isDebug = isDebug;
     }
 
     private LogUtils() {
     }
 
+    /**
+     * 直接传 log
+     * @param log
+     */
     public static void v(String log) {
         v(TAG, log);
     }
@@ -91,6 +95,36 @@ public final class LogUtils {
         e(TAG, log);
     }
 
+    /**
+     * 输出格式化的 log
+     * @param format
+     * @param params
+     */
+    public static void v(String format, Object... params) {
+        v(TAG, String.format(format, params), VERBOSE);
+    }
+
+    public static void d(String format, Object... params) {
+        d(TAG, String.format(format, params), DEBUG);
+    }
+
+    public static void i(String format, Object... params) {
+        i(TAG, String.format(format, params), INFO);
+    }
+
+    public static void w(String format, Object... params) {
+        w(TAG, String.format(format, params), WARN);
+    }
+
+    public static void e(String format, Object... params) {
+        e(TAG, String.format(format, params), ERROR);
+    }
+
+    /**
+     * 传入 tag 和 log
+     * @param tag
+     * @param log
+     */
     public static void v(String tag, String log) {
         println(tag, log, VERBOSE);
     }
@@ -111,17 +145,23 @@ public final class LogUtils {
         println(tag, log, ERROR);
     }
 
+    /**
+     * 最终输出方法
+     * @param tag
+     * @param log
+     * @param type
+     */
     public static void println(String tag, String log, int type) {
         if (TextUtils.isEmpty(tag) || TextUtils.isEmpty(log)) {
             return;
         }
 
-        if (!isDebug){
+        if (!isDebug) {
             // TODO: 17/4/21 当不输出日志时，可以考虑将日志文件保存，上传
             return;
         }
 
-        if (shouldWriteFile){
+        if (shouldWriteFile) {
             if (!log.endsWith("\n"))
                 log = log.concat("\n");
 
@@ -151,4 +191,5 @@ public final class LogUtils {
     private static String getLogFilePath() {
         return AppInfo.DIRECTORY_PATH + File.separator + "log.txt";
     }
+
 }
