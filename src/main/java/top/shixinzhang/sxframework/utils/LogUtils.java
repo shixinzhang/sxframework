@@ -50,14 +50,14 @@ public final class LogUtils {
      */
     private volatile static boolean isDebug = true;
 
-    private volatile static boolean shouldWriteFile = true;
+    private volatile static boolean saveLogToFile = true;
 
-    public static boolean isShouldWriteFile() {
-        return shouldWriteFile;
+    public static boolean isSaveLogToFile() {
+        return saveLogToFile;
     }
 
-    public static void setShouldWriteFile(boolean shouldWriteFile) {
-        LogUtils.shouldWriteFile = shouldWriteFile;
+    public static void setSaveLogToFile(boolean saveLogToFile) {
+        LogUtils.saveLogToFile = saveLogToFile;
     }
 
     public static boolean isDebug() {
@@ -73,6 +73,7 @@ public final class LogUtils {
 
     /**
      * 直接传 log
+     *
      * @param log
      */
     public static void v(String log) {
@@ -97,6 +98,7 @@ public final class LogUtils {
 
     /**
      * 输出格式化的 log
+     *
      * @param format
      * @param params
      */
@@ -122,6 +124,7 @@ public final class LogUtils {
 
     /**
      * 传入 tag 和 log
+     *
      * @param tag
      * @param log
      */
@@ -147,6 +150,7 @@ public final class LogUtils {
 
     /**
      * 最终输出方法
+     *
      * @param tag
      * @param log
      * @param type
@@ -161,11 +165,8 @@ public final class LogUtils {
             return;
         }
 
-        if (shouldWriteFile) {
-            if (!log.endsWith("\n"))
-                log = log.concat("\n");
-
-            FileUtils.writeFile(getLogFilePath(), DateUtils.getDateString(System.currentTimeMillis()) + " " + log, true);
+        if (saveLogToFile) {
+            saveLog(log);
         }
 
         switch (type) {
@@ -188,7 +189,22 @@ public final class LogUtils {
         }
     }
 
-    private static String getLogFilePath() {
+    /**
+     * 日志保存到本地
+     *
+     * @param log
+     */
+    public static void saveLog(String log) {
+        if (TextUtils.isEmpty(log)) {
+            return;
+        }
+        if (!log.endsWith("\n"))
+            log = log.concat("\n");
+
+        FileUtils.writeFile(getLogFilePath(), DateUtils.getDateString(System.currentTimeMillis()) + "\n " + log, true);
+    }
+
+    public static String getLogFilePath() {
         return AppInfo.DIRECTORY_PATH + File.separator + "log.txt";
     }
 
