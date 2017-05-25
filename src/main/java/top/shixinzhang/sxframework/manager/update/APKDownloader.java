@@ -21,7 +21,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import top.shixinzhang.sxframework.network.download.IDownloader;
+import top.shixinzhang.sxframework.network.download.IAPKDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.utils.ApplicationUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
@@ -45,7 +45,7 @@ public class APKDownloader {
     private String mTitle;
     private String mApkName;
 
-    private IDownloader mDownload;
+    private IAPKDownloader mDownload;
 
     private APKDownloader(Builder builder) {
         mContext = builder.mContext;
@@ -71,7 +71,7 @@ public class APKDownloader {
 
         if (lastDownloadId != -1L) { //之前有下载任务
             int downloadStatus = mDownload.getDownloadStatus(lastDownloadId);
-            if (downloadStatus == IDownloader.Status.SUCCESSFUL) {        //下载成功
+            if (downloadStatus == IAPKDownloader.Status.SUCCESSFUL) {        //下载成功
                 Uri uri = mDownload.getDownloadUri(lastDownloadId);
                 if (uri != null) {
                     if (compareVersion(getContext(), uri)) { //需要安装
@@ -82,7 +82,7 @@ public class APKDownloader {
                     }
                 }
 
-            }else if (downloadStatus == IDownloader.Status.RUNNING || downloadStatus == IDownloader.Status.PENDING){    //正在进行或者即将进行
+            }else if (downloadStatus == IAPKDownloader.Status.RUNNING || downloadStatus == IAPKDownloader.Status.PENDING){    //正在进行或者即将进行
                 LogUtils.i(TAG, "Download task " + lastDownloadId + " is running...");
                 return;
             }

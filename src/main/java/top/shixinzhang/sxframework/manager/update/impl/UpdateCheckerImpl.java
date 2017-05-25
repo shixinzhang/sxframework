@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.manager.update;
+package top.shixinzhang.sxframework.manager.update.impl;
 
 import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import top.shixinzhang.sxframework.manager.update.IUpdateChecker;
+import top.shixinzhang.sxframework.manager.update.IUpdateListener;
+import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 import top.shixinzhang.sxframework.network.third.retrofit2.adapter.RxJava2CallAdapterFactory;
 import top.shixinzhang.sxframework.network.third.retrofit2.adapter.custom.SxCallAdapterFactory;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.GsonConverterFactory;
@@ -43,7 +46,20 @@ import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class UpdateChecker {
+public class UpdateCheckerImpl implements IUpdateChecker{
+    /**
+     * 请求是否需要更新
+     * @param requestBean
+     * @param listener
+     */
+    @Override
+    public void check(final UpdateRequestBean requestBean, final IUpdateListener listener) {
+        if (requestBean == null){
+            return;
+        }
+
+    }
+
     public interface OnUpdateCheckListener {
         void onUpdate();
     }
@@ -51,7 +67,7 @@ public class UpdateChecker {
     private UpdateRequestInfo mRequestInfo;
     private UpdateResponseInfo mResponseInfo;
 
-    private UpdateChecker(Builder builder) {
+    private UpdateCheckerImpl(Builder builder) {
         mRequestInfo = builder.mRequestInfo;
         mResponseInfo = builder.mResponseInfo;
         check();
@@ -131,8 +147,8 @@ public class UpdateChecker {
             return this;
         }
 
-        public UpdateChecker check() {
-            return new UpdateChecker(this);
+        public UpdateCheckerImpl check() {
+            return new UpdateCheckerImpl(this);
         }
     }
 }

@@ -22,11 +22,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import java.io.File;
-
 import top.shixinzhang.sxframework.AppInfo;
-import top.shixinzhang.sxframework.config.Config;
-import top.shixinzhang.sxframework.network.download.IDownloader;
+import top.shixinzhang.sxframework.network.download.IAPKDownloader;
 
 /**
  * Description:
@@ -39,7 +36,7 @@ import top.shixinzhang.sxframework.network.download.IDownloader;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class DefaultDownloader implements IDownloader {
+public class DefaultDownloader implements IAPKDownloader {
 
     private volatile static DefaultDownloader mInstance;
 
@@ -105,7 +102,7 @@ public class DefaultDownloader implements IDownloader {
     }
 
     @Override
-    public IDownloader prepare() {
+    public IAPKDownloader prepare() {
         mRequest = new DownloadManager.Request(Uri.parse(mUrl));
         mRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);   //默认设置只允许在 WIFI 情况下下载
         mRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //什么情况下通知栏提示

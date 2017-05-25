@@ -16,6 +16,12 @@
 
 package top.shixinzhang.sxframework.manager;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
+import top.shixinzhang.sxframework.utils.LogUtils;
+
 /**
  * Description:
  * <br>
@@ -28,4 +34,36 @@ package top.shixinzhang.sxframework.manager;
  */
 
 public class UpdateManager {
+    private final String TAG = this.getClass().getSimpleName();
+
+    private final static class UpdateHandler extends Handler {
+        private final String TAG = this.getClass().getSimpleName();
+
+        private UpdateHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg != null && msg.obj != null) {
+//                SystemClock.sleep(10 * 1000);
+                LogUtils.d(TAG, "update handler thread name :" + Thread.currentThread().getName());
+
+                mUpdateChecker.check((AppInfoBean) msg.obj, new IUpdateListener() {
+                    @Override
+                    public void onUpdate(final UpdateResponseBean response) {
+                        if (response != null && response.isSilentUpdate()) {
+                            AlertUtil.toastShort(UpdateService.this, "需要更新");
+                            downloadAndInstall(response.getApkDownloadUrl());
+                        }
+                    }
+                });
+
+                Message newMsg = mServiceHandler.obtainMessage();   //新创建一个消息
+                newMsg.obj = msg.obj;
+                mServiceHandler.sendMessageDelayed(newMsg, DELAY_TIME);
+            }
+        }
+    }
+
 }
