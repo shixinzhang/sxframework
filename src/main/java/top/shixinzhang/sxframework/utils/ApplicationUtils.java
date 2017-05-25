@@ -45,6 +45,8 @@ import top.shixinzhang.sxframework.AppInfo;
  */
 
 public final class ApplicationUtils {
+    private static final String TAG = ApplicationUtils.class.getSimpleName();
+
     private ApplicationUtils() {
     }
 
@@ -164,8 +166,22 @@ public final class ApplicationUtils {
      * 安装应用
      *
      * @param context
-     * @param uri
+     * @param apkPath
      */
+    public static void installApp(Context context, String apkPath) {
+        File file = new File(apkPath);
+        if (!file.exists()) {
+            LogUtils.e(TAG, apkPath + " apk file is not exists");
+            return;
+        }
+        installApp(context, file);
+    }
+
+    public static void installApp(Context context, File file) {
+        installPackage(context, Uri.fromFile(file));
+    }
+
+
     public static void installPackage(Context context, Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
@@ -173,11 +189,12 @@ public final class ApplicationUtils {
         context.startActivity(intent);
     }
 
+
     public static void autoInstallApp(String appName) throws IOException {
 
         String destDir = AppInfo.DIRECTORY_PATH + File.separator + "download" + File.separator + appName;
         File file = new File(destDir);
-        if(!file.exists()){
+        if (!file.exists()) {
             return;
         }
 //            try {
