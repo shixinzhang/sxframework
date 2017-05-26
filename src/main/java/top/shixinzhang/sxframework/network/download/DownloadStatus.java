@@ -16,36 +16,46 @@
 
 package top.shixinzhang.sxframework.network.download;
 
-import java.io.File;
-
 /**
  * Description:
- * <br> 下载回调
+ * <br> 下载状态
  * <p>
- * <br> Created by shixinzhang on 17/4/28.
+ * <br> Created by shixinzhang on 17/5/26.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public interface OnDownloadListener {
-    /**
-     * 下载成功
-     * @param downloadFile 下载到的文件
-     */
-    void onSuccess(File downloadFile);
+public final class DownloadStatus {
 
     /**
-     * 下载失败
-     * @param e 失败原因
+     * the download is waiting to start.
      */
-    void onFail(Exception e);
+    public final static int PENDING = 1;
 
     /**
-     * 下载进度
-     * @param process
-     * @return
+     * the download is currently running.
      */
-    long onProcess(long process);
+    public final static int RUNNING = 1 << 1;
+
+    /**
+     * the download is waiting to retry or resume.
+     */
+    public final static int PAUSED = 1 << 2;
+
+    /**
+     * the download has successfully completed.
+     */
+    public final static int SUCCESSFUL = 1 << 3;
+
+    /**
+     * the download has failed (and will not be retried).
+     */
+    public final static int FAILED = 1 << 4;
+
+    /**
+     * he download has completed with an error that doesn't fit under any other error code.
+     */
+    public final static int ERROR_UNKNOWN = 1000;
 }

@@ -16,46 +16,33 @@
 
 package top.shixinzhang.sxframework.network.download;
 
-import android.net.Uri;
+import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
 
 /**
  * Description:
- * <br> APK 下载接口，定义规范
+ * <br> 文件下载器
  * <p>
- * <br> Created by shixinzhang on 17/4/27.
+ * <br> Created by shixinzhang on 17/5/24.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public interface IAPKDownloader extends IDownloader {
-
-    String getDownloadPath(long id);
-
-    Uri getDownloadUri(long id);
-
-    int getDownloadStatus(long id);
-
-    long getDownloadProgress();
-
-    IAPKDownloader setUrl(String url);
-
-    IAPKDownloader setNotificationTitle(String title);
-
-    IAPKDownloader setNotificationDesc(String desc);
-
-    IAPKDownloader setFilePath(String filePath);
-
-    IAPKDownloader setFileName(String fileName);
+public interface IDownloader {
+    /**
+     * 开始下载
+     *
+     * @param downloadInfo
+     * @param listener
+     * @return 这个下载任务对应的 ID
+     */
+    long download(DownloadInfoBean downloadInfo, IDownloadListener listener);
 
     /**
-     * 最后准备工作，不是必须调用，取决于具体实现
-     * （但是在有些实现里，需要调用这个后才可以调用 download）
+     * 取消下载
      *
-     * @return
+     * @param ids 下载任务 IDs
      */
-    IAPKDownloader prepare();
-
-
+    void cancel(long... ids);
 }

@@ -20,13 +20,13 @@ package top.shixinzhang.sxframework.manager.update.api;
 import java.util.List;
 
 import rx.Observable;
+import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.Body;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.GET;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.HTTP;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.POST;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.Path;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
-import top.shixinzhang.sxframework.manager.update.model.UpdateRequestInfo;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
 
 /**
@@ -43,18 +43,19 @@ import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
 public interface UpdateApi {
     /**
      * 注解中的 URL 前缀 / 无用，BaseUrl 要以 / 结尾；如果注解中的 URL 为完整路径（http://www.XXX.com），将取代 BaseUrl
+     *
      * @param requestInfo
      * @return
      */
     @POST("update")
-    Call<UpdateResponseInfo> checkUpdate(@Body UpdateRequestInfo requestInfo);  //被 Body 修饰的参数，会被 Gson 转换成 RequestBody 发送到服务器
+    Call<UpdateResponseInfo> checkUpdate2(@Body UpdateRequestBean requestInfo);  //被 Body 修饰的参数，会被 Gson 转换成 RequestBody 发送到服务器
 
     @GET("info/{id}")
-    Call<UpdateRequestInfo> getUpdateInfo(@Path("id") int id);
+    Observable<UpdateResponseInfo> checkUpdate(@Body UpdateRequestBean requestBean);
 
     @HTTP(method = "GET", path = "info/{id}")
-    Call<UpdateRequestInfo> getUpdateInfo2(@Path("id") int id);
+    Call<UpdateResponseInfo> getUpdateInfo2(@Path("id") int id);
 
     @POST("info/{ids}")
-    Observable<List<UpdateRequestInfo>> getUpdateInfos(@Path("ids") int ids);
+    Observable<List<UpdateResponseInfo>> getUpdateInfos(@Path("ids") int ids);
 }

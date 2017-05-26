@@ -24,6 +24,8 @@ import android.text.TextUtils;
 
 import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.network.download.IAPKDownloader;
+import top.shixinzhang.sxframework.network.download.IDownloadListener;
+import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
 
 /**
  * Description:
@@ -118,13 +120,8 @@ public class DefaultDownloader implements IAPKDownloader {
     }
 
 
-    /**
-     * 开始下载
-     *
-     * @return 这个下载任务的编号
-     */
     @Override
-    public long startDownload() {
+    public long download(final DownloadInfoBean downloadInfo, final IDownloadListener listener) {
         checkProperties();
 
         return mDownloadManager.enqueue(mRequest);

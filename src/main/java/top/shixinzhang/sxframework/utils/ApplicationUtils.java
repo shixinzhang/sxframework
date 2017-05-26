@@ -197,15 +197,6 @@ public final class ApplicationUtils {
         if (!file.exists()) {
             return;
         }
-//            try {
-//                String command;
-//                command = "adb install -r " + destDir;
-//                Process proc = Runtime.getRuntime().exec(new String[] { "su", "-c", command });
-//                proc.waitFor();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         Process su = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());

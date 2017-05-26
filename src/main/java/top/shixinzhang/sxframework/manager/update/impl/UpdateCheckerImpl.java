@@ -16,28 +16,21 @@
 
 package top.shixinzhang.sxframework.manager.update.impl;
 
-import java.util.List;
-
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import top.shixinzhang.sxframework.manager.update.IUpdateChecker;
 import top.shixinzhang.sxframework.manager.update.IUpdateListener;
-import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
-import top.shixinzhang.sxframework.network.third.retrofit2.adapter.RxJava2CallAdapterFactory;
-import top.shixinzhang.sxframework.network.third.retrofit2.adapter.custom.SxCallAdapterFactory;
-import top.shixinzhang.sxframework.network.third.retrofit2.converter.GsonConverterFactory;
-import top.shixinzhang.sxframework.network.third.retrofit2.converter.custom.StringConverterFactory;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Callback;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
-import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 import top.shixinzhang.sxframework.manager.update.api.UpdateApi;
-import top.shixinzhang.sxframework.manager.update.model.UpdateRequestInfo;
+import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.RxJava2CallAdapterFactory;
+import top.shixinzhang.sxframework.network.third.retrofit2.converter.GsonConverterFactory;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 /**
  * <br> Description:
+ * 更新检查的一种实现
  * <p>
  * <br> Created by shixinzhang on 17/4/27.
  * <p>
@@ -46,109 +39,46 @@ import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class UpdateCheckerImpl implements IUpdateChecker{
+public class UpdateCheckerImpl implements IUpdateChecker {
+
+    public static UpdateCheckerImpl create(){
+        return new UpdateCheckerImpl();
+    }
     /**
      * 请求是否需要更新
+     *
      * @param requestBean
      * @param listener
      */
     @Override
     public void check(final UpdateRequestBean requestBean, final IUpdateListener listener) {
-        if (requestBean == null){
+        if (requestBean == null) {
             return;
         }
-
-    }
-
-    public interface OnUpdateCheckListener {
-        void onUpdate();
-    }
-
-    private UpdateRequestInfo mRequestInfo;
-    private UpdateResponseInfo mResponseInfo;
-
-    private UpdateCheckerImpl(Builder builder) {
-        mRequestInfo = builder.mRequestInfo;
-        mResponseInfo = builder.mResponseInfo;
-        check();
-    }
-
-    private void check() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("www.test.com/")
-                .addConverterFactory(StringConverterFactory.create())
+                .baseUrl("www.shixinzhang.top")
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(SxCallAdapterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        UpdateApi updateApi = retrofit.create(UpdateApi.class);
-
-        final Call<UpdateResponseInfo> updateInfo = updateApi.checkUpdate(mRequestInfo);
-
-        updateInfo.enqueue(new Callback<UpdateResponseInfo>() {
-            @Override
-            public void onResponse(Call<UpdateResponseInfo> call, Response<UpdateResponseInfo> response) {
-                System.out.println(response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<UpdateResponseInfo> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
-        updateApi.getUpdateInfos(3)
+        retrofit.create(UpdateApi.class)
+                .checkUpdate(requestBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<UpdateRequestInfo>>() {
-
+                .subscribe(new Action1<UpdateResponseInfo>() {
                     @Override
-                    public void onCompleted() {
-                        //finished
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<UpdateRequestInfo> updateRequestInfos) {
-                        if (updateRequestInfos != null && !updateRequestInfos.isEmpty()) {
-
+                    public void call(final UpdateResponseInfo responseInfo) {
+                        //success
+                        if (listener != null) {
+                            listener.onUpdate(responseInfo);
                         }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        //failed
                     }
                 });
     }
 
-    private UpdateRequestInfo getRequestInfo() {
-        return mRequestInfo;
-    }
-
-    private UpdateResponseInfo getResponseInfo() {
-        return mResponseInfo;
-    }
-
-    public static final class Builder {
-        private UpdateRequestInfo mRequestInfo;
-        private UpdateResponseInfo mResponseInfo;
-
-        public Builder() {
-        }
-
-        public Builder mRequestInfo(UpdateRequestInfo mRequestInfo) {
-            this.mRequestInfo = mRequestInfo;
-            return this;
-        }
-
-        public Builder mResponseInfo(UpdateResponseInfo mResponseInfo) {
-            this.mResponseInfo = mResponseInfo;
-            return this;
-        }
-
-        public UpdateCheckerImpl check() {
-            return new UpdateCheckerImpl(this);
-        }
-    }
 }
