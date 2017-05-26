@@ -55,7 +55,12 @@ import top.shixinzhang.sxframework.utils.LogUtils;
 
 public class OkHttpDownloader implements IDownloader {
 
+    private OkHttpClient mOkHttpClient;
     public static OkHttpDownloader mInstance = new OkHttpDownloader();
+
+    private OkHttpDownloader() {
+        mOkHttpClient = new OkHttpClient();
+    }
 
     public static OkHttpDownloader getInstance() {
         return mInstance;
@@ -85,7 +90,9 @@ public class OkHttpDownloader implements IDownloader {
 
                     @Override
                     public void onError(final Throwable e) {
-                        listener.onFail(e);
+                        if (listener != null) {
+                            listener.onFail(e);
+                        }
                     }
 
 //                    @Override
@@ -95,7 +102,9 @@ public class OkHttpDownloader implements IDownloader {
 
                     @Override
                     public void onNext(final DownloadInfoBean downloadInfoBean) {
-                        listener.onSuccess(new File(downloadInfoBean.getFilePath()));
+                        if (listener != null) {
+                            listener.onSuccess(new File(downloadInfoBean.getFilePath()));
+                        }
                     }
                 });
 
@@ -104,19 +113,16 @@ public class OkHttpDownloader implements IDownloader {
 
     @Override
     public void cancel(final long... ids) {
-
     }
 
     /**
      * 下载执行
      */
     private class DownloadSubscribe implements Observable.OnSubscribe<DownloadInfoBean> {
-        private OkHttpClient mOkHttpClient;
         private DownloadInfoBean mDownloadInfoBean;
 
         public DownloadSubscribe(final DownloadInfoBean downloadInfo) {
             mDownloadInfoBean = downloadInfo;
-            mOkHttpClient = new OkHttpClient();
         }
 
         @Override

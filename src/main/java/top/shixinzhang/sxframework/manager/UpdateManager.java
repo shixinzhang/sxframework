@@ -16,22 +16,26 @@
 
 package top.shixinzhang.sxframework.manager;
 
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
+import android.content.Context;
 
+import java.io.File;
+
+import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.manager.update.IUpdateChecker;
 import top.shixinzhang.sxframework.manager.update.IUpdateListener;
 import top.shixinzhang.sxframework.manager.update.impl.UpdateCheckerImpl;
 import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
-import top.shixinzhang.sxframework.utils.DateUtils;
+import top.shixinzhang.sxframework.network.download.IDownloadListener;
+import top.shixinzhang.sxframework.network.download.IDownloader;
+import top.shixinzhang.sxframework.network.download.imp.OkHttpDownloader;
+import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
 import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.sxframework.utils.NetworkUtils;
 
 /**
  * Description:
- * <br>
+ * <br> 更新管理器，感觉跟业务需求相关性太强，不适合放到 framework 中
  * <p>
  * <br> Created by shixinzhang on 17/5/12.
  * <p>
@@ -43,59 +47,23 @@ import top.shixinzhang.sxframework.utils.LogUtils;
 public class UpdateManager {
     private final String TAG = this.getClass().getSimpleName();
     private static UpdateManager mInstance = new UpdateManager();
+    private static Context mContext;
 
-    private Looper mUpdateLooper;
+    private IDownloader mDownloader;
     private IUpdateChecker mUpdateChecker;
-    private UpdateHandler mUpdateHandler;
-
-    private final class UpdateHandler extends Handler {
-        private static final long DELAY_TIME = 10 * 6 * 1000;
-        private final String TAG = this.getClass().getSimpleName();
-
-        private UpdateHandler(Looper looper) {
-            super(looper);
-        }
-
-        /**
-         * 子线程中请求服务器或许是否更新信息
-         *
-         * @param msg
-         */
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg != null && msg.obj != null) {
-                LogUtils.d(TAG, "update handler thread name :" + Thread.currentThread().getName());
-
-                mUpdateChecker.check((UpdateRequestBean) msg.obj, new IUpdateListener() {
-                    @Override
-                    public void onUpdate(final UpdateResponseInfo response) {
-                        if (response != null) {
-                            //拿到更新响应数据，判断显示
-                            if (response.isSilentDownload()) {
-                                //静默下载
-                            }
-                        }
-                    }
-                });
-
-                //定时循环请求更新
-//                Message newMsg = mUpdateHandler.obtainMessage();   //新创建一个消息
-//                newMsg.obj = msg.obj;
-//                mUpdateHandler.sendMessageDelayed(newMsg, DELAY_TIME);
-            }
-        }
-    }
-
+    private UpdateResponseInfo mUpdateResponseInfo;
+    private IDownloadListener mDownloadListener;
 
     private UpdateManager() {
-        HandlerThread thread = new HandlerThread("Update[" + DateUtils.getDateString(System.currentTimeMillis()) + "]");
-        thread.start();
-        mUpdateLooper = thread.getLooper();
-        mUpdateHandler = new UpdateHandler(mUpdateLooper);
         mUpdateChecker = UpdateCheckerImpl.create();
+        mDownloader = OkHttpDownloader.getInstance();
     }
 
-    public static UpdateManager getInstance() {
+    public static UpdateManager getInstance(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Context can't be null");
+        }
+        mContext = context.getApplicationContext() != null ? context.getApplicationContext() : context;
         return mInstance;
     }
 
@@ -105,14 +73,59 @@ public class UpdateManager {
      * @param requestBean
      */
     public void request(UpdateRequestBean requestBean) {
-        Message message = mUpdateHandler.obtainMessage();
-        message.obj = requestBean;
-        mUpdateHandler.sendMessage(message);
+        mUpdateChecker.check(requestBean, new IUpdateListener() {
+            @Override
+            public void onUpdate(final UpdateResponseInfo response) {
+                if (response != null && response.isNeedUpdate()) {
+                    mUpdateResponseInfo = response;
+                    downloadOrInstall();
+                }
+            }
+        });
     }
 
-    public void stop() {
-        if (mUpdateLooper != null) {
-            mUpdateLooper.quit();
+    private void downloadOrInstall() {
+        if (mUpdateResponseInfo == null) {
+            return;
         }
+
+        //WIFI 环境下下载
+        if (!NetworkUtils.isWifiConnect(mContext)) {
+            LogUtils.d(TAG, "Not connect WIFI, can't download");
+            return;
+        }
+
+        if (mUpdateResponseInfo.isSilentDownload()) {
+            //静默下载
+            downloadSilently(mUpdateResponseInfo.getDownloadUrl());
+            return;
+        }
+
+    }
+
+    /**
+     * 静默下载
+     *
+     * @param downloadUrl
+     */
+    private void downloadSilently(final String downloadUrl) {
+        DownloadInfoBean downloadInfoBean = new DownloadInfoBean();
+        downloadInfoBean.setDownloadUrl(downloadUrl)
+                .setFilePath(AppInfo.DOWNLOAD_APK_PATH);
+        mDownloader.download(downloadInfoBean, mDownloadListener);
+    }
+
+
+    public IDownloadListener getDownloadListener() {
+        return mDownloadListener;
+    }
+
+    public UpdateManager setDownloadListener(final IDownloadListener downloadListener) {
+        mDownloadListener = downloadListener;
+        return this;
+    }
+
+
+    public void stop() {
     }
 }
