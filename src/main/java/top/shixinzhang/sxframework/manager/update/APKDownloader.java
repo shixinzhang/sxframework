@@ -95,7 +95,7 @@ public class APKDownloader {
     }
 
     private void startDownload() {
-        long id = mDownload.startDownload();
+        long id = mDownload.download(null, null);
         SpUtils.saveDataInDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, id);
         LogUtils.i(TAG, "apk start download , id is " + id);
     }

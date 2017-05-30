@@ -32,6 +32,6 @@ import java.io.File;
  */
 
 public class Config {
-    public static String APP_FOLDER = "";
-    public static String APP_DIR = Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER;
+    public static String APP_FOLDER = "sxframework";
+    public static String EXTERNAL_DIR = Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER;
 }
