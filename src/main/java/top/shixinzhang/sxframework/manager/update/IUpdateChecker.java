@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.network.download;
+package top.shixinzhang.sxframework.manager.update;
 
-import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
+import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 
 /**
  * Description:
- * <br> 文件下载器
+ * <br> 请求更新信息的接口
  * <p>
  * <br> Created by shixinzhang on 17/5/24.
  * <p>
@@ -29,20 +29,7 @@ import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public interface IDownloader {
-    /**
-     * 开始下载
-     *
-     * @param downloadInfo
-     * @param listener
-     * @return 这个下载任务对应的 ID
-     */
-    long download(DownloadInfoBean downloadInfo, IDownloadListener listener);
+public interface IUpdateChecker {
 
-    /**
-     * 取消下载
-     *
-     * @param ids 下载任务 IDs
-     */
-    void cancel(long... ids);
+    void check(UpdateRequestBean requestBean, final IUpdateListener listener);
 }

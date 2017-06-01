@@ -50,75 +50,75 @@ public class UpdateResponseInfo {
         setDownloadUrl(builder.downloadUrl);
     }
 
-    private boolean isNeedUpdate() {
+    public boolean isNeedUpdate() {
         return needUpdate;
     }
 
-    private void setNeedUpdate(boolean needUpdate) {
+    public void setNeedUpdate(boolean needUpdate) {
         this.needUpdate = needUpdate;
     }
 
-    private String getAppName() {
+    public String getAppName() {
         return appName;
     }
 
-    private void setAppName(String appName) {
+    public void setAppName(String appName) {
         this.appName = appName;
     }
 
-    private String getAppVersion() {
+    public String getAppVersion() {
         return appVersion;
     }
 
-    private void setAppVersion(String appVersion) {
+    public void setAppVersion(String appVersion) {
         this.appVersion = appVersion;
     }
 
-    private String getUpdateTitle() {
+    public String getUpdateTitle() {
         return updateTitle;
     }
 
-    private void setUpdateTitle(String updateTitle) {
+    public void setUpdateTitle(String updateTitle) {
         this.updateTitle = updateTitle;
     }
 
-    private String getUpdateTips() {
+    public String getUpdateTips() {
         return updateTips;
     }
 
-    private void setUpdateTips(String updateTips) {
+    public void setUpdateTips(String updateTips) {
         this.updateTips = updateTips;
     }
 
-    private boolean isSilentDownload() {
+    public boolean isSilentDownload() {
         return silentDownload;
     }
 
-    private void setSilentDownload(boolean silentDownload) {
+    public void setSilentDownload(boolean silentDownload) {
         this.silentDownload = silentDownload;
     }
 
-    private boolean isForceUpdate() {
+    public boolean isForceUpdate() {
         return forceUpdate;
     }
 
-    private void setForceUpdate(boolean forceUpdate) {
+    public void setForceUpdate(boolean forceUpdate) {
         this.forceUpdate = forceUpdate;
     }
 
-    private int getDownType() {
+    public int getDownType() {
         return downType;
     }
 
-    private void setDownType(int downType) {
+    public void setDownType(int downType) {
         this.downType = downType;
     }
 
-    private String getDownloadUrl() {
+    public String getDownloadUrl() {
         return downloadUrl;
     }
 
-    private void setDownloadUrl(String downloadUrl) {
+    public void setDownloadUrl(String downloadUrl) {
         this.downloadUrl = downloadUrl;
     }
 

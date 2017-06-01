@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.config;
+package top.shixinzhang.sxframework.views.recyclerview;
 
-import android.os.Environment;
+import android.support.v4.view.ViewPropertyAnimatorListener;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-import java.io.File;
+public abstract class AnimateViewHolder extends RecyclerView.ViewHolder {
 
-/**
- * <br> Description:
- * <p> 配置信息
- * <p>
- * <br> Created by shixinzhang on 17/4/27.
- * <p>
- * <br> Email: shixinzhang2016@gmail.com
- * <p>
- * <a  href="https://about.me/shixinzhang">About me</a>
- */
+    public AnimateViewHolder(View itemView) {
+        super(itemView);
+    }
 
-public class Config {
-    public static String APP_FOLDER = "sxframework";
-    public static String EXTERNAL_DIR = Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER;
+    public void preAnimateAddImpl() {
+    }
+
+    public void preAnimateRemoveImpl() {
+    }
+
+    public abstract void animateAddImpl(ViewPropertyAnimatorListener listener);
+
+    public abstract void animateRemoveImpl(ViewPropertyAnimatorListener listener);
 }

@@ -37,6 +37,10 @@ public class AppInfo {
 
     //文件下载目录
     public final static String DOWNLOAD_PATH = DIRECTORY_NAME + File.separator + "download";
+
+    //APK 下载目录
+    public final static String DOWNLOAD_APK_PATH = DOWNLOAD_PATH + File.separator + "your_app_new_version.apk";
+
     //文件下载绝对目录
     public final static String DOWNLOAD_ABS_PATH = AppInfo.DIRECTORY_PATH + File.separator + "download" + File.separator;
 

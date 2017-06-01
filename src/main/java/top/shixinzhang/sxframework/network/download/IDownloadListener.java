@@ -16,33 +16,36 @@
 
 package top.shixinzhang.sxframework.network.download;
 
-import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
+import java.io.File;
 
 /**
  * Description:
- * <br> 文件下载器
+ * <br> 下载回调
  * <p>
- * <br> Created by shixinzhang on 17/5/24.
+ * <br> Created by shixinzhang on 17/4/28.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public interface IDownloader {
+public interface IDownloadListener {
     /**
-     * 开始下载
-     *
-     * @param downloadInfo
-     * @param listener
-     * @return 这个下载任务对应的 ID
+     * 下载成功
+     * @param downloadFile 下载到的文件
      */
-    long download(DownloadInfoBean downloadInfo, IDownloadListener listener);
+    void onSuccess(File downloadFile);
 
     /**
-     * 取消下载
-     *
-     * @param ids 下载任务 IDs
+     * 下载失败
+     * @param e 失败原因
      */
-    void cancel(long... ids);
+    void onFail(Throwable e);
+
+    /**
+     * 下载进度
+     * @param process
+     * @return
+     */
+    long onProcess(long process);
 }

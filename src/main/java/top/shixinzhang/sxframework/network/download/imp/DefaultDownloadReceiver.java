@@ -63,13 +63,12 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
             DownloadManager downManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadFileUri = downManager.getUriForDownloadedFile(downloadSuccessId);
             if (downloadFileUri != null) {
-//                ApplicationUtils.installPackage(context, downloadFileUri);
-
-                try {
-                    ApplicationUtils.autoInstallApp(downloadFileUri.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                ApplicationUtils.installPackage(context, downloadFileUri);
+//                try {
+//                    ApplicationUtils.autoInstallApp(downloadFileUri.toString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             } else {
                 Toast.makeText(context, "下载失败", Toast.LENGTH_SHORT).show();
             }

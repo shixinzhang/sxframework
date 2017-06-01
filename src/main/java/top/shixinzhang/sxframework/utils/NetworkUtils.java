@@ -63,4 +63,15 @@ public final class NetworkUtils {
         return null;
     }
 
+    /**
+     * 判断是否wifi环境
+     *
+     * @return boolean
+     */
+    public static boolean isWifiConnect(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI;
+    }
+
 }

@@ -21,8 +21,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import top.shixinzhang.sxframework.network.download.IDownloader;
+import top.shixinzhang.sxframework.network.download.DownloadStatus;
+import top.shixinzhang.sxframework.network.download.IAPKDownloader;
+import top.shixinzhang.sxframework.network.download.IDownloadListener;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
+import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
 import top.shixinzhang.sxframework.utils.ApplicationUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 import top.shixinzhang.sxframework.utils.SpUtils;
@@ -45,7 +48,7 @@ public class APKDownloader {
     private String mTitle;
     private String mApkName;
 
-    private IDownloader mDownload;
+    private IAPKDownloader mDownload;
 
     private APKDownloader(Builder builder) {
         mContext = builder.mContext;
@@ -71,18 +74,18 @@ public class APKDownloader {
 
         if (lastDownloadId != -1L) { //之前有下载任务
             int downloadStatus = mDownload.getDownloadStatus(lastDownloadId);
-            if (downloadStatus == IDownloader.Status.SUCCESSFUL) {        //下载成功
+            if (downloadStatus == DownloadStatus.SUCCESSFUL) {        //下载成功
                 Uri uri = mDownload.getDownloadUri(lastDownloadId);
                 if (uri != null) {
                     if (compareVersion(getContext(), uri)) { //需要安装
                         installPackage(getContext(), uri);
                         return;
-                    }else {     //文件不存在或者，已有的版本不当前版本高，删除
+                    } else {     //文件不存在或者，已有的版本不当前版本高，删除
                         mDownload.cancel(lastDownloadId);
                     }
                 }
 
-            }else if (downloadStatus == IDownloader.Status.RUNNING || downloadStatus == IDownloader.Status.PENDING){    //正在进行或者即将进行
+            } else if (downloadStatus == DownloadStatus.RUNNING || downloadStatus == DownloadStatus.PENDING) {    //正在进行或者即将进行
                 LogUtils.i(TAG, "Download task " + lastDownloadId + " is running...");
                 return;
             }
@@ -92,7 +95,7 @@ public class APKDownloader {
     }
 
     private void startDownload() {
-        long id = mDownload.startDownload();
+        long id = mDownload.download(null, null);
         SpUtils.saveDataInDefault(getContext(), DownloadManager.EXTRA_DOWNLOAD_ID, id);
         LogUtils.i(TAG, "apk start download , id is " + id);
     }

@@ -19,6 +19,8 @@ package top.shixinzhang.sxframework.utils;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
@@ -41,6 +43,13 @@ import java.util.List;
  * Modified by shixinzhang
  */
 public class FileUtils {
+
+    /**
+     * 文件写入进度回调
+     */
+    public interface OnFileWriteProgressListener {
+        void onProgress(float write, float remain);
+    }
 
     private static final int BUFFER_SIZE = 4 * 1024;
     public final static String FILE_EXTENSION_SEPARATOR = ".";
@@ -231,6 +240,52 @@ public class FileUtils {
             close(o);
             close(stream);
         }
+    }
+
+    /**
+     * 文件写入，同时带有进度回调
+     *
+     * @param file
+     * @param inputStream
+     * @param contentLength
+     * @param progressListener
+     * @param append
+     * @return
+     */
+    public static boolean writeFileWithProgress(File file, InputStream inputStream, int contentLength,
+                                                OnFileWriteProgressListener progressListener, boolean append) {
+        if (file == null || inputStream == null) {
+            return false;
+        }
+        makeDirs(file.getAbsolutePath());
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(new FileOutputStream(file, append));
+
+            int total = contentLength;
+            int remaining = total;
+            int readLen = 0;
+            byte[] buf = new byte[total];
+            while (remaining > 0
+                    && ((readLen = bis.read(buf, total - remaining, remaining)) != -1)) {
+                remaining -= readLen;
+                if (progressListener != null) {
+                    progressListener.onProgress(readLen, remaining);
+                }
+            }
+
+            bos.write(buf);
+            bos.flush();
+            bos.close();
+            bis.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.network.download;
+package top.shixinzhang.sxframework.network.download.model;
 
-import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
+import java.io.Serializable;
 
 /**
  * Description:
- * <br> 文件下载器
+ * <br> 下载信息
  * <p>
  * <br> Created by shixinzhang on 17/5/24.
  * <p>
@@ -29,20 +29,27 @@ import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public interface IDownloader {
-    /**
-     * 开始下载
-     *
-     * @param downloadInfo
-     * @param listener
-     * @return 这个下载任务对应的 ID
-     */
-    long download(DownloadInfoBean downloadInfo, IDownloadListener listener);
+public class DownloadInfoBean implements Serializable {
+    private static final long serialVersionUID = -3175069492627972154L;
 
-    /**
-     * 取消下载
-     *
-     * @param ids 下载任务 IDs
-     */
-    void cancel(long... ids);
+    private String mFilePath;   //文件保存位置
+    private String mDownloadUrl;
+
+    public String getFilePath() {
+        return mFilePath;
+    }
+
+    public DownloadInfoBean setFilePath(final String filePath) {
+        mFilePath = filePath;
+        return this;
+    }
+
+    public String getDownloadUrl() {
+        return mDownloadUrl;
+    }
+
+    public DownloadInfoBean setDownloadUrl(final String downloadUrl) {
+        mDownloadUrl = downloadUrl;
+        return this;
+    }
 }
