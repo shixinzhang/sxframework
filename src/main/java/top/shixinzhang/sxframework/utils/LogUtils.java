@@ -50,7 +50,7 @@ public final class LogUtils {
      */
     private volatile static boolean isDebug = true;
 
-    private volatile static boolean saveLogToFile = true;
+    private volatile static boolean saveLogToFile = false;
 
     public static boolean isSaveLogToFile() {
         return saveLogToFile;
