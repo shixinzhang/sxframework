@@ -48,8 +48,15 @@ public class EventBus {
     private static final EventBusBuilder DEFAULT_BUILDER = new EventBusBuilder();
     private static final Map<Class<?>, List<Class<?>>> eventTypesCache = new HashMap<>();
 
+    ////////////
+    //最关键的两个属性，注册、解除注册最后都是操作它们
+    //  事件与对应的订阅者关联列表，
     private final Map<Class<?>, CopyOnWriteArrayList<Subscription>> subscriptionsByEventType;
+    //  订阅的类与订阅的事件关联列表
     private final Map<Object, List<Class<?>>> typesBySubscriber;
+    ////////////
+
+    //这个也挺重要，保存粘性事件
     private final Map<Class<?>, Object> stickyEvents;
 
     private final ThreadLocal<PostingThreadState> currentPostingThreadState = new ThreadLocal<PostingThreadState>() {
@@ -133,9 +140,11 @@ public class EventBus {
      */
     public void register(Object subscriber) {
         Class<?> subscriberClass = subscriber.getClass();
+        // 根据 Class 获取其中的订阅方法
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
         synchronized (this) {
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
+                //遍历这个类中的所有订阅方法，挨个
                 subscribe(subscriber, subscriberMethod);
             }
         }
@@ -145,11 +154,12 @@ public class EventBus {
     private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
         Class<?> eventType = subscriberMethod.eventType;
         Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
+        //获取这个事件对应的订阅者列表
         CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
-        if (subscriptions == null) {
+        if (subscriptions == null) {    //如果之前没有这个事件的订阅者，添加进去
             subscriptions = new CopyOnWriteArrayList<>();
             subscriptionsByEventType.put(eventType, subscriptions);
-        } else {
+        } else {    //如果之前这个类已经订阅过这个事件，再次订阅就报错
             if (subscriptions.contains(newSubscription)) {
                 throw new EventBusException("Subscriber " + subscriber.getClass() + " already registered to event "
                         + eventType);
@@ -158,12 +168,14 @@ public class EventBus {
 
         int size = subscriptions.size();
         for (int i = 0; i <= size; i++) {
+            //遍历这个事件的订阅方法，调整它在订阅列表中的顺序，高优先级的放
             if (i == size || subscriberMethod.priority > subscriptions.get(i).subscriberMethod.priority) {
                 subscriptions.add(i, newSubscription);
                 break;
             }
         }
 
+        //保存这个类与订阅事件的映射关系
         List<Class<?>> subscribedEvents = typesBySubscriber.get(subscriber);
         if (subscribedEvents == null) {
             subscribedEvents = new ArrayList<>();
@@ -171,6 +183,7 @@ public class EventBus {
         }
         subscribedEvents.add(eventType);
 
+        //如果是粘性事件，立即发送出去
         if (subscriberMethod.sticky) {
             if (eventInheritance) {
                 // Existing sticky events of all subclasses of eventType have to be considered.
@@ -192,6 +205,11 @@ public class EventBus {
         }
     }
 
+    /**
+     * 发送粘性事件给订阅者
+     * @param newSubscription
+     * @param stickyEvent
+     */
     private void checkPostStickyEventToSubscription(Subscription newSubscription, Object stickyEvent) {
         if (stickyEvent != null) {
             // If the subscriber is trying to abort the event, it will fail (event is not tracked in posting state)
@@ -206,12 +224,13 @@ public class EventBus {
 
     /** Only updates subscriptionsByEventType, not typesBySubscriber! Caller must update typesBySubscriber. */
     private void unsubscribeByEventType(Object subscriber, Class<?> eventType) {
+        //获取订阅这个事件的订阅者列表
         List<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
         if (subscriptions != null) {
-            int size = subscriptions.size();
+            int size = subscriptions.size();    //只调用一次 subscriptions.size()，比在循环里每次都调用 subscriptions.size() 好
             for (int i = 0; i < size; i++) {
                 Subscription subscription = subscriptions.get(i);
-                if (subscription.subscriber == subscriber) {
+                if (subscription.subscriber == subscriber) {    //将当前订阅者从订阅这个事件的订阅者列表中删除
                     subscription.active = false;
                     subscriptions.remove(i);
                     i--;
@@ -222,12 +241,18 @@ public class EventBus {
     }
 
     /** Unregisters the given subscriber from all event classes. */
+    /**
+     * 解除注册很简单，就从两个属性中移除，画个图吧！
+     * @param subscriber
+     */
     public synchronized void unregister(Object subscriber) {
         List<Class<?>> subscribedTypes = typesBySubscriber.get(subscriber);
         if (subscribedTypes != null) {
+            //找到这个类中所有的订阅方法，挨个取消注册
             for (Class<?> eventType : subscribedTypes) {
                 unsubscribeByEventType(subscriber, eventType);
             }
+            //移除这个订阅记录
             typesBySubscriber.remove(subscriber);
         } else {
             Log.w(TAG, "Subscriber to unregister was not registered before: " + subscriber.getClass());
@@ -305,7 +330,7 @@ public class EventBus {
 
     /**
      * Remove and gets the recent sticky event for the given event type.
-     *
+     *  移除并返回最近的粘性事件
      * @see #postSticky(Object)
      */
     public <T> T removeStickyEvent(Class<T> eventType) {

@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
+/**
+ * 保存类与其中的订阅方法关系
+ */
 final class Subscription {
     final Object subscriber;
     final SubscriberMethod subscriberMethod;
