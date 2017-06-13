@@ -19,7 +19,7 @@ import android.util.Log;
 
 /**
  * Posts events in background.
- * 
+ *  使用线程池循环执行任务
  * @author Markus
  */
 final class BackgroundPoster implements Runnable {
@@ -37,7 +37,7 @@ final class BackgroundPoster implements Runnable {
     public void enqueue(Subscription subscription, Object event) {
         PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
         synchronized (this) {
-            queue.enqueue(pendingPost);
+            queue.enqueue(pendingPost); //入队，执行任务
             if (!executorRunning) {
                 executorRunning = true;
                 eventBus.getExecutorService().execute(this);
@@ -50,7 +50,7 @@ final class BackgroundPoster implements Runnable {
         try {
             try {
                 while (true) {
-                    PendingPost pendingPost = queue.poll(1000);
+                    PendingPost pendingPost = queue.poll(1000);     //有可能阻塞
                     if (pendingPost == null) {
                         synchronized (this) {
                             // Check again, this time in synchronized

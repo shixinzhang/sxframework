@@ -20,6 +20,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 
+/**
+ * 主线程发送者
+ */
 final class HandlerPoster extends Handler {
 
     private final PendingPostQueue queue;
@@ -35,12 +38,12 @@ final class HandlerPoster extends Handler {
     }
 
     void enqueue(Subscription subscription, Object event) {
-        PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
+        PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);   //为什么要包裹成 PendingPost 呢？
         synchronized (this) {
-            queue.enqueue(pendingPost);
+            queue.enqueue(pendingPost);     //事件入队
             if (!handlerActive) {
                 handlerActive = true;
-                if (!sendMessage(obtainMessage())) {
+                if (!sendMessage(obtainMessage())) {    //入一次队，发送一个空消息
                     throw new EventBusException("Could not send handler message");
                 }
             }
@@ -57,7 +60,7 @@ final class HandlerPoster extends Handler {
                 if (pendingPost == null) {
                     synchronized (this) {
                         // Check again, this time in synchronized
-                        pendingPost = queue.poll();
+                        pendingPost = queue.poll();     //为什么又出队一次？
                         if (pendingPost == null) {
                             handlerActive = false;
                             return;

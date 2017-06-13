@@ -62,7 +62,7 @@ class SubscriberMethodFinder {
         if (ignoreGeneratedIndex) {     //默认 false
             subscriberMethods = findUsingReflection(subscriberClass);   //反射获取 class 中的订阅的方法
         } else {
-            subscriberMethods = findUsingInfo(subscriberClass);
+            subscriberMethods = findUsingInfo(subscriberClass); //从 index 中查询订阅方法
         }
         if (subscriberMethods.isEmpty()) {
             throw new EventBusException("Subscriber " + subscriberClass
@@ -136,6 +136,7 @@ class SubscriberMethodFinder {
      * @return
      */
     private SubscriberInfo getSubscriberInfo(FindState findState) {
+        //已经有订阅信息，并且父订阅信息的 Class 就是当前 Class
         if (findState.subscriberInfo != null && findState.subscriberInfo.getSuperSubscriberInfo() != null) {
             SubscriberInfo superclassInfo = findState.subscriberInfo.getSuperSubscriberInfo();
             if (findState.clazz == superclassInfo.getSubscriberClass()) {

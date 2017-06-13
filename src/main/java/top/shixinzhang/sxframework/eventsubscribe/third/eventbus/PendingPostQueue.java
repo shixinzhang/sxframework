@@ -16,6 +16,9 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
+/**
+ * 待发送消息的双向链表，生产者-消费者模型, 出队 wait - 入队 nofityAll
+ */
 final class PendingPostQueue {
     private PendingPost head;
     private PendingPost tail;
@@ -48,7 +51,7 @@ final class PendingPostQueue {
 
     synchronized PendingPost poll(int maxMillisToWait) throws InterruptedException {
         if (head == null) {
-            wait(maxMillisToWait);
+            wait(maxMillisToWait);  //最大等待超时
         }
         return poll();
     }
