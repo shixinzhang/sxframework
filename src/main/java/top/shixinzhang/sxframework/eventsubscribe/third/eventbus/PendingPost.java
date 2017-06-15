@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 等到发送的事件队列，就是一个对象复用池
+ * 等待发送的事件队列，就是一个对象复用池
  */
 final class PendingPost {
     private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();  //对象复用池

@@ -60,7 +60,7 @@ final class HandlerPoster extends Handler {
                 if (pendingPost == null) {
                     synchronized (this) {
                         // Check again, this time in synchronized
-                        pendingPost = queue.poll();     //为什么又出队一次？
+                        pendingPost = queue.poll();
                         if (pendingPost == null) {
                             handlerActive = false;
                             return;

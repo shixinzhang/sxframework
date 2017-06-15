@@ -45,5 +45,4 @@ class AsyncPoster implements Runnable {
         }
         eventBus.invokeSubscriber(pendingPost);
     }
-
 }

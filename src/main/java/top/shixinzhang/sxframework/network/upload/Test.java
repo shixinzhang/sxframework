@@ -16,6 +16,13 @@
 
 package top.shixinzhang.sxframework.network.upload;
 
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 /**
  * <br> Description:
  * <p>
@@ -27,4 +34,26 @@ package top.shixinzhang.sxframework.network.upload;
  */
 
 public class Test {
+    public static void main(String[] args) {
+        UploadManager uploadManager = new UploadManager.Builder()
+                .file(new File("sdcard/test/"))
+                .name("serverName")
+                .fileType("image/png")
+                .fileName("test")
+                .url("www.shixinzhang.top")
+                .callback(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+
+                    }
+                })
+                .build();
+
+        uploadManager.upload();
+    }
 }
