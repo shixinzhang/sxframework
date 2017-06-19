@@ -36,6 +36,8 @@ import top.shixinzhang.sxframework.utils.LogUtils;
 /**
  * Description:
  * <br> 上传文件，使用 okhttp3 实现
+ *
+        // TODO: 17/6/15 上传进度回调
  * <p>
  * <br> Created by shixinzhang on 17/6/15.
  * <p>
@@ -56,6 +58,7 @@ public class UploadManager {
     private String mUrl;
     private Map<String, String> mHeaders;
     private Callback mCallback;
+
 
     private OkHttpClient newClient() {
         return new OkHttpClient.Builder()
