@@ -19,7 +19,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
-version = "1.0.3"
+version = "1.0.4"
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -38,10 +38,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
@@ -55,6 +51,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.android.support:support-annotations:26.0.0-alpha1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.hwangjr.rxbus:rxbus:1.0.5'
 }
 
 def siteUrl = 'https://github.com/shixinzhang/android-framework'

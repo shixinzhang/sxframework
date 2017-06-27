@@ -20,20 +20,9 @@ import top.shixinzhang.sxframework.R;
 import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
- * <header>
  * Description:
- * </header>
  * <p>
  * Author: shixinzhang
- * </p>
- * <p>
- * Create at: 6/1/2017
- * </p>
- * <p>
- * Update at: 6/1/2017
- * </p>
- * <p>
- * Related links: http://blog.csdn.net/u014369799/article/details/50337229
  * </p>
  */
 public class MarqueeTextView extends TextSwitcher implements ViewSwitcher.ViewFactory {
