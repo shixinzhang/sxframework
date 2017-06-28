@@ -60,6 +60,5 @@
         android:layout_marginRight="32dp"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/dotLinear"
-        android:layout_marginBottom="12dp"
-        android:background="@mipmap/btn_home"/>
+        android:layout_marginBottom="12dp"/>
 </merge>
