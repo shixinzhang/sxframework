@@ -55,6 +55,22 @@ public final class DateUtils {
     }
 
     /**
+     * YEAR = 1
+     * WEEK_OF_MONTH = 4
+     * WEEK_OF_YEAR = 3
+     * DAY_OF_MONTH = 5
+     * HOUR_OF_DAY = 11 (24-hour)
+     * MINUTE = 12
+     * SECOND = 13
+     *
+     * @param field
+     * @return
+     */
+    public static int getCurrentField(int field) {
+        return DateUtils.getCurrentCalendar().get(field);
+    }
+
+    /**
      * 获取当前日期格式化
      *
      * @return

@@ -36,3 +36,25 @@ Some base function classes for android development.
 刚开始，**network** 开发中，（╯－＿－）╯╧╧
 
 持续更新中，敬请 ``watch`` 。
+
+
+## 如何使用
+
+1.在根项目的 ``build.gradle`` 的 ``allprojects`` 中添加
+
+```
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+2.在 module 项目的 ``build.gradle`` 中添加地址
+
+```
+	dependencies {
+	    compile 'com.github.shixinzhang:sxframework:1.0.5'
+	}
+```
