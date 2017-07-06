@@ -1,0 +1,50 @@
+/*
+ * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.thread;
+
+import android.os.Handler;
+import android.os.Looper;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+public interface ThreadHandler {
+    Executor getExecutor();
+
+    Handler getHandler();
+
+    static ThreadHandler DEFAULT = new ThreadHandler() {
+        private Executor executor;
+        private Handler handler;
+
+        @Override
+        public Executor getExecutor() {
+            if(executor == null) {
+                executor = Executors.newCachedThreadPool();
+            }
+            return executor;
+        }
+
+        @Override
+        public Handler getHandler() {
+            if(handler == null) {
+                handler = new Handler(Looper.getMainLooper());
+            }
+            return handler;
+        }
+    };
+}

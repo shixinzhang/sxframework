@@ -16,15 +16,31 @@
 
 package top.shixinzhang.sxframework.network.response;
 
+import rx.functions.Action1;
+
 /**
- * <br> Description:
+ * Description:
+ * <br>
  * <p>
- * <br> Created by shixinzhang on 17/4/24.
+ * <br> Created by shixinzhang on 17/7/4.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
- * <a  href="https://about.me/shixinzhang">About me</a>
+ * <br> https://about.me/shixinzhang
  */
 
-public class Test {
+public class Observable<T> {
+    private T mResponse;
+    private Action1<T> mSuccessAction;
+    private Action1<T> mFailedAction;
+
+    public Observable<T> onSuccess(Action1<T> action1) {
+        mSuccessAction = action1;
+        return this;
+    }
+
+    public Observable<T> onFailed(Action1<T> action1) {
+        mFailedAction = action1;
+        return this;
+    }
 }
