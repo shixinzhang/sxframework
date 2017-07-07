@@ -24,6 +24,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import top.shixinzhang.sxframework.imageload.picasso.Picasso;
+
 
 /**
  * 封装后的ViewHolder
@@ -62,7 +64,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = retrieveView(viewId);
-//        Picasso.with(context).load(imageUrl).into(view);
+        Picasso.with(context).load(imageUrl).into(view);
         return this;
     }
 
