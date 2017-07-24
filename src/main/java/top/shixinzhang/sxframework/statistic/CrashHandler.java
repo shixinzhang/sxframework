@@ -25,10 +25,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
 import top.shixinzhang.sxframework.AppInfo;
+import top.shixinzhang.sxframework.BuildConfig;
 import top.shixinzhang.sxframework.utils.AlertUtils;
 import top.shixinzhang.sxframework.utils.ApplicationUtils;
 import top.shixinzhang.sxframework.utils.DateUtils;
@@ -37,6 +40,8 @@ import top.shixinzhang.sxframework.utils.FileUtils;
 /**
  * <br> Description:
  * <p> 错误捕获
+ * http://www.jianshu.com/p/3b66f15babfb
+ * http://qkxue.net/info/185791/Android
  * <p>
  * <br> Created by shixinzhang on 17/4/24.
  * <p>
@@ -110,6 +115,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //                    restartIntent); // 1秒钟后重启应用
 //            System.exit(0);
             AlertUtils.toastShort(mContext, "啊偶，奔溃了");
+            mDefaultCrashHandler.uncaughtException(thread, ex);
         } catch (Exception localException) {
 
         }
@@ -129,6 +135,23 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
 
     private void saveToSDCard(Throwable ex) throws Exception {
+        //#1
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        if (BuildConfig.DEBUG) { //跳转到 Crash 详情页面
+
+        }
+//        FLog.i(writer.toString(), CRASH_LOG_PATH);
+
+        //#2
+
         String currentDate = DateUtils.getDateString(System.currentTimeMillis());
         File file = FileUtils.createFile(AppInfo.DIRECTORY_PATH + currentDate + ".log");
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));

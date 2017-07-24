@@ -45,7 +45,7 @@ import top.shixinzhang.sxframework.utils.LogUtils;
  */
 public class BitmapManager {
 
-    private static BitmapManager mInstance;
+    private volatile static BitmapManager mInstance;
     private Picasso mPicasso;
     private Context mContext;
     private LruCache mLruCache;
