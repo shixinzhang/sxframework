@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.http;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -71,7 +73,7 @@ public @interface Query {
     /**
      * The query parameter name.
      */
-    String value();
+    @NonNull String value();
 
     /**
      * Specifies whether the parameter {@linkplain #value() name} and value are already URL encoded.

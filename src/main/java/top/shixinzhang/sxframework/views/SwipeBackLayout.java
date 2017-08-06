@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ScrollingView;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -75,6 +76,7 @@ public class SwipeBackLayout extends ViewGroup {
 
     private static final double AUTO_FINISHED_SPEED_LIMIT = 1000.0;
 
+    @NonNull
     private final ViewDragHelper viewDragHelper;
 
     private View target;
@@ -179,7 +181,7 @@ public class SwipeBackLayout extends ViewGroup {
     /**
      * Find out the scrollable child view from a ViewGroup.
      */
-    private void findScrollView(ViewGroup viewGroup) {
+    private void findScrollView(@NonNull ViewGroup viewGroup) {
         scrollChild = viewGroup;
         if (viewGroup.getChildCount() > 0) {
             int count = viewGroup.getChildCount();
@@ -359,7 +361,7 @@ public class SwipeBackLayout extends ViewGroup {
 
 
         @Override
-        public int clampViewPositionVertical(View child, int top, int dy) {
+        public int clampViewPositionVertical(@NonNull View child, int top, int dy) {
             int result = 0;
             if (isVerticalMode) {
                 updateVerticalEdge(isTopEdge(), top);

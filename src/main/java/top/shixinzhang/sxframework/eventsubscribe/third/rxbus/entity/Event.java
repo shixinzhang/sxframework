@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.entity;
 
+import android.support.annotation.NonNull;
+
 import java.lang.reflect.InvocationTargetException;
 
 abstract class Event {
@@ -24,7 +26,7 @@ abstract class Event {
      * InvocationTargetException}. If the specified {@link InvocationTargetException} does not have a
      * cause, neither will the {@link RuntimeException}.
      */
-    public void throwRuntimeException(String msg, InvocationTargetException e) {
+    public void throwRuntimeException(String msg, @NonNull InvocationTargetException e) {
         throwRuntimeException(msg, e.getCause());
     }
 
@@ -33,7 +35,7 @@ abstract class Event {
      * InvocationTargetException}. If the specified {@link InvocationTargetException} does not have a
      * cause, neither will the {@link RuntimeException}.
      */
-    public void throwRuntimeException(String msg, Throwable e) {
+    public void throwRuntimeException(String msg, @NonNull Throwable e) {
         Throwable cause = e.getCause();
         if (cause != null) {
             throw new RuntimeException(msg + ": " + cause.getMessage(), cause);

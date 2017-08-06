@@ -23,6 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -50,7 +51,7 @@ public class ViewHelper {
      *
      * @param context context
      */
-    public static void init(Context context) {
+    public static void init(@NonNull Context context) {
         sDisplayMetrics = context.getResources().getDisplayMetrics();
     }
 
@@ -78,7 +79,7 @@ public class ViewHelper {
      * @param sp sp
      * @return float
      */
-    public static float sp2Px(Context context, int sp) {
+    public static float sp2Px(@NonNull Context context, int sp) {
       return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
               context.getResources().getDisplayMetrics());
     }
@@ -89,7 +90,7 @@ public class ViewHelper {
      * @param dp dp
      * @return float
      */
-    public static float dp2Px(Context context, int dp) {
+    public static float dp2Px(@NonNull Context context, int dp) {
       return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
               context.getResources().getDisplayMetrics());
     }
@@ -100,7 +101,7 @@ public class ViewHelper {
      * @param px px
      * @return float
      */
-    public static float px2Dp(Context context, int px) {
+    public static float px2Dp(@NonNull Context context, int px) {
       return context.getResources().getDisplayMetrics().density * px;
     }
 
@@ -111,7 +112,7 @@ public class ViewHelper {
      * @param event
      * @return
      */
-    public static boolean eventInView(View view, MotionEvent event) {
+    public static boolean eventInView(@NonNull View view, @NonNull MotionEvent event) {
         if(view.getVisibility() != View.VISIBLE)
             return false;
 
@@ -137,7 +138,8 @@ public class ViewHelper {
      * @param view
      * @return
      */
-    public static View.OnClickListener getOnClickListener(View view) {
+    @Nullable
+    public static View.OnClickListener getOnClickListener(@Nullable View view) {
         if (view == null) {
             return null;
         }
@@ -149,6 +151,7 @@ public class ViewHelper {
     }
 
     //Used for APIs lower than ICS (API 14)
+    @Nullable
     private static View.OnClickListener getOnClickListenerV(View view) {
         View.OnClickListener retrievedListener = null;
         String viewStr = "android.view.View";
@@ -169,6 +172,7 @@ public class ViewHelper {
     }
 
     //Used for new ListenerInfo class structure used beginning with API 14 (ICS)
+    @Nullable
     private static View.OnClickListener getOnClickListenerV14(View view) {
         View.OnClickListener retrievedListener = null;
         String viewStr = "android.view.View";
@@ -204,7 +208,8 @@ public class ViewHelper {
      * @param view
      * @return
      */
-    public static String getViewEntryName(View view) {
+    @Nullable
+    public static String getViewEntryName(@Nullable View view) {
         if(null == view || view.getId() == View.NO_ID)
             return null;
 
@@ -216,7 +221,8 @@ public class ViewHelper {
      * @param view
      * @return
      */
-    public static String getViewText(View view) {
+    @Nullable
+    public static String getViewText(@Nullable View view) {
         if (null == view)
             return null;
 
@@ -236,6 +242,7 @@ public class ViewHelper {
         Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
     }
 
+    @NonNull
     public static StateListDrawable createStateListDrawable(int normalColor, int activeColor) {
         StateListDrawable drawable = new StateListDrawable();
         drawable.addState(new int[]{-android.R.attr.state_checked}, new ColorDrawable(normalColor));

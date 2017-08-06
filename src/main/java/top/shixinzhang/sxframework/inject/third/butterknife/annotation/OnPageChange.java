@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.inject.third.butterknife.annotation;
 
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import java.lang.annotation.Retention;
@@ -56,10 +57,10 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 )
 public @interface OnPageChange {
   /** View IDs to which the method will be bound. */
-  @IdRes int[] value() default { View.NO_ID };
+  @NonNull @IdRes int[] value() default { View.NO_ID };
 
   /** Listener callback to which the method will be bound. */
-  Callback callback() default Callback.PAGE_SELECTED;
+  @NonNull Callback callback() default Callback.PAGE_SELECTED;
 
   /** {@code ViewPager.OnPageChangeListener} callback methods. */
   enum Callback {

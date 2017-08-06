@@ -19,6 +19,8 @@ package top.shixinzhang.sxframework.manager.asynctask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -71,21 +73,26 @@ public class AsyncTaskManager implements Runnable {
     /**
      * 定义一个单线程的线程池，专门用来执行耗时且不需要回调的操作
      */
+    @Nullable
     private static ScheduledExecutorService singlePool = null/*Executors.newSingleThreadScheduledExecutor()*/;
     /**
      * 定义一个大小为5的线程池(这个我们比较适合多个图片下载时使用)
      */
+    @Nullable
     private static ExecutorService threadPool = null/*Executors.newFixedThreadPool(threadNum)*/;
     /**
      * 任务执行队列
      */
+    @Nullable
     private static ConcurrentLinkedQueue<ExecuteTask> allExecuteTask = null/*new ConcurrentLinkedQueue<ExcuteTask>()*/;
     /**
      * 回调接口列表
      */
+    @Nullable
     private static ConcurrentHashMap<Integer, Object> uniqueListenerList = null/*new ConcurrentHashMap<String, Object>()*/;
 
 
+    @Nullable
     public Handler getHandler() {
         return handler;
     }
@@ -116,9 +123,10 @@ public class AsyncTaskManager implements Runnable {
     /**
      * 直接把数据发送到主线程
      */
+    @Nullable
     private final static Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             long start = System.currentTimeMillis();
 
             switch (msg.what) {
@@ -138,12 +146,14 @@ public class AsyncTaskManager implements Runnable {
     };
 
 
+    @Nullable
     private static AsyncTaskManager instance = null;
 
     private AsyncTaskManager() {
         LogUtils.i("private ExcuteTaskManager() { 当前的线程Id为：" + Thread.currentThread().getId());
     }
 
+    @Nullable
     public static AsyncTaskManager getInstance() {
         if (instance == null) {
             synchronized (AsyncTaskManager.class) {
@@ -228,7 +238,7 @@ public class AsyncTaskManager implements Runnable {
      *
      * @param task 可执行的任务对象
      */
-    public void newExecuteTask(ExecuteTask task) {
+    public void newExecuteTask(@Nullable ExecuteTask task) {
         if (task != null) {
             allExecuteTask.offer(task);
             LogUtils.i("ExcuteTaskManager 添加任务成功之后" + "allExcuteTask.size()=" + allExecuteTask.size());
@@ -251,7 +261,7 @@ public class AsyncTaskManager implements Runnable {
      * @param task     加入的任务Task
      * @param callback 任务的回调接口GetDataCallback
      */
-    public void getData(ExecuteTask task, GetExecuteTaskCallback callback) {
+    public void getData(@Nullable ExecuteTask task, @Nullable GetExecuteTaskCallback callback) {
         /**
          *  把CallBack 接口加入列表中,用完之后移除
          */
@@ -285,7 +295,7 @@ public class AsyncTaskManager implements Runnable {
      *
      * @param task 添加的任务对象
      */
-    public void removeExcuteTask(ExecuteTask task) {
+    public void removeExcuteTask(@Nullable ExecuteTask task) {
         if (task != null) {
             uniqueListenerList.remove(task.getUniqueID());
             allExecuteTask.remove(task);
@@ -379,7 +389,7 @@ public class AsyncTaskManager implements Runnable {
      *
      * @param task ExcuteTask对象
      */
-    private void doExcuteTask(ExecuteTask task) {
+    private void doExcuteTask(@NonNull ExecuteTask task) {
 
         ExecuteTask result = task.doTask();
 
@@ -418,7 +428,7 @@ public class AsyncTaskManager implements Runnable {
      *
      * @param task ExcuteTask对象
      */
-    private void doCommonHandler(ExecuteTask task) {
+    private void doCommonHandler(@Nullable ExecuteTask task) {
         long start = System.currentTimeMillis();
         LogUtils.i("已经进入了private void doCommonHandler(Message msg) {");
         if (task != null && uniqueListenerList.containsKey(task.getUniqueID())) {
@@ -454,7 +464,7 @@ public class AsyncTaskManager implements Runnable {
      *
      * @param runnable 对象
      */
-    public void excute(Runnable runnable) {
+    public void excute(@NonNull Runnable runnable) {
         singlePool.execute(runnable);
     }
 
@@ -464,7 +474,7 @@ public class AsyncTaskManager implements Runnable {
      * @param runnable 对象
      * @param delay    延迟执行的时间，单位毫秒
      */
-    public void excute(Runnable runnable, long delay) {
+    public void excute(@NonNull Runnable runnable, long delay) {
         singlePool.schedule(runnable, delay, TimeUnit.MILLISECONDS);
     }
 
@@ -475,19 +485,19 @@ public class AsyncTaskManager implements Runnable {
      * @param delay    延迟执行的时间
      * @param timeUnit 时间单位
      */
-    public void excute(Runnable runnable, long delay, TimeUnit timeUnit) {
+    public void excute(@NonNull Runnable runnable, long delay, @NonNull TimeUnit timeUnit) {
         singlePool.schedule(runnable, delay, timeUnit);
     }
 
-    public void scheduleAtFixedRate(Runnable runnable, long delay, long period, TimeUnit timeUnit) {
+    public void scheduleAtFixedRate(@NonNull Runnable runnable, long delay, long period, @NonNull TimeUnit timeUnit) {
         singlePool.scheduleAtFixedRate(runnable, delay, period, timeUnit);
     }
 
-    public void scheduleAtFixedRate(Runnable runnable, long delay, long period) {
+    public void scheduleAtFixedRate(@NonNull Runnable runnable, long delay, long period) {
         singlePool.scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
     }
 
-    public void scheduleAtFixedRate(Runnable runnable, long period) {
+    public void scheduleAtFixedRate(@NonNull Runnable runnable, long period) {
         singlePool.scheduleAtFixedRate(runnable, 0, period, TimeUnit.MILLISECONDS);
     }
     /**=================================单线程池,可以顺序，延迟执行一些任务end============================================*/

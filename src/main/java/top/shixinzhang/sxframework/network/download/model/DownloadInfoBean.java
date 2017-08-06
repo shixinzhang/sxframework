@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.network.download.model;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -39,6 +41,7 @@ public class DownloadInfoBean implements Serializable {
         return mFilePath;
     }
 
+    @NonNull
     public DownloadInfoBean setFilePath(final String filePath) {
         mFilePath = filePath;
         return this;
@@ -48,6 +51,7 @@ public class DownloadInfoBean implements Serializable {
         return mDownloadUrl;
     }
 
+    @NonNull
     public DownloadInfoBean setDownloadUrl(final String downloadUrl) {
         mDownloadUrl = downloadUrl;
         return this;

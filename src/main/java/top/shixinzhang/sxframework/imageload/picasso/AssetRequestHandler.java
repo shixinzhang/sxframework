@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.imageload.picasso;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,22 +33,23 @@ class AssetRequestHandler extends RequestHandler {
 
   private final AssetManager assetManager;
 
-  public AssetRequestHandler(Context context) {
+  public AssetRequestHandler(@NonNull Context context) {
     assetManager = context.getAssets();
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     Uri uri = data.uri;
     return (SCHEME_FILE.equals(uri.getScheme())
         && !uri.getPathSegments().isEmpty() && ANDROID_ASSET.equals(uri.getPathSegments().get(0)));
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @NonNull
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     InputStream is = assetManager.open(getFilePath(request));
     return new Result(is, DISK);
   }
 
-  static String getFilePath(Request request) {
+  static String getFilePath(@NonNull Request request) {
     return request.uri.toString().substring(ASSET_PREFIX_LENGTH);
   }
 }

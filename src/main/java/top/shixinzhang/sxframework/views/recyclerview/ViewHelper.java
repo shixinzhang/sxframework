@@ -16,12 +16,13 @@
 
 package top.shixinzhang.sxframework.views.recyclerview;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 public final class ViewHelper {
 
-    public static void clear(View v) {
+    public static void clear(@NonNull View v) {
         ViewCompat.setAlpha(v, 1);
         ViewCompat.setScaleY(v, 1);
         ViewCompat.setScaleX(v, 1);

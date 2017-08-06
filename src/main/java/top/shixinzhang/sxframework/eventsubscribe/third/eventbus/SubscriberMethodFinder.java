@@ -16,6 +16,9 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -78,6 +81,7 @@ class SubscriberMethodFinder {
      * @param subscriberClass
      * @return
      */
+    @NonNull
     private List<SubscriberMethod> findUsingInfo(Class<?> subscriberClass) {
         FindState findState = prepareFindState();
         findState.initForSubscriber(subscriberClass);
@@ -99,7 +103,8 @@ class SubscriberMethodFinder {
         return getMethodsAndRelease(findState);
     }
 
-    private List<SubscriberMethod> getMethodsAndRelease(FindState findState) {
+    @NonNull
+    private List<SubscriberMethod> getMethodsAndRelease(@NonNull FindState findState) {
         List<SubscriberMethod> subscriberMethods = new ArrayList<>(findState.subscriberMethods);
         findState.recycle();
         synchronized (FIND_STATE_POOL) {
@@ -135,7 +140,7 @@ class SubscriberMethodFinder {
      * @param findState
      * @return
      */
-    private SubscriberInfo getSubscriberInfo(FindState findState) {
+    private SubscriberInfo getSubscriberInfo(@NonNull FindState findState) {
         //已经有订阅信息，并且父订阅信息的 Class 就是当前 Class
         if (findState.subscriberInfo != null && findState.subscriberInfo.getSuperSubscriberInfo() != null) {
             SubscriberInfo superclassInfo = findState.subscriberInfo.getSuperSubscriberInfo();
@@ -155,6 +160,7 @@ class SubscriberMethodFinder {
         return null;
     }
 
+    @NonNull
     private List<SubscriberMethod> findUsingReflection(Class<?> subscriberClass) {
         FindState findState = prepareFindState();
         findState.initForSubscriber(subscriberClass);
@@ -169,7 +175,7 @@ class SubscriberMethodFinder {
      * 使用反射获取
      * @param findState
      */
-    private void findUsingReflectionInSingleClass(FindState findState) {
+    private void findUsingReflectionInSingleClass(@NonNull FindState findState) {
         Method[] methods;
         try {
             // This is faster than getMethods, especially when subscribers are fat classes like Activities
@@ -220,9 +226,12 @@ class SubscriberMethodFinder {
         final Map<String, Class> subscriberClassByMethodKey = new HashMap<>();  //方法签名与方法 Class 对象的映射
         final StringBuilder methodKeyBuilder = new StringBuilder(128);  //订阅方法的一种签名，用于比较是否相等
 
+        @Nullable
         Class<?> subscriberClass;   //订阅方法所在的类
+        @Nullable
         Class<?> clazz;
         boolean skipSuperClasses;
+        @Nullable
         SubscriberInfo subscriberInfo;  //订阅信息
 
         void initForSubscriber(Class<?> subscriberClass) {
@@ -248,7 +257,7 @@ class SubscriberMethodFinder {
          * @param eventType
          * @return
          */
-        boolean checkAdd(Method method, Class<?> eventType) {
+        boolean checkAdd(@NonNull Method method, @NonNull Class<?> eventType) {
             // 2 level check: 1st level with event type only (fast), 2nd level with complete signature when required.
             // Usually a subscriber doesn't have methods listening to the same event type.
             // 将订阅方法和参数事件保存到一个映射表中
@@ -275,7 +284,7 @@ class SubscriberMethodFinder {
          * @param eventType
          * @return
          */
-        private boolean checkAddWithMethodSignature(Method method, Class<?> eventType) {
+        private boolean checkAddWithMethodSignature(@NonNull Method method, @NonNull Class<?> eventType) {
             methodKeyBuilder.setLength(0);
             methodKeyBuilder.append(method.getName());
             methodKeyBuilder.append('>').append(eventType.getName());

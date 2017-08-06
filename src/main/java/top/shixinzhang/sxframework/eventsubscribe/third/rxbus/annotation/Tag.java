@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.annotation;
 
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,5 +39,5 @@ import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.finder.AnnotatedFi
 public @interface Tag {
     static final String DEFAULT = "rxbus_default_tag";
 
-    String value() default DEFAULT;
+    @NonNull String value() default DEFAULT;
 }

@@ -15,18 +15,22 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 
 /** The result of executing an HTTP request. */
 public final class Result<T> {
-  public static <T> Result<T> error(Throwable error) {
+  @Nullable
+  public static <T> Result<T> error(@Nullable Throwable error) {
     if (error == null) throw new NullPointerException("error == null");
     return new Result<>(null, error);
   }
 
-  public static <T> Result<T> response(Response<T> response) {
+  @Nullable
+  public static <T> Result<T> response(@Nullable Response<T> response) {
     if (response == null) throw new NullPointerException("response == null");
     return new Result<>(response, null);
   }

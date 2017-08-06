@@ -21,6 +21,8 @@ package top.shixinzhang.sxframework.views.recyclerview;
  */
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
@@ -38,18 +40,29 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     private static final boolean DEBUG = false;
 
+    @NonNull
     private ArrayList<ViewHolder> mPendingRemovals = new ArrayList<>();
+    @NonNull
     private ArrayList<ViewHolder> mPendingAdditions = new ArrayList<>();
+    @NonNull
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
+    @NonNull
     private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
 
+    @NonNull
     private ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList<>();
+    @NonNull
     private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<>();
+    @NonNull
     private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<>();
 
+    @NonNull
     protected ArrayList<ViewHolder> mAddAnimations = new ArrayList<>();
+    @NonNull
     private ArrayList<ViewHolder> mMoveAnimations = new ArrayList<>();
+    @NonNull
     protected ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<>();
+    @NonNull
     private ArrayList<ViewHolder> mChangeAnimations = new ArrayList<>();
 
     protected Interpolator mInterpolator = new LinearInterpolator();
@@ -70,6 +83,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     private static class ChangeInfo {
 
+        @Nullable
         public ViewHolder oldHolder, newHolder;
         public int fromX, fromY, toX, toY;
 
@@ -87,6 +101,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
             this.toY = toY;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "ChangeInfo{" +
@@ -209,7 +224,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     protected abstract void animateAddImpl(final RecyclerView.ViewHolder holder);
 
-    private void preAnimateRemove(final RecyclerView.ViewHolder holder) {
+    private void preAnimateRemove(@NonNull final RecyclerView.ViewHolder holder) {
         ViewHelper.clear(holder.itemView);
 
         if (holder instanceof AnimateViewHolder) {
@@ -219,7 +234,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    private void preAnimateAdd(final RecyclerView.ViewHolder holder) {
+    private void preAnimateAdd(@NonNull final RecyclerView.ViewHolder holder) {
         ViewHelper.clear(holder.itemView);
 
         if (holder instanceof AnimateViewHolder) {
@@ -250,31 +265,31 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     }
 
     @Override
-    public boolean animateRemove(final ViewHolder holder) {
+    public boolean animateRemove(@NonNull final ViewHolder holder) {
         endAnimation(holder);
         preAnimateRemove(holder);
         mPendingRemovals.add(holder);
         return true;
     }
 
-    protected long getRemoveDelay(final RecyclerView.ViewHolder holder) {
+    protected long getRemoveDelay(@NonNull final RecyclerView.ViewHolder holder) {
         return Math.abs(holder.getOldPosition() * getRemoveDuration() / 4);
     }
 
     @Override
-    public boolean animateAdd(final ViewHolder holder) {
+    public boolean animateAdd(@NonNull final ViewHolder holder) {
         endAnimation(holder);
         preAnimateAdd(holder);
         mPendingAdditions.add(holder);
         return true;
     }
 
-    protected long getAddDelay(final RecyclerView.ViewHolder holder) {
+    protected long getAddDelay(@NonNull final RecyclerView.ViewHolder holder) {
         return Math.abs(holder.getAdapterPosition() * getAddDuration() / 4);
     }
 
     @Override
-    public boolean animateMove(final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    public boolean animateMove(@NonNull final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
         final View view = holder.itemView;
         fromX += ViewCompat.getTranslationX(holder.itemView);
         fromY += ViewCompat.getTranslationY(holder.itemView);
@@ -295,7 +310,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void animateMoveImpl(final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    private void animateMoveImpl(@NonNull final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -337,7 +352,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     }
 
     @Override
-    public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY,
+    public boolean animateChange(@NonNull ViewHolder oldHolder, @Nullable ViewHolder newHolder, int fromX, int fromY,
                                  int toX, int toY) {
         final float prevTranslationX = ViewCompat.getTranslationX(oldHolder.itemView);
         final float prevTranslationY = ViewCompat.getTranslationY(oldHolder.itemView);
@@ -360,7 +375,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void animateChangeImpl(final ChangeInfo changeInfo) {
+    private void animateChangeImpl(@NonNull final ChangeInfo changeInfo) {
         final ViewHolder holder = changeInfo.oldHolder;
         final View view = holder == null ? null : holder.itemView;
         final ViewHolder newHolder = changeInfo.newHolder;
@@ -413,7 +428,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    private void endChangeAnimation(List<ChangeInfo> infoList, ViewHolder item) {
+    private void endChangeAnimation(@NonNull List<ChangeInfo> infoList, @NonNull ViewHolder item) {
         for (int i = infoList.size() - 1; i >= 0; i--) {
             ChangeInfo changeInfo = infoList.get(i);
             if (endChangeAnimationIfNecessary(changeInfo, item)) {
@@ -424,7 +439,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    private void endChangeAnimationIfNecessary(ChangeInfo changeInfo) {
+    private void endChangeAnimationIfNecessary(@NonNull ChangeInfo changeInfo) {
         if (changeInfo.oldHolder != null) {
             endChangeAnimationIfNecessary(changeInfo, changeInfo.oldHolder);
         }
@@ -433,7 +448,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    private boolean endChangeAnimationIfNecessary(ChangeInfo changeInfo, ViewHolder item) {
+    private boolean endChangeAnimationIfNecessary(@NonNull ChangeInfo changeInfo, @NonNull ViewHolder item) {
         boolean oldItem = false;
         if (changeInfo.newHolder == item) {
             changeInfo.newHolder = null;
@@ -451,7 +466,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     }
 
     @Override
-    public void endAnimation(ViewHolder item) {
+    public void endAnimation(@NonNull ViewHolder item) {
         final View view = item.itemView;
         // this will trigger end callback which should set properties to their target values.
         ViewCompat.animate(view).cancel();
@@ -646,7 +661,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         dispatchAnimationsFinished();
     }
 
-    void cancelAll(List<ViewHolder> viewHolders) {
+    void cancelAll(@NonNull List<ViewHolder> viewHolders) {
         for (int i = viewHolders.size() - 1; i >= 0; i--) {
             ViewCompat.animate(viewHolders.get(i).itemView).cancel();
         }
@@ -681,12 +696,12 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
 
         @Override
-        public void onAnimationCancel(View view) {
+        public void onAnimationCancel(@NonNull View view) {
             ViewHelper.clear(view);
         }
 
         @Override
-        public void onAnimationEnd(View view) {
+        public void onAnimationEnd(@NonNull View view) {
             ViewHelper.clear(view);
             dispatchAddFinished(mViewHolder);
             mAddAnimations.remove(mViewHolder);
@@ -708,12 +723,12 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
 
         @Override
-        public void onAnimationCancel(View view) {
+        public void onAnimationCancel(@NonNull View view) {
             ViewHelper.clear(view);
         }
 
         @Override
-        public void onAnimationEnd(View view) {
+        public void onAnimationEnd(@NonNull View view) {
             ViewHelper.clear(view);
             dispatchRemoveFinished(mViewHolder);
             mRemoveAnimations.remove(mViewHolder);

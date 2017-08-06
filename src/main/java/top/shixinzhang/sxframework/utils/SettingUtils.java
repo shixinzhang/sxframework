@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -42,7 +44,7 @@ public class SettingUtils {
      * @param activity
      * @param packageName
      */
-    public static void checkOverlayPermission(Activity activity, String packageName) {
+    public static void checkOverlayPermission(@Nullable Activity activity, String packageName) {
         if (activity == null || TextUtils.isEmpty(packageName)) {
             throw new IllegalArgumentException("[SettingUtils] Arguments can't be null!");
         }
@@ -63,7 +65,7 @@ public class SettingUtils {
      * @param ServiceClass
      * @return
      */
-    public static boolean checkAccessibilityOpen(Context context, Class ServiceClass) {
+    public static boolean checkAccessibilityOpen(@NonNull Context context, @NonNull Class ServiceClass) {
         int enable = 0;
         final String service = context.getPackageName() + "/" + ServiceClass.getCanonicalName();
         try {
@@ -89,7 +91,7 @@ public class SettingUtils {
         return false;
     }
 
-    public static void jumpToSettingAccessibility(Context context) {
+    public static void jumpToSettingAccessibility(@NonNull Context context) {
         Toast.makeText(context, "请点击应用名称开启辅助功能", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         context.startActivity(intent);

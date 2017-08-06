@@ -17,6 +17,9 @@
 package top.shixinzhang.sxframework.network.download.imp;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -56,12 +59,14 @@ import top.shixinzhang.sxframework.utils.LogUtils;
 public class OkHttpDownloader implements IDownloader {
 
     private OkHttpClient mOkHttpClient;
+    @NonNull
     public static OkHttpDownloader mInstance = new OkHttpDownloader();
 
     private OkHttpDownloader() {
         mOkHttpClient = new OkHttpClient();
     }
 
+    @NonNull
     public static OkHttpDownloader getInstance() {
         return mInstance;
     }
@@ -73,7 +78,7 @@ public class OkHttpDownloader implements IDownloader {
      * @param listener
      */
     @Override
-    public long download(final DownloadInfoBean downloadInfo, final IDownloadListener listener) {
+    public long download(@Nullable final DownloadInfoBean downloadInfo, @Nullable final IDownloadListener listener) {
         if (downloadInfo == null) {
             return -1;
         }
@@ -101,7 +106,7 @@ public class OkHttpDownloader implements IDownloader {
 //                    }
 
                     @Override
-                    public void onNext(final DownloadInfoBean downloadInfoBean) {
+                    public void onNext(@NonNull final DownloadInfoBean downloadInfoBean) {
                         if (listener != null) {
                             listener.onSuccess(new File(downloadInfoBean.getFilePath()));
                         }
@@ -126,11 +131,11 @@ public class OkHttpDownloader implements IDownloader {
         }
 
         @Override
-        public void call(final Subscriber<? super DownloadInfoBean> subscriber) {
+        public void call(@NonNull final Subscriber<? super DownloadInfoBean> subscriber) {
             download(subscriber);
         }
 
-        private void download(final Subscriber<? super DownloadInfoBean> subscriber) {
+        private void download(@NonNull final Subscriber<? super DownloadInfoBean> subscriber) {
             if (mDownloadInfoBean == null) {
                 return;
             }

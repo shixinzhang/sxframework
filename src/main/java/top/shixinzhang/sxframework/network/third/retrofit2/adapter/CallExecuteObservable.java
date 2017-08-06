@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
+import android.support.annotation.NonNull;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -31,7 +33,7 @@ final class CallExecuteObservable<T> extends Observable<Response<T>> {
     this.originalCall = originalCall;
   }
 
-  @Override protected void subscribeActual(Observer<? super Response<T>> observer) {
+  @Override protected void subscribeActual(@NonNull Observer<? super Response<T>> observer) {
     // Since Call is a one-shot type, clone it for each new observer.
     Call<T> call = originalCall.clone();
     observer.onSubscribe(new CallDisposable(call));

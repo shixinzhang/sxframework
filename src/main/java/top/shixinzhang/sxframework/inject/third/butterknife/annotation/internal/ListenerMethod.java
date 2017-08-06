@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.inject.third.butterknife.annotation.internal;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -25,14 +27,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME) @Target(FIELD)
 public @interface ListenerMethod {
   /** Name of the listener method for which this annotation applies. */
-  String name();
+  @NonNull String name();
 
   /** List of method parameters. If the type is not a primitive it must be fully-qualified. */
-  String[] parameters() default { };
+  @NonNull String[] parameters() default { };
 
   /** Primitive or fully-qualified return type of the listener method. May also be {@code void}. */
-  String returnType() default "void";
+  @NonNull String returnType() default "void";
 
   /** If {@link #returnType()} is not {@code void} this value is returned when no binding exists. */
-  String defaultReturn() default "null";
+  @NonNull String defaultReturn() default "null";
 }

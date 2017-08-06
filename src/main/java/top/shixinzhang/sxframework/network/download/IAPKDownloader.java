@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.network.download;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Description:
@@ -31,6 +33,7 @@ import android.net.Uri;
 
 public interface IAPKDownloader extends IDownloader {
 
+    @Nullable
     String getDownloadPath(long id);
 
     Uri getDownloadUri(long id);
@@ -39,14 +42,19 @@ public interface IAPKDownloader extends IDownloader {
 
     long getDownloadProgress();
 
+    @NonNull
     IAPKDownloader setUrl(String url);
 
+    @NonNull
     IAPKDownloader setNotificationTitle(String title);
 
+    @NonNull
     IAPKDownloader setNotificationDesc(String desc);
 
+    @NonNull
     IAPKDownloader setFilePath(String filePath);
 
+    @NonNull
     IAPKDownloader setFileName(String fileName);
 
     /**
@@ -55,6 +63,7 @@ public interface IAPKDownloader extends IDownloader {
      *
      * @return
      */
+    @NonNull
     IAPKDownloader prepare();
 
 

@@ -28,6 +28,8 @@ import android.os.Message;
 import android.os.Process;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -105,7 +107,7 @@ public final class Utils {
     // No instances.
   }
 
-  static int getBitmapBytes(Bitmap bitmap) {
+  static int getBitmapBytes(@NonNull Bitmap bitmap) {
     int result;
     if (SDK_INT >= HONEYCOMB_MR1) {
       result = BitmapHoneycombMR1.getByteCount(bitmap);
@@ -118,7 +120,8 @@ public final class Utils {
     return result;
   }
 
-  static <T> T checkNotNull(T value, String message) {
+  @Nullable
+  static <T> T checkNotNull(@Nullable T value, String message) {
     if (value == null) {
       throw new NullPointerException(message);
     }
@@ -141,11 +144,11 @@ public final class Utils {
     return Looper.getMainLooper().getThread() == Thread.currentThread();
   }
 
-  static String getLogIdsForHunter(BitmapHunter hunter) {
+  static String getLogIdsForHunter(@NonNull BitmapHunter hunter) {
     return getLogIdsForHunter(hunter, "");
   }
 
-  static String getLogIdsForHunter(BitmapHunter hunter, String prefix) {
+  static String getLogIdsForHunter(@NonNull BitmapHunter hunter, String prefix) {
     StringBuilder builder = new StringBuilder(prefix);
     Action action = hunter.getAction();
     if (action != null) {
@@ -169,13 +172,14 @@ public final class Utils {
     Log.d("Picasso", format("%1$-11s %2$-12s %3$s %4$s", owner, verb, logId, extras));
   }
 
-  static String createKey(Request data) {
+  @NonNull
+  static String createKey(@NonNull Request data) {
     String result = createKey(data, MAIN_THREAD_KEY_BUILDER);
     MAIN_THREAD_KEY_BUILDER.setLength(0);
     return result;
   }
 
-  static String createKey(Request data, StringBuilder builder) {
+  static String createKey(@NonNull Request data, @NonNull StringBuilder builder) {
     if (data.stableKey != null) {
       builder.ensureCapacity(data.stableKey.length() + KEY_PADDING);
       builder.append(data.stableKey);
@@ -217,7 +221,7 @@ public final class Utils {
     return builder.toString();
   }
 
-  static void closeQuietly(InputStream is) {
+  static void closeQuietly(@Nullable InputStream is) {
     if (is == null) return;
     try {
       is.close();
@@ -226,7 +230,7 @@ public final class Utils {
   }
 
   /** Returns {@code true} if header indicates the response body was loaded from the disk cache. */
-  static boolean parseResponseSourceHeader(String header) {
+  static boolean parseResponseSourceHeader(@Nullable String header) {
     if (header == null) {
       return false;
     }
@@ -244,6 +248,7 @@ public final class Utils {
     }
   }
 
+  @NonNull
   static Downloader createDefaultDownloader(Context context) {
     try {
       Class.forName("com.squareup.okhttp.OkHttpClient");
@@ -253,7 +258,8 @@ public final class Utils {
     return new UrlConnectionDownloader(context);
   }
 
-  static File createDefaultCacheDir(Context context) {
+  @NonNull
+  static File createDefaultCacheDir(@NonNull Context context) {
     File cache = new File(context.getApplicationContext().getCacheDir(), PICASSO_CACHE);
     if (!cache.exists()) {
       //noinspection ResultOfMethodCallIgnored
@@ -262,7 +268,7 @@ public final class Utils {
     return cache;
   }
 
-  static long calculateDiskCacheSize(File dir) {
+  static long calculateDiskCacheSize(@NonNull File dir) {
     long size = MIN_DISK_CACHE_SIZE;
 
     try {
@@ -277,7 +283,7 @@ public final class Utils {
     return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
   }
 
-  static int calculateMemoryCacheSize(Context context) {
+  static int calculateMemoryCacheSize(@NonNull Context context) {
     ActivityManager am = getService(context, ACTIVITY_SERVICE);
     boolean largeHeap = (context.getApplicationInfo().flags & FLAG_LARGE_HEAP) != 0;
     int memoryClass = am.getMemoryClass();
@@ -288,7 +294,7 @@ public final class Utils {
     return 1024 * 1024 * memoryClass / 7;
   }
 
-  static boolean isAirplaneModeOn(Context context) {
+  static boolean isAirplaneModeOn(@NonNull Context context) {
     ContentResolver contentResolver = context.getContentResolver();
     try {
       return Settings.System.getInt(contentResolver, AIRPLANE_MODE_ON, 0) != 0;
@@ -299,16 +305,17 @@ public final class Utils {
     }
   }
 
+  @NonNull
   @SuppressWarnings("unchecked")
-  static <T> T getService(Context context, String service) {
+  static <T> T getService(@NonNull Context context, @NonNull String service) {
     return (T) context.getSystemService(service);
   }
 
-  static boolean hasPermission(Context context, String permission) {
+  static boolean hasPermission(@NonNull Context context, @NonNull String permission) {
     return context.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
   }
 
-  static byte[] toByteArray(InputStream input) throws IOException {
+  static byte[] toByteArray(@NonNull InputStream input) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     byte[] buffer = new byte[1024 * 4];
     int n;
@@ -318,7 +325,7 @@ public final class Utils {
     return byteArrayOutputStream.toByteArray();
   }
 
-  static boolean isWebPFile(InputStream stream) throws IOException {
+  static boolean isWebPFile(@NonNull InputStream stream) throws IOException {
     byte[] fileHeaderBytes = new byte[WEBP_FILE_HEADER_SIZE];
     boolean isWebPFile = false;
     if (stream.read(fileHeaderBytes, 0, WEBP_FILE_HEADER_SIZE) == WEBP_FILE_HEADER_SIZE) {
@@ -329,7 +336,7 @@ public final class Utils {
     return isWebPFile;
   }
 
-  static int getResourceId(Resources resources, Request data) throws FileNotFoundException {
+  static int getResourceId(@NonNull Resources resources, @NonNull Request data) throws FileNotFoundException {
     if (data.resourceId != 0 || data.uri == null) {
       return data.resourceId;
     }
@@ -358,7 +365,7 @@ public final class Utils {
     return id;
   }
 
-  static Resources getResources(Context context, Request data) throws FileNotFoundException {
+  static Resources getResources(@NonNull Context context, @NonNull Request data) throws FileNotFoundException {
     if (data.resourceId != 0 || data.uri == null) {
       return context.getResources();
     }
@@ -389,12 +396,13 @@ public final class Utils {
 
   @TargetApi(HONEYCOMB)
   private static class ActivityManagerHoneycomb {
-    static int getLargeMemoryClass(ActivityManager activityManager) {
+    static int getLargeMemoryClass(@NonNull ActivityManager activityManager) {
       return activityManager.getLargeMemoryClass();
     }
   }
 
   static class PicassoThreadFactory implements ThreadFactory {
+    @NonNull
     @SuppressWarnings("NullableProblems")
     public Thread newThread(Runnable r) {
       return new PicassoThread(r);
@@ -414,12 +422,13 @@ public final class Utils {
 
   @TargetApi(HONEYCOMB_MR1)
   private static class BitmapHoneycombMR1 {
-    static int getByteCount(Bitmap bitmap) {
+    static int getByteCount(@NonNull Bitmap bitmap) {
       return bitmap.getByteCount();
     }
   }
 
   private static class OkHttpLoaderCreator {
+    @NonNull
     static Downloader create(Context context) {
       return new OkHttpDownloader(context);
     }

@@ -20,6 +20,8 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import top.shixinzhang.sxframework.AppInfo;
@@ -55,18 +57,19 @@ public class DefaultDownloader implements IAPKDownloader {
     private String mDownloadFilePath = DEFAULT_PATH;
     private String mDownloadFileName;
 
-    private DefaultDownloader(Context context) {
+    private DefaultDownloader(@NonNull Context context) {
         mContext = context.getApplicationContext() == null ? context : context.getApplicationContext();
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
-    public static synchronized DefaultDownloader getInstance(Context context) {
+    public static synchronized DefaultDownloader getInstance(@NonNull Context context) {
         if (mInstance == null) {
             mInstance = new DefaultDownloader(context);
         }
         return mInstance;
     }
 
+    @NonNull
     public DefaultDownloader setUrl(String url) {
         mUrl = url;
         return this;
@@ -78,31 +81,37 @@ public class DefaultDownloader implements IAPKDownloader {
      * @param request
      * @return
      */
+    @NonNull
     public DefaultDownloader setRequest(DownloadManager.Request request) {
         mRequest = request;
         return this;
     }
 
+    @NonNull
     public DefaultDownloader setNotificationTitle(String title) {
         mNotificationTitle = title;
         return this;
     }
 
+    @NonNull
     public DefaultDownloader setNotificationDesc(String desc) {
         mNotificationDesc = desc;
         return this;
     }
 
+    @NonNull
     public DefaultDownloader setFilePath(String filePath) {
         mDownloadFilePath = filePath;
         return this;
     }
 
+    @NonNull
     public DefaultDownloader setFileName(String fileName) {
         mDownloadFileName = fileName;
         return this;
     }
 
+    @NonNull
     @Override
     public IAPKDownloader prepare() {
         mRequest = new DownloadManager.Request(Uri.parse(mUrl));
@@ -165,6 +174,7 @@ public class DefaultDownloader implements IAPKDownloader {
      * @param id
      * @return
      */
+    @Nullable
     @Override
     public String getDownloadPath(long id) {
         Cursor cursor = getCursor(id);

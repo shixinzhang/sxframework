@@ -16,6 +16,9 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -168,6 +171,7 @@ public class Bus {
         this.finder = finder;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[Bus \"" + identifier + "\"]";
@@ -185,7 +189,7 @@ public class Bus {
      * @param object object whose subscriber methods should be registered.
      * @throws NullPointerException if the object is null.
      */
-    public void register(Object object) {
+    public void register(@Nullable Object object) {
         if (object == null) {
             throw new NullPointerException("Object to register must not be null.");
         }
@@ -244,10 +248,10 @@ public class Bus {
         }
     }
 
-    private void dispatchProducerResult(final SubscriberEvent subscriberEvent, ProducerEvent producer) {
+    private void dispatchProducerResult(@NonNull final SubscriberEvent subscriberEvent, @NonNull ProducerEvent producer) {
         producer.produce().subscribe(new Action1<Object>() {
             @Override
-            public void call(Object event) {
+            public void call(@Nullable Object event) {
                 if (event != null) {
                     dispatch(event, subscriberEvent);
                 }
@@ -264,7 +268,7 @@ public class Bus {
      * @throws NullPointerException if the object is null.
      */
     @Deprecated
-    public boolean hasRegistered(Object object) {
+    public boolean hasRegistered(@Nullable Object object) {
         if (object == null) {
             throw new NullPointerException("Object to register must not be null.");
         }
@@ -305,7 +309,7 @@ public class Bus {
      * @throws IllegalArgumentException if the object was not previously registered.
      * @throws NullPointerException     if the object is null.
      */
-    public void unregister(Object object) {
+    public void unregister(@Nullable Object object) {
         if (object == null) {
             throw new NullPointerException("Object to unregister must not be null.");
         }
@@ -370,7 +374,7 @@ public class Bus {
      * @param event event to post.
      * @throws NullPointerException if the event is null.
      */
-    public void post(String tag, Object event) {
+    public void post(String tag, @Nullable Object event) {
         if (event == null) {
             throw new NullPointerException("Event to post must not be null.");
         }
@@ -402,7 +406,7 @@ public class Bus {
      * @param event   event to dispatch.
      * @param wrapper wrapper that will call the handle.
      */
-    protected void dispatch(Object event, SubscriberEvent wrapper) {
+    protected void dispatch(Object event, @NonNull SubscriberEvent wrapper) {
         if (wrapper.isValid()) {
             wrapper.handle(event);
         }
@@ -437,7 +441,7 @@ public class Bus {
      * @param concreteClass class whose type hierarchy will be retrieved.
      * @return {@code concreteClass}'s complete type hierarchy, flattened and uniqued.
      */
-    Set<Class<?>> flattenHierarchy(Class<?> concreteClass) {
+    Set<Class<?>> flattenHierarchy(@NonNull Class<?> concreteClass) {
         Set<Class<?>> classes = flattenHierarchyCache.get(concreteClass);
         if (classes == null) {
             Set<Class<?>> classesCreation = getClassesFor(concreteClass);
@@ -450,6 +454,7 @@ public class Bus {
         return classes;
     }
 
+    @NonNull
     private Set<Class<?>> getClassesFor(Class<?> concreteClass) {
         List<Class<?>> parents = new LinkedList<>();
         Set<Class<?>> classes = new HashSet<>();

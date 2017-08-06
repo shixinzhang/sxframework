@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.annotation;
 
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -36,7 +38,7 @@ import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.thread.EventThread
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Produce {
-    Tag[] tags() default {};
+    @NonNull Tag[] tags() default {};
 
-    EventThread thread() default EventThread.MAIN_THREAD;
+    @NonNull EventThread thread() default EventThread.MAIN_THREAD;
 }

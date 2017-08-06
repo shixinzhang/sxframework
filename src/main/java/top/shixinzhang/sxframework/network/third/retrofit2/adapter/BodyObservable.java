@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
+import android.support.annotation.NonNull;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -47,7 +49,7 @@ final class BodyObservable<T> extends Observable<T> {
       observer.onSubscribe(disposable);
     }
 
-    @Override public void onNext(Response<R> response) {
+    @Override public void onNext(@NonNull Response<R> response) {
       if (response.isSuccessful()) {
         observer.onNext(response.body());
       } else {

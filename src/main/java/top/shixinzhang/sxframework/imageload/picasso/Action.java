@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -32,8 +34,10 @@ abstract class Action<T> {
     }
   }
 
+  @NonNull
   final Picasso picasso;
   final Request request;
+  @NonNull
   final WeakReference<T> target;
   final boolean noFade;
   final int memoryPolicy;
@@ -41,13 +45,14 @@ abstract class Action<T> {
   final int errorResId;
   final Drawable errorDrawable;
   final String key;
+  @NonNull
   final Object tag;
 
   boolean willReplay;
   boolean cancelled;
 
-  Action(Picasso picasso, T target, Request request, int memoryPolicy, int networkPolicy,
-         int errorResId, Drawable errorDrawable, String key, Object tag, boolean noFade) {
+  Action(@NonNull Picasso picasso, @Nullable T target, Request request, int memoryPolicy, int networkPolicy,
+         int errorResId, Drawable errorDrawable, String key, @Nullable Object tag, boolean noFade) {
     this.picasso = picasso;
     this.request = request;
     this.target =
@@ -73,6 +78,7 @@ abstract class Action<T> {
     return request;
   }
 
+  @Nullable
   T getTarget() {
     return target == null ? null : target.get();
   }
@@ -97,6 +103,7 @@ abstract class Action<T> {
     return networkPolicy;
   }
 
+  @NonNull
   Picasso getPicasso() {
     return picasso;
   }
@@ -105,6 +112,7 @@ abstract class Action<T> {
     return request.priority;
   }
 
+  @NonNull
   Object getTag() {
     return tag;
   }

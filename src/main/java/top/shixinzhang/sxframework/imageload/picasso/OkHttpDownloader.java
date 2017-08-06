@@ -17,6 +17,7 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 
 import com.squareup.okhttp.CacheControl;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
  * A {@link Downloader} which uses OkHttp to download images.
  */
 public class OkHttpDownloader implements Downloader {
+    @NonNull
     private static OkHttpClient defaultOkHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(Utils.DEFAULT_CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS);
@@ -46,7 +48,7 @@ public class OkHttpDownloader implements Downloader {
      * Create new downloader that uses OkHttp. This will install an image cache into your application
      * cache directory.
      */
-    public OkHttpDownloader(final Context context) {
+    public OkHttpDownloader(@NonNull final Context context) {
         this(Utils.createDefaultCacheDir(context));
     }
 
@@ -56,7 +58,7 @@ public class OkHttpDownloader implements Downloader {
      *
      * @param cacheDir The directory in which the cache should be stored
      */
-    public OkHttpDownloader(final File cacheDir) {
+    public OkHttpDownloader(@NonNull final File cacheDir) {
         this(cacheDir, Utils.calculateDiskCacheSize(cacheDir));
     }
 
@@ -66,7 +68,7 @@ public class OkHttpDownloader implements Downloader {
      *
      * @param maxSize The size limit for the cache.
      */
-    public OkHttpDownloader(final Context context, final long maxSize) {
+    public OkHttpDownloader(@NonNull final Context context, final long maxSize) {
         this(Utils.createDefaultCacheDir(context), maxSize);
     }
 
@@ -94,8 +96,9 @@ public class OkHttpDownloader implements Downloader {
         return client;
     }
 
+    @NonNull
     @Override
-    public Response load(Uri uri, int networkPolicy) throws IOException {
+    public Response load(@NonNull Uri uri, int networkPolicy) throws IOException {
         CacheControl cacheControl = null;
         if (networkPolicy != 0) {
             if (NetworkPolicy.isOfflineOnly(networkPolicy)) {

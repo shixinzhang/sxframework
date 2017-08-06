@@ -15,6 +15,7 @@
  */
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
@@ -24,6 +25,7 @@ import android.util.Log;
  */
 final class BackgroundPoster implements Runnable {
 
+    @NonNull
     private final PendingPostQueue queue;
     private final EventBus eventBus;
 

@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
             long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             LogUtils.d(TAG, downloadId + " download success");
@@ -56,7 +57,7 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
         }
     }
 
-    private void installApk(Context context, long downloadSuccessId) {
+    private void installApk(@NonNull Context context, long downloadSuccessId) {
 
         long lastDownloadId = (long) SpUtils.getDataFromDefault(context, DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
         if (downloadSuccessId == lastDownloadId) {

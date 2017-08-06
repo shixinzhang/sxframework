@@ -16,6 +16,7 @@
 
 package top.shixinzhang.sxframework.network.upload;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -66,7 +67,7 @@ public class UploadManager {
                 .build();
     }
 
-    private UploadManager(final Builder builder) {
+    private UploadManager(@NonNull final Builder builder) {
         mHttpClient = newClient();
         mName = builder.mName;
         mFileName = builder.mFileName;
@@ -101,7 +102,7 @@ public class UploadManager {
 
         mHttpClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
-            public void onFailure(final Call call, final IOException e) {
+            public void onFailure(final Call call, @NonNull final IOException e) {
                 e.printStackTrace();
                 LogUtils.d(TAG, "上传失败：" + e.getMessage());
 
@@ -111,7 +112,7 @@ public class UploadManager {
             }
 
             @Override
-            public void onResponse(final Call call, final Response response) throws IOException {
+            public void onResponse(final Call call, @NonNull final Response response) throws IOException {
                 LogUtils.d(TAG, "上传成功：" + response.body().string());
 
                 if (mCallback != null) {
@@ -135,41 +136,49 @@ public class UploadManager {
         public Builder() {
         }
 
+        @NonNull
         public Builder name(final String mName) {
             this.mName = mName;
             return this;
         }
 
+        @NonNull
         public Builder fileName(final String mFileName) {
             this.mFileName = mFileName;
             return this;
         }
 
+        @NonNull
         public Builder fileType(final String mFileType) {
             this.mFileType = mFileType;
             return this;
         }
 
+        @NonNull
         public Builder file(final File mFile) {
             this.mFile = mFile;
             return this;
         }
 
+        @NonNull
         public Builder url(final String mUrl) {
             this.mUrl = mUrl;
             return this;
         }
 
+        @NonNull
         public Builder headers(final Map<String, String> mHeaders) {
             this.mHeaders = mHeaders;
             return this;
         }
 
+        @NonNull
         public Builder callback(final Callback mCallback) {
             this.mCallback = mCallback;
             return this;
         }
 
+        @NonNull
         public UploadManager build() {
             return new UploadManager(this);
         }

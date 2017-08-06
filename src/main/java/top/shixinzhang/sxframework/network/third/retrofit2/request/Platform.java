@@ -18,6 +18,8 @@ package top.shixinzhang.sxframework.network.third.retrofit2.request;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 //import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 //
@@ -30,8 +32,10 @@ import java.util.concurrent.Executor;
 
 
 class Platform {
+    @Nullable
     private static final Platform PLATFORM = findPlatform();
 
+    @Nullable
     static Platform get() {
         return PLATFORM;
     }
@@ -58,11 +62,13 @@ class Platform {
         return new Platform();
     }
 
+    @Nullable
     Executor defaultCallbackExecutor() {
         return null;
     }
 
-    CallAdapter.Factory defaultCallAdapterFactory(Executor callbackExecutor) {
+    @Nullable
+    CallAdapter.Factory defaultCallAdapterFactory(@Nullable Executor callbackExecutor) {
         if (callbackExecutor != null) {
             return new ExecutorCallAdapterFactory(callbackExecutor);
         }
@@ -73,6 +79,7 @@ class Platform {
         return false;
     }
 
+    @NonNull
     Object invokeDefaultMethod(Method method, Class<?> declaringClass, Object object, Object... args)
             throws Throwable {
         throw new UnsupportedOperationException();
@@ -98,11 +105,13 @@ class Platform {
 //  }
 
     static class Android extends Platform {
+        @NonNull
         @Override
         public Executor defaultCallbackExecutor() {
             return new MainThreadExecutor();
         }
 
+        @NonNull
         @Override
         CallAdapter.Factory defaultCallAdapterFactory(Executor callbackExecutor) {
             return new ExecutorCallAdapterFactory(callbackExecutor);
@@ -119,11 +128,13 @@ class Platform {
     }
 
     static class IOS extends Platform {
+        @NonNull
         @Override
         public Executor defaultCallbackExecutor() {
             return new MainThreadExecutor();
         }
 
+        @NonNull
         @Override
         CallAdapter.Factory defaultCallAdapterFactory(Executor callbackExecutor) {
             return new ExecutorCallAdapterFactory(callbackExecutor);
@@ -149,7 +160,7 @@ class Platform {
                 try {
                     // queue.addOperation(r);
                     addOperation.invoke(queue, r);
-                } catch (IllegalArgumentException | IllegalAccessException e) {
+                } catch (@NonNull IllegalArgumentException | IllegalAccessException e) {
                     throw new AssertionError(e);
                 } catch (InvocationTargetException e) {
                     Throwable cause = e.getCause();

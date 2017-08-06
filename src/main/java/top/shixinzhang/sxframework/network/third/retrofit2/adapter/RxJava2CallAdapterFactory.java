@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
@@ -61,6 +64,7 @@ public final class RxJava2CallAdapterFactory extends CallAdapter.Factory {
      * Returns an instance which creates synchronous observables that do not operate on any scheduler
      * by default.
      */
+    @NonNull
     public static RxJava2CallAdapterFactory create() {
         return new RxJava2CallAdapterFactory(null, false);
     }
@@ -69,6 +73,7 @@ public final class RxJava2CallAdapterFactory extends CallAdapter.Factory {
      * Returns an instance which creates asynchronous observables. Applying
      * {@link Observable#subscribeOn} has no effect on stream types created by this factory.
      */
+    @NonNull
     public static RxJava2CallAdapterFactory createAsync() {
         return new RxJava2CallAdapterFactory(null, true);
     }
@@ -77,7 +82,8 @@ public final class RxJava2CallAdapterFactory extends CallAdapter.Factory {
      * Returns an instance which creates synchronous observables that
      * {@linkplain Observable#subscribeOn(Scheduler) subscribe on} {@code scheduler} by default.
      */
-    public static RxJava2CallAdapterFactory createWithScheduler(Scheduler scheduler) {
+    @NonNull
+    public static RxJava2CallAdapterFactory createWithScheduler(@Nullable Scheduler scheduler) {
         if (scheduler == null) throw new NullPointerException("scheduler == null");
         return new RxJava2CallAdapterFactory(scheduler, false);
     }

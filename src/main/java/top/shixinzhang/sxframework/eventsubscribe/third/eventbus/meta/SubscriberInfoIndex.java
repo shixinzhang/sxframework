@@ -15,9 +15,12 @@
  */
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.meta;
 
+import android.support.annotation.NonNull;
+
 /**
  * Interface for generated indexes.
  */
 public interface SubscriberInfoIndex {
+    @NonNull
     SubscriberInfo getSubscriberInfo(Class<?> subscriberClass);
 }

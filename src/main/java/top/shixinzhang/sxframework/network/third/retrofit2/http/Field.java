@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.http;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -59,7 +61,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 public @interface Field {
-    String value();
+    @NonNull String value();
 
     /**
      * Specifies whether the {@linkplain #value() name} and value are already URL encoded.

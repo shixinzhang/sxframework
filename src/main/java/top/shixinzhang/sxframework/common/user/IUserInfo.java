@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.common.user;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -27,42 +29,52 @@ import java.io.Serializable;
 
 public interface IUserInfo extends Serializable{
     //用户ID
+    @NonNull
     String getUserId();
     void setUserId(String userId);
 
     //用户名
+    @NonNull
     String getUserName();
     void setUserName(String userName);
 
     //昵称
+    @NonNull
     String getNickName();
     void setNickName(String nickName);
 
     //真实名称
+    @NonNull
     String getRealName();
     void setRealName(String realName);
 
     //手机号
+    @NonNull
     String getPhoneNumber();
     void setPhoneNumber(String phoneNumber);
 
     //邮箱
+    @NonNull
     String getEmail();
     void setEmail(String email);
 
     //性别
+    @NonNull
     String getGender();
     void setGender(String gender);
 
     //生日
+    @NonNull
     String getBirthday();
     void setBirthday(String birthday);
 
     //头像地址
+    @NonNull
     String getHeadPortrait();
     void setHeadPortrait(String portrait);
 
     //身份证
+    @NonNull
     String getIdCard();
     void setIdCard(String idCard);
 }

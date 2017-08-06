@@ -19,12 +19,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 /**
  * 主线程发送者
  */
 final class HandlerPoster extends Handler {
 
+    @NonNull
     private final PendingPostQueue queue;
     private final int maxMillisInsideHandleMessage;
     private final EventBus eventBus;

@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.cache.imp;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 
 import java.util.Map;
@@ -30,6 +32,7 @@ import top.shixinzhang.sxframework.cache.IMemoryCache;
  * Edit it! Change it! Beat it! Whatever!
  */
 public class MemoryCache implements IMemoryCache{
+    @NonNull
     private final LruCache<String, Value> memoryCache;
 
     public MemoryCache(int count) {
@@ -48,17 +51,18 @@ public class MemoryCache implements IMemoryCache{
         }
     }
 
-    public void put(String key, String value) {
+    public void put(@NonNull String key, String value) {
         checkMemoryCacheValid();
         memoryCache.put(key, new Value(value));
     }
 
-    public void put(String key, String value, int saveTime) {
+    public void put(@NonNull String key, String value, int saveTime) {
         checkMemoryCacheValid();
         memoryCache.put(key, new Value(value, saveTime));
     }
 
-    public String getAsString(String key) {
+    @Nullable
+    public String getAsString(@NonNull String key) {
         checkMemoryCacheValid();
         Value value = memoryCache.remove(key);
         if(value!=null){
@@ -74,7 +78,7 @@ public class MemoryCache implements IMemoryCache{
      * 移除某个cache
      * @param key
      */
-    public void remove( String key ) {
+    public void remove(@NonNull String key ) {
         memoryCache.remove( key );
     }
 

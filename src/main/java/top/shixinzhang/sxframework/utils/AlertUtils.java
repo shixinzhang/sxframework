@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.utils;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class AlertUtils {
      * @param msg
      * @param duration
      */
-    private static void toast(Context context, String msg, int duration) {
+    private static void toast(@Nullable Context context, String msg, int duration) {
         if (context == null) {
             throw new IllegalArgumentException("[AlertUtils] Context can't be null!");
         }

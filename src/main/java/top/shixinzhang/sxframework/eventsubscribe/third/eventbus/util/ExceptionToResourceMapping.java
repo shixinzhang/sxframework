@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.util;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 
@@ -34,6 +36,7 @@ import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBus;
  */
 public class ExceptionToResourceMapping {
 
+    @NonNull
     public final Map<Class<? extends Throwable>, Integer> throwableToMsgIdMap;
 
     public ExceptionToResourceMapping() {
@@ -41,6 +44,7 @@ public class ExceptionToResourceMapping {
     }
 
     /** Looks at the exception and its causes trying to find an ID. */
+    @Nullable
     public Integer mapThrowable(final Throwable throwable) {
         Throwable throwableToCheck = throwable;
         int depthToGo = 20;
@@ -63,7 +67,7 @@ public class ExceptionToResourceMapping {
     }
 
     /** Mapping without checking the cause (done in mapThrowable). */
-    protected Integer mapThrowableFlat(Throwable throwable) {
+    protected Integer mapThrowableFlat(@NonNull Throwable throwable) {
         Class<? extends Throwable> throwableClass = throwable.getClass();
         Integer resId = throwableToMsgIdMap.get(throwableClass);
         if (resId == null) {
@@ -83,6 +87,7 @@ public class ExceptionToResourceMapping {
         return resId;
     }
 
+    @NonNull
     public ExceptionToResourceMapping addMapping(Class<? extends Throwable> clazz, int msgId) {
         throwableToMsgIdMap.put(clazz, msgId);
         return this;

@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.views.adapter.lvbaseadapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public abstract class EnhancedQuickAdapter<T> extends QuickAdapter<T> {
     }
 
     @Override
-    protected final void convert(BaseAdapterHelper helper, T item) {
+    protected final void convert(@NonNull BaseAdapterHelper helper, T item) {
         boolean itemChanged = helper.associatedObject == null || !helper.associatedObject.equals(item);
         helper.associatedObject = item;
         convert(helper, item, itemChanged);

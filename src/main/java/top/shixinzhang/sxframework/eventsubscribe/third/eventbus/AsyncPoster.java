@@ -16,6 +16,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
 
+import android.support.annotation.NonNull;
+
 /**
  * Posts events in background.
  * 
@@ -23,6 +25,7 @@ package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
  */
 class AsyncPoster implements Runnable {
 
+    @NonNull
     private final PendingPostQueue queue;
     private final EventBus eventBus;
 

@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
+import android.support.annotation.NonNull;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -32,7 +34,7 @@ final class CallEnqueueObservable<T> extends Observable<Response<T>> {
     this.originalCall = originalCall;
   }
 
-  @Override protected void subscribeActual(Observer<? super Response<T>> observer) {
+  @Override protected void subscribeActual(@NonNull Observer<? super Response<T>> observer) {
     // Since Call is a one-shot type, clone it for each new observer.
     Call<T> call = originalCall.clone();
     CallCallback<T> callback = new CallCallback<>(call, observer);
@@ -50,7 +52,7 @@ final class CallEnqueueObservable<T> extends Observable<Response<T>> {
       this.observer = observer;
     }
 
-    @Override public void onResponse(Call<T> call, Response<T> response) {
+    @Override public void onResponse(@NonNull Call<T> call, Response<T> response) {
       if (call.isCanceled()) return;
 
       try {
@@ -74,7 +76,7 @@ final class CallEnqueueObservable<T> extends Observable<Response<T>> {
       }
     }
 
-    @Override public void onFailure(Call<T> call, Throwable t) {
+    @Override public void onFailure(@NonNull Call<T> call, Throwable t) {
       if (call.isCanceled()) return;
 
       try {

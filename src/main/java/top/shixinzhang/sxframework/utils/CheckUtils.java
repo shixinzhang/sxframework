@@ -16,6 +16,7 @@
 
 package top.shixinzhang.sxframework.utils;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -66,7 +67,8 @@ public class CheckUtils {
         }
     }
 
-    public static <T> T checkNotNull(T reference) {
+    @Nullable
+    public static <T> T checkNotNull(@Nullable T reference) {
         if (reference == null) {
             throw new NullPointerException();
         } else {
@@ -74,7 +76,8 @@ public class CheckUtils {
         }
     }
 
-    public static <T> T checkNotNull(T reference, @Nullable Object errorMessage) {
+    @Nullable
+    public static <T> T checkNotNull(@Nullable T reference, @Nullable Object errorMessage) {
         if (reference == null) {
             throw new NullPointerException(String.valueOf(errorMessage));
         } else {
@@ -82,7 +85,8 @@ public class CheckUtils {
         }
     }
 
-    public static <T> T checkNotNull(T reference, @Nullable String errorMessageTemplate, @Nullable Object... errorMessageArgs) {
+    @Nullable
+    public static <T> T checkNotNull(@Nullable T reference, @Nullable String errorMessageTemplate, @Nullable Object... errorMessageArgs) {
         if (reference == null) {
             throw new NullPointerException(format(errorMessageTemplate, errorMessageArgs));
         } else {
@@ -140,6 +144,7 @@ public class CheckUtils {
         }
     }
 
+    @NonNull
     private static String badPositionIndexes(int start, int end, int size) {
         return start >= 0 && start <= size ? (end >= 0 && end <= size ? format("end index (%s) must not be less than start index (%s)", end, start) : badPositionIndex(end, size, "end index")) : badPositionIndex(start, size, "start index");
     }

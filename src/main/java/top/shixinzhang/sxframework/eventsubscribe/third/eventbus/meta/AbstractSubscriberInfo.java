@@ -16,6 +16,9 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.meta;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.reflect.Method;
 
 import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBusException;
@@ -40,6 +43,7 @@ public abstract class AbstractSubscriberInfo implements SubscriberInfo {
         return subscriberClass;
     }
 
+    @Nullable
     @Override
     public SubscriberInfo getSuperSubscriberInfo() {
         if(superSubscriberInfoClass == null) {
@@ -47,7 +51,7 @@ public abstract class AbstractSubscriberInfo implements SubscriberInfo {
         }
         try {
             return superSubscriberInfoClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (@NonNull InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -57,14 +61,17 @@ public abstract class AbstractSubscriberInfo implements SubscriberInfo {
         return shouldCheckSuperclass;
     }
 
+    @NonNull
     protected SubscriberMethod createSubscriberMethod(String methodName, Class<?> eventType) {
         return createSubscriberMethod(methodName, eventType, ThreadMode.POSTING, 0, false);
     }
 
+    @NonNull
     protected SubscriberMethod createSubscriberMethod(String methodName, Class<?> eventType, ThreadMode threadMode) {
         return createSubscriberMethod(methodName, eventType, threadMode, 0, false);
     }
 
+    @NonNull
     protected SubscriberMethod createSubscriberMethod(String methodName, Class<?> eventType, ThreadMode threadMode,
                                                       int priority, boolean sticky) {
         try {

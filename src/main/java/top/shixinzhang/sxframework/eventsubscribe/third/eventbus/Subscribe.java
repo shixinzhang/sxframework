@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,7 +29,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Subscribe {
-    ThreadMode threadMode() default ThreadMode.POSTING;
+    @NonNull ThreadMode threadMode() default ThreadMode.POSTING;
 
     /**
      * If true, delivers the most recent sticky event (posted with

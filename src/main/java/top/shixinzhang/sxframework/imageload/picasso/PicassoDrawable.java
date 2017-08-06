@@ -28,6 +28,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import static android.graphics.Color.WHITE;
@@ -42,7 +44,7 @@ final class PicassoDrawable extends BitmapDrawable {
    * Create or update the drawable on the target {@link ImageView} to display the supplied bitmap
    * image.
    */
-  static void setBitmap(ImageView target, Context context, Bitmap bitmap,
+  static void setBitmap(@NonNull ImageView target, @NonNull Context context, Bitmap bitmap,
                         Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging) {
     Drawable placeholder = target.getDrawable();
     if (placeholder instanceof AnimationDrawable) {
@@ -57,7 +59,7 @@ final class PicassoDrawable extends BitmapDrawable {
    * Create or update the drawable on the target {@link ImageView} to display the supplied
    * placeholder image.
    */
-  static void setPlaceholder(ImageView target, Drawable placeholderDrawable) {
+  static void setPlaceholder(@NonNull ImageView target, Drawable placeholderDrawable) {
     target.setImageDrawable(placeholderDrawable);
     if (target.getDrawable() instanceof AnimationDrawable) {
       ((AnimationDrawable) target.getDrawable()).start();
@@ -68,13 +70,14 @@ final class PicassoDrawable extends BitmapDrawable {
   private final float density;
   private final Picasso.LoadedFrom loadedFrom;
 
+  @Nullable
   Drawable placeholder;
 
   long startTimeMillis;
   boolean animating;
   int alpha = 0xFF;
 
-  PicassoDrawable(Context context, Bitmap bitmap, Drawable placeholder,
+  PicassoDrawable(@NonNull Context context, Bitmap bitmap, Drawable placeholder,
                   Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging) {
     super(context.getResources(), bitmap);
 
@@ -91,7 +94,7 @@ final class PicassoDrawable extends BitmapDrawable {
     }
   }
 
-  @Override public void draw(Canvas canvas) {
+  @Override public void draw(@NonNull Canvas canvas) {
     if (!animating) {
       super.draw(canvas);
     } else {
@@ -135,14 +138,14 @@ final class PicassoDrawable extends BitmapDrawable {
     super.setColorFilter(cf);
   }
 
-  @Override protected void onBoundsChange(Rect bounds) {
+  @Override protected void onBoundsChange(@NonNull Rect bounds) {
     if (placeholder != null) {
       placeholder.setBounds(bounds);
     }
     super.onBoundsChange(bounds);
   }
 
-  private void drawDebugIndicator(Canvas canvas) {
+  private void drawDebugIndicator(@NonNull Canvas canvas) {
     DEBUG_PAINT.setColor(WHITE);
     Path path = getTrianglePath(new Point(0, 0), (int) (16 * density));
     canvas.drawPath(path, DEBUG_PAINT);
@@ -152,7 +155,8 @@ final class PicassoDrawable extends BitmapDrawable {
     canvas.drawPath(path, DEBUG_PAINT);
   }
 
-  private static Path getTrianglePath(Point p1, int width) {
+  @NonNull
+  private static Path getTrianglePath(@NonNull Point p1, int width) {
     Point p2 = new Point(p1.x + width, p1.y);
     Point p3 = new Point(p1.x, p1.y + width);
 

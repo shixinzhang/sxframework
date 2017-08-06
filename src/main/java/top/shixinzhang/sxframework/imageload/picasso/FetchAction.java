@@ -16,13 +16,17 @@
 package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 class FetchAction extends Action<Object> {
 
+  @NonNull
   private final Object target;
+  @Nullable
   private Callback callback;
 
-  FetchAction(Picasso picasso, Request data, int memoryPolicy, int networkPolicy, Object tag,
+  FetchAction(@NonNull Picasso picasso, Request data, int memoryPolicy, int networkPolicy, Object tag,
               String key, Callback callback) {
     super(picasso, null, data, memoryPolicy, networkPolicy, 0, null, key, tag, false);
     this.target = new Object();
@@ -46,6 +50,7 @@ class FetchAction extends Action<Object> {
     callback = null;
   }
 
+  @NonNull
   @Override Object getTarget() {
     return target;
   }

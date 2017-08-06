@@ -16,9 +16,10 @@
 package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 
 class GetAction extends Action<Void> {
-  GetAction(Picasso picasso, Request data, int memoryPolicy, int networkPolicy, Object tag,
+  GetAction(@NonNull Picasso picasso, Request data, int memoryPolicy, int networkPolicy, Object tag,
             String key) {
     super(picasso, null, data, memoryPolicy, networkPolicy, 0, null, key, tag, false);
   }

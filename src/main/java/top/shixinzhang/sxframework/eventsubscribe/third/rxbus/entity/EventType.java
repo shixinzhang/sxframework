@@ -16,16 +16,21 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.entity;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 public class EventType {
 
     /**
      * Event Tag
      */
+    @Nullable
     private final String tag;
 
     /**
      * Event Clazz
      */
+    @Nullable
     private final Class<?> clazz;
     /**
      * Object hash code.
@@ -33,7 +38,7 @@ public class EventType {
     private final int hashCode;
 
 
-    public EventType(String tag, Class<?> clazz) {
+    public EventType(@Nullable String tag, @Nullable Class<?> clazz) {
         if (tag == null) {
             throw new NullPointerException("EventType Tag cannot be null.");
         }
@@ -50,6 +55,7 @@ public class EventType {
         hashCode = (prime + tag.hashCode()) * prime + clazz.hashCode();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[EventType " + tag + " && " + clazz + "]";
@@ -61,7 +67,7 @@ public class EventType {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

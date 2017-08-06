@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ class ResourceRequestHandler extends RequestHandler {
     this.context = context;
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     if (data.resourceId != 0) {
       return true;
     }
@@ -40,13 +41,14 @@ class ResourceRequestHandler extends RequestHandler {
     return SCHEME_ANDROID_RESOURCE.equals(data.uri.getScheme());
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @NonNull
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     Resources res = Utils.getResources(context, request);
     int id = Utils.getResourceId(res, request);
     return new Result(decodeResource(res, id, request), DISK);
   }
 
-  private static Bitmap decodeResource(Resources resources, int id, Request data) {
+  private static Bitmap decodeResource(Resources resources, int id, @NonNull Request data) {
     final BitmapFactory.Options options = createBitmapOptions(data);
     if (requiresInSampleSize(options)) {
       BitmapFactory.decodeResource(resources, id, options);

@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.cache.imp;
 
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -104,8 +106,9 @@ public class BaseDiskCache implements IDiskCache {
     /**
      * Returns the cache entry with the specified key if it exists, null otherwise.
      */
+    @Nullable
     @Override
-    public synchronized Entry get(String key) {
+    public synchronized Entry get(@NonNull String key) {
         CacheHeader entry = mEntries.get(key);
         // if the entry does not exist, return.
         if (entry == null) {
@@ -184,7 +187,7 @@ public class BaseDiskCache implements IDiskCache {
      * @param fullExpire True to fully expire the entry, false to soft expire
      */
     @Override
-    public synchronized void invalidate(String key, boolean fullExpire) {
+    public synchronized void invalidate(@NonNull String key, boolean fullExpire) {
         Entry entry = get(key);
         if (entry != null) {
             entry.softTtl = 0;
@@ -200,7 +203,7 @@ public class BaseDiskCache implements IDiskCache {
      * Puts the entry with the specified key into the cache.
      */
     @Override
-    public synchronized void put(String key, Entry entry) {
+    public synchronized void put(@NonNull String key, @NonNull Entry entry) {
         pruneIfNeeded(entry.data.length);
         File file = getFileForKey(key);
         try {
@@ -228,7 +231,7 @@ public class BaseDiskCache implements IDiskCache {
      * Removes the specified key from the cache if it exists.
      */
     @Override
-    public synchronized void remove(String key) {
+    public synchronized void remove(@NonNull String key) {
         boolean deleted = getFileForKey(key).delete();
         removeEntry(key);
         if (!deleted) {
@@ -242,7 +245,8 @@ public class BaseDiskCache implements IDiskCache {
      * @param key The key to generate a file name for.
      * @return A pseudo-unique filename.
      */
-    private String getFilenameForKey(String key) {
+    @NonNull
+    private String getFilenameForKey(@NonNull String key) {
         int firstHalfLength = key.length() / 2;
         String localFilename = String.valueOf(key.substring(0, firstHalfLength).hashCode());
         localFilename += String.valueOf(key.substring(firstHalfLength).hashCode());
@@ -252,7 +256,8 @@ public class BaseDiskCache implements IDiskCache {
     /**
      * Returns a file object for the given cache key.
      */
-    public File getFileForKey(String key) {
+    @NonNull
+    public File getFileForKey(@NonNull String key) {
         return new File(mRootDirectory, getFilenameForKey(key));
     }
 
@@ -302,7 +307,7 @@ public class BaseDiskCache implements IDiskCache {
      * @param key The key to identify the entry by.
      * @param entry The entry to cache.
      */
-    private void putEntry(String key, CacheHeader entry) {
+    private void putEntry(String key, @NonNull CacheHeader entry) {
         if (!mEntries.containsKey(key)) {
             mTotalSize += entry.size;
         } else {
@@ -326,7 +331,8 @@ public class BaseDiskCache implements IDiskCache {
     /**
      * Reads the contents of an InputStream into a byte[].
      * */
-    private static byte[] streamToBytes(InputStream in, int length) throws IOException {
+    @NonNull
+    private static byte[] streamToBytes(@NonNull InputStream in, int length) throws IOException {
         byte[] bytes = new byte[length];
         int count;
         int pos = 0;
@@ -352,6 +358,7 @@ public class BaseDiskCache implements IDiskCache {
         public String key;
 
         /** ETag for cache coherence. */
+        @Nullable
         public String etag;
 
         /** Date of this response as reported by the server. */
@@ -376,7 +383,7 @@ public class BaseDiskCache implements IDiskCache {
          * @param key The key that identifies the cache entry
          * @param entry The cache entry.
          */
-        public CacheHeader(String key, Entry entry) {
+        public CacheHeader(String key, @NonNull Entry entry) {
             this.key = key;
             this.size = entry.data.length;
             this.etag = entry.etag;
@@ -392,7 +399,8 @@ public class BaseDiskCache implements IDiskCache {
          * @param is The InputStream to read from.
          * @throws IOException
          */
-        public static CacheHeader readHeader(InputStream is) throws IOException {
+        @NonNull
+        public static CacheHeader readHeader(@NonNull InputStream is) throws IOException {
             CacheHeader entry = new CacheHeader();
             int magic = readInt(is);
             if (magic != CACHE_MAGIC) {
@@ -416,6 +424,7 @@ public class BaseDiskCache implements IDiskCache {
         /**
          * Creates a cache entry for the specified data.
          */
+        @NonNull
         public Entry toCacheEntry(byte[] data) {
             Entry e = new Entry();
             e.data = data;
@@ -432,7 +441,7 @@ public class BaseDiskCache implements IDiskCache {
         /**
          * Writes the contents of this CacheHeader to the specified OutputStream.
          */
-        public boolean writeHeader(OutputStream os) {
+        public boolean writeHeader(@NonNull OutputStream os) {
             try {
                 writeInt(os, CACHE_MAGIC);
                 writeString(os, key);
@@ -469,7 +478,7 @@ public class BaseDiskCache implements IDiskCache {
         }
 
         @Override
-        public int read(byte[] buffer, int offset, int count) throws IOException {
+        public int read(@NonNull byte[] buffer, int offset, int count) throws IOException {
             int result = super.read(buffer, offset, count);
             if (result != -1) {
                 bytesRead += result;
@@ -489,7 +498,7 @@ public class BaseDiskCache implements IDiskCache {
      * Simple wrapper around {@link InputStream#read()} that throws EOFException
      * instead of returning -1.
      */
-    private static int read(InputStream is) throws IOException {
+    private static int read(@NonNull InputStream is) throws IOException {
         int b = is.read();
         if (b == -1) {
             throw new EOFException();
@@ -497,14 +506,14 @@ public class BaseDiskCache implements IDiskCache {
         return b;
     }
 
-    static void writeInt(OutputStream os, int n) throws IOException {
+    static void writeInt(@NonNull OutputStream os, int n) throws IOException {
         os.write((n >> 0) & 0xff);
         os.write((n >> 8) & 0xff);
         os.write((n >> 16) & 0xff);
         os.write((n >> 24) & 0xff);
     }
 
-    static int readInt(InputStream is) throws IOException {
+    static int readInt(@NonNull InputStream is) throws IOException {
         int n = 0;
         n |= (read(is) << 0);
         n |= (read(is) << 8);
@@ -513,7 +522,7 @@ public class BaseDiskCache implements IDiskCache {
         return n;
     }
 
-    static void writeLong(OutputStream os, long n) throws IOException {
+    static void writeLong(@NonNull OutputStream os, long n) throws IOException {
         os.write((byte)(n >>> 0));
         os.write((byte)(n >>> 8));
         os.write((byte)(n >>> 16));
@@ -524,7 +533,7 @@ public class BaseDiskCache implements IDiskCache {
         os.write((byte)(n >>> 56));
     }
 
-    static long readLong(InputStream is) throws IOException {
+    static long readLong(@NonNull InputStream is) throws IOException {
         long n = 0;
         n |= ((read(is) & 0xFFL) << 0);
         n |= ((read(is) & 0xFFL) << 8);
@@ -537,19 +546,20 @@ public class BaseDiskCache implements IDiskCache {
         return n;
     }
 
-    static void writeString(OutputStream os, String s) throws IOException {
+    static void writeString(@NonNull OutputStream os, @NonNull String s) throws IOException {
         byte[] b = s.getBytes("UTF-8");
         writeLong(os, b.length);
         os.write(b, 0, b.length);
     }
 
-    static String readString(InputStream is) throws IOException {
+    @NonNull
+    static String readString(@NonNull InputStream is) throws IOException {
         int n = (int) readLong(is);
         byte[] b = streamToBytes(is, n);
         return new String(b, "UTF-8");
     }
 
-    static void writeStringStringMap(Map<String, String> map, OutputStream os) throws IOException {
+    static void writeStringStringMap(@Nullable Map<String, String> map, @NonNull OutputStream os) throws IOException {
         if (map != null) {
             writeInt(os, map.size());
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -561,7 +571,8 @@ public class BaseDiskCache implements IDiskCache {
         }
     }
 
-    static Map<String, String> readStringStringMap(InputStream is) throws IOException {
+    @NonNull
+    static Map<String, String> readStringStringMap(@NonNull InputStream is) throws IOException {
         int size = readInt(is);
         Map<String, String> result = (size == 0)
                 ? Collections.<String, String>emptyMap()

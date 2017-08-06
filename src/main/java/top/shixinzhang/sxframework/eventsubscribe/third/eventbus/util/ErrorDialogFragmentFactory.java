@@ -19,6 +19,8 @@ package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.util;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 /**
@@ -35,8 +37,9 @@ public abstract class ErrorDialogFragmentFactory<T> {
     /**
      * Prepares the fragment's arguments and creates the fragment. May be overridden to provide custom error fragments.
      */
-    protected T prepareErrorFragment(ThrowableFailureEvent event, boolean finishAfterDialog,
-                                     Bundle argumentsForErrorDialog) {
+    @Nullable
+    protected T prepareErrorFragment(@NonNull ThrowableFailureEvent event, boolean finishAfterDialog,
+                                     @Nullable Bundle argumentsForErrorDialog) {
         if (event.isSuppressErrorUi()) {
             // Show nothing by default
             return null;
@@ -70,15 +73,18 @@ public abstract class ErrorDialogFragmentFactory<T> {
     }
 
     /** Returns either a new Honeycomb+ or a new support library DialogFragment. */
+    @NonNull
     protected abstract T createErrorFragment(ThrowableFailureEvent event, Bundle arguments);
 
     /** May be overridden to provide custom error title. */
+    @NonNull
     protected String getTitleFor(ThrowableFailureEvent event, Bundle arguments) {
         return config.resources.getString(config.defaultTitleId);
     }
 
     /** May be overridden to provide custom error messages. */
-    protected String getMessageFor(ThrowableFailureEvent event, Bundle arguments) {
+    @NonNull
+    protected String getMessageFor(@NonNull ThrowableFailureEvent event, Bundle arguments) {
         int msgResId = config.getMessageIdForThrowable(event.throwable);
         return config.resources.getString(msgResId);
     }
@@ -89,6 +95,7 @@ public abstract class ErrorDialogFragmentFactory<T> {
             super(config);
         }
 
+        @NonNull
         protected Fragment createErrorFragment(ThrowableFailureEvent event, Bundle arguments) {
             ErrorDialogFragments.Support errorFragment = new ErrorDialogFragments.Support();
             errorFragment.setArguments(arguments);
@@ -104,6 +111,7 @@ public abstract class ErrorDialogFragmentFactory<T> {
             super(config);
         }
 
+        @NonNull
         protected android.app.Fragment createErrorFragment(ThrowableFailureEvent event, Bundle arguments) {
             ErrorDialogFragments.Honeycomb errorFragment = new ErrorDialogFragments.Honeycomb();
             errorFragment.setArguments(arguments);

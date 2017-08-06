@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 
 import java.util.concurrent.Future;
@@ -39,7 +41,7 @@ class PicassoExecutorService extends ThreadPoolExecutor {
         new PriorityBlockingQueue<Runnable>(), new Utils.PicassoThreadFactory());
   }
 
-  void adjustThreadCount(NetworkInfo info) {
+  void adjustThreadCount(@Nullable NetworkInfo info) {
     if (info == null || !info.isConnectedOrConnecting()) {
       setThreadCount(DEFAULT_THREAD_COUNT);
       return;
@@ -82,6 +84,7 @@ class PicassoExecutorService extends ThreadPoolExecutor {
     setMaximumPoolSize(threadCount);
   }
 
+  @NonNull
   @Override
   public Future<?> submit(Runnable task) {
     PicassoFutureTask ftask = new PicassoFutureTask((BitmapHunter) task);
@@ -91,15 +94,16 @@ class PicassoExecutorService extends ThreadPoolExecutor {
 
   private static final class PicassoFutureTask extends FutureTask<BitmapHunter>
       implements Comparable<PicassoFutureTask> {
+    @NonNull
     private final BitmapHunter hunter;
 
-    public PicassoFutureTask(BitmapHunter hunter) {
+    public PicassoFutureTask(@NonNull BitmapHunter hunter) {
       super(hunter, null);
       this.hunter = hunter;
     }
 
     @Override
-    public int compareTo(PicassoFutureTask other) {
+    public int compareTo(@NonNull PicassoFutureTask other) {
       Picasso.Priority p1 = hunter.getPriority();
       Picasso.Priority p2 = other.hunter.getPriority();
 

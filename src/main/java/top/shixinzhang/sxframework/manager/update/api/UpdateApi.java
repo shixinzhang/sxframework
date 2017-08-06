@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.manager.update.api;
 
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import rx.Observable;
@@ -47,15 +49,19 @@ public interface UpdateApi {
      * @param requestInfo
      * @return
      */
+    @NonNull
     @POST("update")
     Call<UpdateResponseInfo> checkUpdate2(@Body UpdateRequestBean requestInfo);  //被 Body 修饰的参数，会被 Gson 转换成 RequestBody 发送到服务器
 
+    @NonNull
     @GET("info/{id}")
     Observable<UpdateResponseInfo> checkUpdate(@Body UpdateRequestBean requestBean);
 
+    @NonNull
     @HTTP(method = "GET", path = "info/{id}")
     Call<UpdateResponseInfo> getUpdateInfo2(@Path("id") int id);
 
+    @NonNull
     @POST("info/{ids}")
     Observable<List<UpdateResponseInfo>> getUpdateInfos(@Path("ids") int ids);
 }

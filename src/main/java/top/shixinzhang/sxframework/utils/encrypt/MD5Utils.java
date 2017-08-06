@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.utils.encrypt;
 
+import android.support.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -30,7 +32,7 @@ public class MD5Utils {
      * @param b b
      * @return
      */
-    private static String toHexString(byte[] b) {
+    private static String toHexString(@NonNull byte[] b) {
         StringBuilder sb = new StringBuilder(b.length * 2);
         for (int i = 0; i < b.length; i++) {
             sb.append(HEX_DIGITS[(b[i] & 0xf0) >>> 4]);
@@ -44,7 +46,7 @@ public class MD5Utils {
      * @param s s
      * @return
      */
-    public static String md5(String s) {
+    public static String md5(@NonNull String s) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(s.getBytes("UTF-8"));
@@ -60,7 +62,7 @@ public class MD5Utils {
      * @param file file
      * @return
      */
-    public static String getFileMD5(File file) {
+    public static String getFileMD5(@NonNull File file) {
         byte[] buffer = new byte[8192];
         try {
             InputStream is = new FileInputStream(file);

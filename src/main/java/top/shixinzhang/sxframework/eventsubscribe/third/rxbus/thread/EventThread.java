@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.thread;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
 
 import java.util.concurrent.Executor;
@@ -84,7 +85,7 @@ public enum EventThread {
      */
     HANDLER;
 
-    public static Scheduler getScheduler(EventThread thread) {
+    public static Scheduler getScheduler(@NonNull EventThread thread) {
         Scheduler scheduler;
         switch (thread) {
             case MAIN_THREAD:

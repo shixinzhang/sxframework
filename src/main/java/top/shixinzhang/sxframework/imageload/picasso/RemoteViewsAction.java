@@ -19,6 +19,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.appwidget.AppWidgetManager;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -30,7 +32,7 @@ abstract class RemoteViewsAction extends Action<RemoteViewsAction.RemoteViewsTar
 
   private RemoteViewsTarget target;
 
-  RemoteViewsAction(Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
+  RemoteViewsAction(@NonNull Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
                     int errorResId, int memoryPolicy, int networkPolicy, Object tag, String key) {
     super(picasso, null, data, memoryPolicy, networkPolicy, errorResId, null, key, tag, false);
     this.remoteViews = remoteViews;
@@ -71,7 +73,7 @@ abstract class RemoteViewsAction extends Action<RemoteViewsAction.RemoteViewsTar
       this.viewId = viewId;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override public boolean equals(@Nullable Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       RemoteViewsTarget remoteViewsTarget = (RemoteViewsTarget) o;
@@ -87,7 +89,7 @@ abstract class RemoteViewsAction extends Action<RemoteViewsAction.RemoteViewsTar
   static class AppWidgetAction extends RemoteViewsAction {
     private final int[] appWidgetIds;
 
-    AppWidgetAction(Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
+    AppWidgetAction(@NonNull Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
                     int[] appWidgetIds, int memoryPolicy, int networkPolicy, String key, Object tag,
                     int errorResId) {
       super(picasso, data, remoteViews, viewId, errorResId, memoryPolicy, networkPolicy, tag, key);
@@ -104,7 +106,7 @@ abstract class RemoteViewsAction extends Action<RemoteViewsAction.RemoteViewsTar
     private final int notificationId;
     private final Notification notification;
 
-    NotificationAction(Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
+    NotificationAction(@NonNull Picasso picasso, Request data, RemoteViews remoteViews, int viewId,
                        int notificationId, Notification notification, int memoryPolicy, int networkPolicy,
                        String key, Object tag, int errorResId) {
       super(picasso, data, remoteViews, viewId, errorResId, memoryPolicy, networkPolicy, tag, key);

@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.config;
 
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 
@@ -32,6 +33,8 @@ import java.io.File;
  */
 
 public class Config {
+    @NonNull
     public static String APP_FOLDER = "sxframework";
+    @NonNull
     public static String EXTERNAL_DIR = Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER;
 }

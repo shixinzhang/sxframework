@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.manager;
 
+import android.support.annotation.NonNull;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -45,6 +47,7 @@ public class ThreadPoolManager {
     private final ThreadFactory DEFAULT_THREAD_FACTORY = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
+        @NonNull
         public Thread newThread(Runnable r) {
             Thread thread = new Thread(r, TAG + " #" + mCount.getAndIncrement());
             thread.setPriority(Thread.NORM_PRIORITY);
@@ -52,12 +55,15 @@ public class ThreadPoolManager {
         }
     };
 
+    @NonNull
     private ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME,
             TimeUnit.SECONDS, mWorkQueue, DEFAULT_THREAD_FACTORY,
             new ThreadPoolExecutor.DiscardOldestPolicy());
 
+    @NonNull
     private static volatile ThreadPoolManager mInstance = new ThreadPoolManager();
 
+    @NonNull
     public static ThreadPoolManager getInstance() {
         return mInstance;
     }

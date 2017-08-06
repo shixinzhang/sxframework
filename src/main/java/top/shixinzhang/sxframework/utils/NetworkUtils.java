@@ -19,6 +19,7 @@ package top.shixinzhang.sxframework.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 
 /**
  * <br> Description: 网络状态工具类
@@ -36,7 +37,7 @@ public final class NetworkUtils {
 
     public static int TYPE_INT_DISCONNECT = -1;
 
-    public static boolean isNetworkAvailable(Context context) {
+    public static boolean isNetworkAvailable(@NonNull Context context) {
         NetworkInfo activeNetworkInfo = getNetworkInfo(context);
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
             if (activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
@@ -46,7 +47,7 @@ public final class NetworkUtils {
         return false;
     }
 
-    public static int getNetworkType(Context context) {
+    public static int getNetworkType(@NonNull Context context) {
         NetworkInfo activeNetworkInfo = getNetworkInfo(context);
         return activeNetworkInfo == null ? TYPE_INT_DISCONNECT : activeNetworkInfo.getType();
     }
@@ -55,7 +56,7 @@ public final class NetworkUtils {
         return "";
     }
 
-    private static NetworkInfo getNetworkInfo(Context context) {
+    private static NetworkInfo getNetworkInfo(@NonNull Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             return connectivityManager.getActiveNetworkInfo();
@@ -68,7 +69,7 @@ public final class NetworkUtils {
      *
      * @return boolean
      */
-    public static boolean isWifiConnect(Context context) {
+    public static boolean isWifiConnect(@NonNull Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI;

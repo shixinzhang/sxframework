@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.http;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -61,10 +63,10 @@ public @interface Part {
      * The name of the part. Required for all parameter types except
      * {@link okhttp3.MultipartBody.Part}.
      */
-    String value() default "";
+    @NonNull String value() default "";
 
     /**
      * The {@code Content-Transfer-Encoding} of this part.
      */
-    String encoding() default "binary";
+    @NonNull String encoding() default "binary";
 }

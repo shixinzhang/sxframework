@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ public final class Request {
    */
   public final String stableKey;
   /** List of custom transformations to be applied after the built-in transformations. */
+  @Nullable
   public final List<Transformation> transformations;
   /** Target image width for resizing. */
   public final int targetWidth;
@@ -85,10 +88,10 @@ public final class Request {
   /** The priority of this request. */
   public final Picasso.Priority priority;
 
-  private Request(Uri uri, int resourceId, String stableKey, List<Transformation> transformations,
-      int targetWidth, int targetHeight, boolean centerCrop, boolean centerInside,
-      boolean onlyScaleDown, float rotationDegrees, float rotationPivotX, float rotationPivotY,
-      boolean hasRotationPivot, Bitmap.Config config, Picasso.Priority priority) {
+  private Request(Uri uri, int resourceId, String stableKey, @Nullable List<Transformation> transformations,
+                  int targetWidth, int targetHeight, boolean centerCrop, boolean centerInside,
+                  boolean onlyScaleDown, float rotationDegrees, float rotationPivotX, float rotationPivotY,
+                  boolean hasRotationPivot, Bitmap.Config config, Picasso.Priority priority) {
     this.uri = uri;
     this.resourceId = resourceId;
     this.stableKey = stableKey;
@@ -149,6 +152,7 @@ public final class Request {
     return sb.toString();
   }
 
+  @NonNull
   String logId() {
     long delta = System.nanoTime() - started;
     if (delta > TOO_LONG_LOG) {
@@ -157,6 +161,7 @@ public final class Request {
     return plainId() + '+' + TimeUnit.NANOSECONDS.toMillis(delta) + "ms";
   }
 
+  @NonNull
   String plainId() {
     return "[R" + id + ']';
   }
@@ -184,12 +189,14 @@ public final class Request {
     return transformations != null;
   }
 
+  @NonNull
   public Builder buildUpon() {
     return new Builder(this);
   }
 
   /** Builder for creating {@link Request} instances. */
   public static final class Builder {
+    @Nullable
     private Uri uri;
     private int resourceId;
     private String stableKey;
@@ -202,8 +209,10 @@ public final class Request {
     private float rotationPivotX;
     private float rotationPivotY;
     private boolean hasRotationPivot;
+    @Nullable
     private List<Transformation> transformations;
     private Bitmap.Config config;
+    @Nullable
     private Picasso.Priority priority;
 
     /** Start building a request using the specified {@link Uri}. */
@@ -222,7 +231,7 @@ public final class Request {
       this.config = bitmapConfig;
     }
 
-    private Builder(Request request) {
+    private Builder(@NonNull Request request) {
       uri = request.uri;
       resourceId = request.resourceId;
       stableKey = request.stableKey;
@@ -259,7 +268,8 @@ public final class Request {
      * <p>
      * This will clear an image resource ID if one is set.
      */
-    public Builder setUri(Uri uri) {
+    @NonNull
+    public Builder setUri(@Nullable Uri uri) {
       if (uri == null) {
         throw new IllegalArgumentException("Image URI may not be null.");
       }
@@ -273,6 +283,7 @@ public final class Request {
      * <p>
      * This will clear an image Uri if one is set.
      */
+    @NonNull
     public Builder setResourceId(int resourceId) {
       if (resourceId == 0) {
         throw new IllegalArgumentException("Image resource ID may not be 0.");
@@ -286,6 +297,7 @@ public final class Request {
      * Set the stable key to be used instead of the URI or resource ID when caching.
      * Two requests with the same value are considered to be for the same resource.
      */
+    @NonNull
     public Builder stableKey(String stableKey) {
       this.stableKey = stableKey;
       return this;
@@ -295,6 +307,7 @@ public final class Request {
      * Resize the image to the specified size in pixels.
      * Use 0 as desired dimension to resize keeping aspect ratio.
      */
+    @NonNull
     public Builder resize(int targetWidth, int targetHeight) {
       if (targetWidth < 0) {
         throw new IllegalArgumentException("Width must be positive number or 0.");
@@ -311,6 +324,7 @@ public final class Request {
     }
 
     /** Clear the resize transformation, if any. This will also clear center crop/inside if set. */
+    @NonNull
     public Builder clearResize() {
       targetWidth = 0;
       targetHeight = 0;
@@ -324,6 +338,7 @@ public final class Request {
      * distorting the aspect ratio. This cropping technique scales the image so that it fills the
      * requested bounds and then crops the extra.
      */
+    @NonNull
     public Builder centerCrop() {
       if (centerInside) {
         throw new IllegalStateException("Center crop can not be used after calling centerInside");
@@ -333,6 +348,7 @@ public final class Request {
     }
 
     /** Clear the center crop transformation flag, if set. */
+    @NonNull
     public Builder clearCenterCrop() {
       centerCrop = false;
       return this;
@@ -342,6 +358,7 @@ public final class Request {
      * Centers an image inside of the bounds specified by {@link #resize(int, int)}. This scales
      * the image so that both dimensions are equal to or less than the requested bounds.
      */
+    @NonNull
     public Builder centerInside() {
       if (centerCrop) {
         throw new IllegalStateException("Center inside can not be used after calling centerCrop");
@@ -351,6 +368,7 @@ public final class Request {
     }
 
     /** Clear the center inside transformation flag, if set. */
+    @NonNull
     public Builder clearCenterInside() {
       centerInside = false;
       return this;
@@ -360,6 +378,7 @@ public final class Request {
      * Only resize an image if the original image size is bigger than the target size
      * specified by {@link #resize(int, int)}.
      */
+    @NonNull
     public Builder onlyScaleDown() {
       if (targetHeight == 0 && targetWidth == 0) {
         throw new IllegalStateException("onlyScaleDown can not be applied without resize");
@@ -369,18 +388,21 @@ public final class Request {
     }
 
     /** Clear the onlyScaleUp flag, if set. **/
+    @NonNull
     public Builder clearOnlyScaleDown() {
       onlyScaleDown = false;
       return this;
     }
 
     /** Rotate the image by the specified degrees. */
+    @NonNull
     public Builder rotate(float degrees) {
       rotationDegrees = degrees;
       return this;
     }
 
     /** Rotate the image by the specified degrees around a pivot point. */
+    @NonNull
     public Builder rotate(float degrees, float pivotX, float pivotY) {
       rotationDegrees = degrees;
       rotationPivotX = pivotX;
@@ -390,6 +412,7 @@ public final class Request {
     }
 
     /** Clear the rotation transformation, if any. */
+    @NonNull
     public Builder clearRotation() {
       rotationDegrees = 0;
       rotationPivotX = 0;
@@ -399,13 +422,15 @@ public final class Request {
     }
 
     /** Decode the image using the specified config. */
+    @NonNull
     public Builder config(Bitmap.Config config) {
       this.config = config;
       return this;
     }
 
     /** Execute request using the specified priority. */
-    public Builder priority(Picasso.Priority priority) {
+    @NonNull
+    public Builder priority(@Nullable Picasso.Priority priority) {
       if (priority == null) {
         throw new IllegalArgumentException("Priority invalid.");
       }
@@ -421,7 +446,8 @@ public final class Request {
      * <p>
      * Custom transformations will always be run after the built-in transformations.
      */
-    public Builder transform(Transformation transformation) {
+    @NonNull
+    public Builder transform(@Nullable Transformation transformation) {
       if (transformation == null) {
         throw new IllegalArgumentException("Transformation must not be null.");
       }
@@ -440,7 +466,8 @@ public final class Request {
      * <p>
      * Custom transformations will always be run after the built-in transformations.
      */
-    public Builder transform(List<? extends Transformation> transformations) {
+    @NonNull
+    public Builder transform(@Nullable List<? extends Transformation> transformations) {
       if (transformations == null) {
         throw new IllegalArgumentException("Transformation list must not be null.");
       }
@@ -451,6 +478,7 @@ public final class Request {
     }
 
     /** Create the immutable {@link Request} object. */
+    @Nullable
     public Request build() {
       if (centerInside && centerCrop) {
         throw new IllegalStateException("Center crop and center inside can not be used together.");

@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.common.user;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -28,14 +30,17 @@ import java.io.Serializable;
 public interface IUserAuth extends Serializable{
 
     //token
+    @NonNull
     String getToken();
     void setToken(String token);
 
     //有效期
+    @NonNull
     String getExpiredTime();
     void setExpiredTime(String expiredTime);
 
     //用户ID
+    @NonNull
     String getUserId();
     void setUserId(String userId);
 
@@ -44,10 +49,12 @@ public interface IUserAuth extends Serializable{
     void setIsCodeLogin(boolean isCodeLogin);
 
     // UserKey 的意义？
+    @NonNull
     String getUserKey();
     void setUserKey(String userKey);
 
     //密码
+    @NonNull
     String getPassword();
     void setPassword(String password);
 }

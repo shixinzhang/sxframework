@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.manager.update.model;
 
+import android.support.annotation.NonNull;
+
 /**
  * Description:
  * <br> 服务器可能返回的更新信息
@@ -38,7 +40,7 @@ public class UpdateResponseInfo {
     private int downType;   //如何下载：1:应用内更新 2：跳转到浏览器更新 3：应用市场更新
     private String downloadUrl; //apk 下载地址
 
-    private UpdateResponseInfo(Builder builder) {
+    private UpdateResponseInfo(@NonNull Builder builder) {
         setNeedUpdate(builder.needUpdate);
         setAppName(builder.appName);
         setAppVersion(builder.appVersion);
@@ -136,56 +138,67 @@ public class UpdateResponseInfo {
         public Builder() {
         }
 
+        @NonNull
         public Builder needUpdate(boolean needUpdate) {
             this.needUpdate = needUpdate;
             return this;
         }
 
+        @NonNull
         public Builder appName(String appName) {
             this.appName = appName;
             return this;
         }
 
+        @NonNull
         public Builder appVersion(String appVersion) {
             this.appVersion = appVersion;
             return this;
         }
 
+        @NonNull
         public Builder updateTitle(String updateTitle) {
             this.updateTitle = updateTitle;
             return this;
         }
 
+        @NonNull
         public Builder updateTips(String updateTips) {
             this.updateTips = updateTips;
             return this;
         }
 
+        @NonNull
         public Builder silentDownload(boolean silentDownload) {
             this.silentDownload = silentDownload;
             return this;
         }
 
+        @NonNull
         public Builder forceUpdate(boolean forceUpdate) {
             this.forceUpdate = forceUpdate;
             return this;
         }
 
+        @NonNull
         public Builder downType(int downType) {
             this.downType = downType;
             return this;
         }
 
+        @NonNull
         public Builder downloadUrl(String downloadUrl) {
             this.downloadUrl = downloadUrl;
             return this;
         }
 
+        @NonNull
         public UpdateResponseInfo build() {
             return new UpdateResponseInfo(this);
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "UpdateResponseInfo{" +

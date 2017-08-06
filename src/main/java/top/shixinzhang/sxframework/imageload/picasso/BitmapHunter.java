@@ -19,6 +19,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +53,7 @@ class BitmapHunter implements Runnable {
   private static final Object DECODE_LOCK = new Object();
 
   private static final ThreadLocal<StringBuilder> NAME_BUILDER = new ThreadLocal<StringBuilder>() {
+    @NonNull
     @Override protected StringBuilder initialValue() {
       return new StringBuilder(Utils.THREAD_PREFIX);
     }
@@ -63,6 +66,7 @@ class BitmapHunter implements Runnable {
       return true;
     }
 
+    @NonNull
     @Override public Result load(Request request, int networkPolicy) throws IOException {
       throw new IllegalStateException("Unrecognized type of request: " + request);
     }
@@ -77,10 +81,13 @@ class BitmapHunter implements Runnable {
   final Request data;
   final int memoryPolicy;
   int networkPolicy;
+  @NonNull
   final RequestHandler requestHandler;
 
+  @Nullable
   Action action;
   List<Action> actions;
+  @Nullable
   Bitmap result;
   Future<?> future;
   Picasso.LoadedFrom loadedFrom;
@@ -89,8 +96,8 @@ class BitmapHunter implements Runnable {
   int retryCount;
   Priority priority;
 
-  BitmapHunter(Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats, Action action,
-               RequestHandler requestHandler) {
+  BitmapHunter(Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats, @NonNull Action action,
+               @NonNull RequestHandler requestHandler) {
     this.sequence = SEQUENCE_GENERATOR.incrementAndGet();
     this.picasso = picasso;
     this.dispatcher = dispatcher;
@@ -111,7 +118,7 @@ class BitmapHunter implements Runnable {
    * about the supplied request in order to do the decoding efficiently (such as through leveraging
    * {@code inSampleSize}).
    */
-  static Bitmap decodeStream(InputStream stream, Request request) throws IOException {
+  static Bitmap decodeStream(InputStream stream, @NonNull Request request) throws IOException {
     MarkableInputStream markStream = new MarkableInputStream(stream);
     stream = markStream;
 
@@ -188,6 +195,7 @@ class BitmapHunter implements Runnable {
     }
   }
 
+  @Nullable
   Bitmap hunt() throws IOException {
     Bitmap bitmap = null;
 
@@ -251,7 +259,7 @@ class BitmapHunter implements Runnable {
     return bitmap;
   }
 
-  void attach(Action action) {
+  void attach(@NonNull Action action) {
     boolean loggingEnabled = picasso.loggingEnabled;
     Request request = action.request;
 
@@ -283,7 +291,7 @@ class BitmapHunter implements Runnable {
     }
   }
 
-  void detach(Action action) {
+  void detach(@NonNull Action action) {
     boolean detached = false;
     if (this.action == action) {
       this.action = null;
@@ -355,6 +363,7 @@ class BitmapHunter implements Runnable {
     return requestHandler.supportsReplay();
   }
 
+  @Nullable
   Bitmap getResult() {
     return result;
   }
@@ -371,6 +380,7 @@ class BitmapHunter implements Runnable {
     return data;
   }
 
+  @Nullable
   Action getAction() {
     return action;
   }
@@ -395,7 +405,7 @@ class BitmapHunter implements Runnable {
     return priority;
   }
 
-  static void updateThreadName(Request data) {
+  static void updateThreadName(@NonNull Request data) {
     String name = data.getName();
 
     StringBuilder builder = NAME_BUILDER.get();
@@ -405,8 +415,9 @@ class BitmapHunter implements Runnable {
     Thread.currentThread().setName(builder.toString());
   }
 
-  static BitmapHunter forRequest(Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats,
-                                 Action action) {
+  @NonNull
+  static BitmapHunter forRequest(@NonNull Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats,
+                                 @NonNull Action action) {
     Request request = action.getRequest();
     List<RequestHandler> requestHandlers = picasso.getRequestHandlers();
 
@@ -422,13 +433,13 @@ class BitmapHunter implements Runnable {
     return new BitmapHunter(picasso, dispatcher, cache, stats, action, ERRORING_HANDLER);
   }
 
-  static Bitmap applyCustomTransformations(List<Transformation> transformations, Bitmap result) {
+  static Bitmap applyCustomTransformations(@NonNull List<Transformation> transformations, @NonNull Bitmap result) {
     for (int i = 0, count = transformations.size(); i < count; i++) {
       final Transformation transformation = transformations.get(i);
       Bitmap newResult;
       try {
         newResult = transformation.transform(result);
-      } catch (final RuntimeException e) {
+      } catch (@NonNull final RuntimeException e) {
         Picasso.HANDLER.post(new Runnable() {
           @Override public void run() {
             throw new RuntimeException(
@@ -484,7 +495,8 @@ class BitmapHunter implements Runnable {
     return result;
   }
 
-  static Bitmap transformResult(Request data, Bitmap result, int exifRotation) {
+  @NonNull
+  static Bitmap transformResult(@NonNull Request data, @NonNull Bitmap result, int exifRotation) {
     int inWidth = result.getWidth();
     int inHeight = result.getHeight();
     boolean onlyScaleDown = data.onlyScaleDown;

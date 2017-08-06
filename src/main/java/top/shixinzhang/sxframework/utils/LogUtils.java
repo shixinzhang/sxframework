@@ -16,6 +16,7 @@
 
 package top.shixinzhang.sxframework.utils;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -76,23 +77,23 @@ public final class LogUtils {
      *
      * @param log
      */
-    public static void v(String log) {
+    public static void v(@NonNull String log) {
         v(TAG, log);
     }
 
-    public static void d(String log) {
+    public static void d(@NonNull String log) {
         d(TAG, log);
     }
 
-    public static void i(String log) {
+    public static void i(@NonNull String log) {
         i(TAG, log);
     }
 
-    public static void w(String log) {
+    public static void w(@NonNull String log) {
         w(TAG, log);
     }
 
-    public static void e(String log) {
+    public static void e(@NonNull String log) {
         e(TAG, log);
     }
 
@@ -102,23 +103,23 @@ public final class LogUtils {
      * @param format
      * @param params
      */
-    public static void v(String format, Object... params) {
+    public static void v(@NonNull String format, Object... params) {
         v(TAG, String.format(format, params), VERBOSE);
     }
 
-    public static void d(String format, Object... params) {
+    public static void d(@NonNull String format, Object... params) {
         d(TAG, String.format(format, params), DEBUG);
     }
 
-    public static void i(String format, Object... params) {
+    public static void i(@NonNull String format, Object... params) {
         i(TAG, String.format(format, params), INFO);
     }
 
-    public static void w(String format, Object... params) {
+    public static void w(@NonNull String format, Object... params) {
         w(TAG, String.format(format, params), WARN);
     }
 
-    public static void e(String format, Object... params) {
+    public static void e(@NonNull String format, Object... params) {
         e(TAG, String.format(format, params), ERROR);
     }
 
@@ -128,23 +129,23 @@ public final class LogUtils {
      * @param tag
      * @param log
      */
-    public static void v(String tag, String log) {
+    public static void v(String tag, @NonNull String log) {
         println(tag, log, VERBOSE);
     }
 
-    public static void d(String tag, String log) {
+    public static void d(String tag, @NonNull String log) {
         println(tag, log, DEBUG);
     }
 
-    public static void i(String tag, String log) {
+    public static void i(String tag, @NonNull String log) {
         println(tag, log, INFO);
     }
 
-    public static void w(String tag, String log) {
+    public static void w(String tag, @NonNull String log) {
         println(tag, log, WARN);
     }
 
-    public static void e(String tag, String log) {
+    public static void e(String tag, @NonNull String log) {
         println(tag, log, ERROR);
     }
 
@@ -155,7 +156,7 @@ public final class LogUtils {
      * @param log
      * @param type
      */
-    public static void println(String tag, String log, int type) {
+    public static void println(String tag, @NonNull String log, int type) {
         if (TextUtils.isEmpty(tag) || TextUtils.isEmpty(log)) {
             return;
         }
@@ -194,7 +195,7 @@ public final class LogUtils {
      *
      * @param log
      */
-    public static void saveLog(String log) {
+    public static void saveLog(@NonNull String log) {
         if (TextUtils.isEmpty(log)) {
             return;
         }
@@ -204,6 +205,7 @@ public final class LogUtils {
         FileUtils.writeFile(getLogFilePath(), DateUtils.getDateString(System.currentTimeMillis()) + "\n " + log, true);
     }
 
+    @NonNull
     public static String getLogFilePath() {
         return AppInfo.DIRECTORY_PATH + File.separator + "log.txt";
     }

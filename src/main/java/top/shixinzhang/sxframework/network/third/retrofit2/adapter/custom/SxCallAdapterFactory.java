@@ -16,6 +16,9 @@
 
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter.custom;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -35,10 +38,12 @@ import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
  */
 
 public class SxCallAdapterFactory extends CallAdapter.Factory {
+    @NonNull
     public static SxCallAdapterFactory create() {
         return new SxCallAdapterFactory();
     }
 
+    @Nullable
     @Override
     public CallAdapter<?, ?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
         Class<?> rawType = getRawType(returnType);

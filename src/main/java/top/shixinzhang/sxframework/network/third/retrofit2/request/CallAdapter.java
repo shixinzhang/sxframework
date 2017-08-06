@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -68,6 +71,7 @@ public interface CallAdapter<R, T> {
          * Returns a call adapter for interface methods that return {@code returnType}, or null if it
          * cannot be handled by this factory.
          */
+        @Nullable
         public abstract CallAdapter<?, ?> get(Type returnType, Annotation[] annotations,
                                               Retrofit retrofit);
 
@@ -77,7 +81,7 @@ public interface CallAdapter<R, T> {
          * Extract the upper bound of the generic parameter at {@code index} from {@code type}. For
          * example, index 1 of {@code Map<String, ? extends Runnable>} returns {@code Runnable}.
          */
-        protected static Type getParameterUpperBound(int index, ParameterizedType type) {
+        protected static Type getParameterUpperBound(int index, @NonNull ParameterizedType type) {
             return Utils.getParameterUpperBound(index, type);
         }
 
@@ -87,6 +91,7 @@ public interface CallAdapter<R, T> {
          * Extract the raw class type from {@code type}. For example, the type representing
          * {@code List<? extends Runnable>} returns {@code List.class}.
          */
+        @Nullable
         protected static Class<?> getRawType(Type type) {
             return Utils.getRawType(type);
         }

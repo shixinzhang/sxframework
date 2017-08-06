@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.thread;
 
 import android.os.Looper;
+import android.support.annotation.Nullable;
 
 import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.Bus;
 
@@ -47,6 +48,7 @@ public interface ThreadEnforcer {
     /**
      * A {@link ThreadEnforcer} that confines {@link Bus} methods to the main thread.
      */
+    @Nullable
     ThreadEnforcer MAIN = new ThreadEnforcer() {
         @Override
         public void enforce(Bus bus) {

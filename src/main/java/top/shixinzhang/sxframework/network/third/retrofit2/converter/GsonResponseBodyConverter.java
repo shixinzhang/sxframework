@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.converter;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.TypeAdapter;
 
 import java.io.IOException;
@@ -30,7 +32,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     }
 
     @Override
-    public T convert(ResponseBody value) throws IOException {
+    public T convert(@NonNull ResponseBody value) throws IOException {
         Reader reader = value.charStream();
         try {
             return adapter.fromJson(reader);

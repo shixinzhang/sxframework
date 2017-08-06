@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -66,7 +68,7 @@ public class FileUtils {
      * @return if file not exist, return null, else return content of file
      * @throws RuntimeException if an error occurs while operator BufferedReader
      */
-    public static StringBuilder readFile(String filePath, String charsetName) {
+    public static StringBuilder readFile(@NonNull String filePath, @NonNull String charsetName) {
         File file = new File(filePath);
         StringBuilder fileContent = new StringBuilder("");
         if (file == null || !file.isFile()) {
@@ -101,7 +103,7 @@ public class FileUtils {
      * @return return false if content is empty, true otherwise
      * @throws RuntimeException if an error occurs while operator FileWriter
      */
-    public static boolean writeFile(String filePath, String content, boolean append) {
+    public static boolean writeFile(@NonNull String filePath, @NonNull String content, boolean append) {
         if (TextUtils.isEmpty(content)) {
             return false;
         }
@@ -128,7 +130,7 @@ public class FileUtils {
      * @return return false if contentList is empty, true otherwise
      * @throws RuntimeException if an error occurs while operator FileWriter
      */
-    public static boolean writeFile(String filePath, List<String> contentList, boolean append) {
+    public static boolean writeFile(@NonNull String filePath, @Nullable List<String> contentList, boolean append) {
         if (contentList == null || contentList.isEmpty()) {
             return false;
         }
@@ -159,7 +161,7 @@ public class FileUtils {
      * @param content
      * @return
      */
-    public static boolean writeFile(String filePath, String content) {
+    public static boolean writeFile(@NonNull String filePath, @NonNull String content) {
         return writeFile(filePath, content, false);
     }
 
@@ -170,7 +172,7 @@ public class FileUtils {
      * @param contentList
      * @return
      */
-    public static boolean writeFile(String filePath, List<String> contentList) {
+    public static boolean writeFile(@NonNull String filePath, List<String> contentList) {
         return writeFile(filePath, contentList, false);
     }
 
@@ -182,7 +184,7 @@ public class FileUtils {
      * @return
      * @see {@link #writeFile(String, InputStream, boolean)}
      */
-    public static boolean writeFile(String filePath, InputStream stream) {
+    public static boolean writeFile(String filePath, @NonNull InputStream stream) {
         return writeFile(filePath, stream, false);
     }
 
@@ -195,7 +197,7 @@ public class FileUtils {
      * @return return true
      * @throws RuntimeException if an error occurs while operator FileOutputStream
      */
-    public static boolean writeFile(String filePath, InputStream stream, boolean append) {
+    public static boolean writeFile(@Nullable String filePath, @NonNull InputStream stream, boolean append) {
         return writeFile(filePath != null ? new File(filePath) : null, stream, append);
     }
 
@@ -207,7 +209,7 @@ public class FileUtils {
      * @return
      * @see {@link #writeFile(File, InputStream, boolean)}
      */
-    public static boolean writeFile(File file, InputStream stream) {
+    public static boolean writeFile(@NonNull File file, @NonNull InputStream stream) {
         return writeFile(file, stream, false);
     }
 
@@ -220,7 +222,7 @@ public class FileUtils {
      * @return return true
      * @throws RuntimeException if an error occurs while operator FileOutputStream
      */
-    public static boolean writeFile(File file, InputStream stream, boolean append) {
+    public static boolean writeFile(@NonNull File file, @NonNull InputStream stream, boolean append) {
         OutputStream o = null;
         try {
             makeDirs(file.getAbsolutePath());
@@ -252,8 +254,8 @@ public class FileUtils {
      * @param append
      * @return
      */
-    public static boolean writeFileWithProgress(File file, InputStream inputStream, int contentLength,
-                                                OnFileWriteProgressListener progressListener, boolean append) {
+    public static boolean writeFileWithProgress(@Nullable File file, @Nullable InputStream inputStream, int contentLength,
+                                                @Nullable OnFileWriteProgressListener progressListener, boolean append) {
         if (file == null || inputStream == null) {
             return false;
         }
@@ -294,7 +296,7 @@ public class FileUtils {
      * @param sourceFilePath
      * @param destFilePath
      */
-    public static void moveFile(String sourceFilePath, String destFilePath) {
+    public static void moveFile(@NonNull String sourceFilePath, @NonNull String destFilePath) {
         if (TextUtils.isEmpty(sourceFilePath) || TextUtils.isEmpty(destFilePath)) {
             throw new RuntimeException("Both sourceFilePath and destFilePath cannot be null.");
         }
@@ -307,7 +309,7 @@ public class FileUtils {
      * @param srcFile
      * @param destFile
      */
-    public static void moveFile(File srcFile, File destFile) {
+    public static void moveFile(@NonNull File srcFile, @NonNull File destFile) {
         boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
             copyFile(srcFile.getAbsolutePath(), destFile.getAbsolutePath());
@@ -323,7 +325,7 @@ public class FileUtils {
      * @return
      * @throws RuntimeException if an error occurs while operator FileOutputStream
      */
-    public static boolean copyFile(String sourceFilePath, String destFilePath) {
+    public static boolean copyFile(@NonNull String sourceFilePath, String destFilePath) {
         InputStream inputStream = null;
         try {
             inputStream = new FileInputStream(sourceFilePath);
@@ -341,7 +343,7 @@ public class FileUtils {
      * @return if file not exist, return null, else return content of file
      * @throws RuntimeException if an error occurs while operator BufferedReader
      */
-    public static List<String> readFileToList(String filePath, String charsetName) {
+    public static List<String> readFileToList(@NonNull String filePath, @NonNull String charsetName) {
         File file = new File(filePath);
         List<String> fileContent = new ArrayList<String>();
         if (file == null || !file.isFile()) {
@@ -386,7 +388,8 @@ public class FileUtils {
      * @return file name from path, not include suffix
      * @see
      */
-    public static String getFileNameWithoutExtension(String filePath) {
+    @NonNull
+    public static String getFileNameWithoutExtension(@NonNull String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return filePath;
         }
@@ -423,7 +426,8 @@ public class FileUtils {
      * @param filePath
      * @return file name from path, include suffix
      */
-    public static String getFileName(String filePath) {
+    @NonNull
+    public static String getFileName(@NonNull String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return filePath;
         }
@@ -454,7 +458,8 @@ public class FileUtils {
      * @param filePath
      * @return
      */
-    public static String getFolderName(String filePath) {
+    @NonNull
+    public static String getFolderName(@NonNull String filePath) {
 
         if (TextUtils.isEmpty(filePath)) {
             return filePath;
@@ -486,7 +491,8 @@ public class FileUtils {
      * @param filePath
      * @return
      */
-    public static String getFileExtension(String filePath) {
+    @NonNull
+    public static String getFileExtension(@NonNull String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return filePath;
         }
@@ -518,7 +524,7 @@ public class FileUtils {
      * <li>return {@link File#mkdirs()}</li>
      * </ul>
      */
-    public static boolean makeDirs(String filePath) {
+    public static boolean makeDirs(@NonNull String filePath) {
         String folderName = getFolderName(filePath);
         if (TextUtils.isEmpty(folderName)) {
             return false;
@@ -533,7 +539,7 @@ public class FileUtils {
      * @return
      * @see #makeDirs(String)
      */
-    public static boolean makeFolders(String filePath) {
+    public static boolean makeFolders(@NonNull String filePath) {
         return makeDirs(filePath);
     }
 
@@ -543,7 +549,7 @@ public class FileUtils {
      * @param filePath
      * @return
      */
-    public static boolean isFileExist(String filePath) {
+    public static boolean isFileExist(@NonNull String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return false;
         }
@@ -558,7 +564,7 @@ public class FileUtils {
      * @param directoryPath
      * @return
      */
-    public static boolean isFolderExist(String directoryPath) {
+    public static boolean isFolderExist(@NonNull String directoryPath) {
         if (TextUtils.isEmpty(directoryPath)) {
             return false;
         }
@@ -578,7 +584,7 @@ public class FileUtils {
      * @param path
      * @return
      */
-    public static boolean deleteFile(String path) {
+    public static boolean deleteFile(@NonNull String path) {
         if (TextUtils.isEmpty(path)) {
             return true;
         }
@@ -613,7 +619,7 @@ public class FileUtils {
      * @param path
      * @return returns the length of this file in bytes. returns -1 if the file does not exist.
      */
-    public static long getFileSize(String path) {
+    public static long getFileSize(@NonNull String path) {
         if (TextUtils.isEmpty(path)) {
             return -1;
         }
@@ -627,7 +633,7 @@ public class FileUtils {
      *
      * @param closeable closeable object
      */
-    public static void close(Closeable closeable) {
+    public static void close(@Nullable Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -644,7 +650,7 @@ public class FileUtils {
      * @param interval 时间(单位:毫秒)
      * @return 删除文件个数
      */
-    synchronized public static int clearFolder(File path, long interval) {
+    synchronized public static int clearFolder(@NonNull File path, long interval) {
         long expiredTimeMillis = System.currentTimeMillis() - interval;
         int deletedItems = 0;
         File[] fileList = path.listFiles();
@@ -669,7 +675,7 @@ public class FileUtils {
      * @param path path
      * @return
      */
-    synchronized public static int clearFolder(File path) {
+    synchronized public static int clearFolder(@NonNull File path) {
         int deletedItems = 0;
         File[] fileList = path.listFiles();
         if (fileList != null) {
@@ -692,7 +698,7 @@ public class FileUtils {
      * @param path 目录路径
      * @return 创建好的目录文件对象
      */
-    synchronized public static File createFolder(String path) {
+    synchronized public static File createFolder(@NonNull String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
@@ -706,7 +712,7 @@ public class FileUtils {
      * @param path 文件或目录路径。
      * @return true 表示删除成功，否则为失败
      */
-    synchronized public static boolean delete(String path) {
+    synchronized public static boolean delete(@NonNull String path) {
         return !TextUtils.isEmpty(path) && delete(new File(path));
     }
 
@@ -716,7 +722,7 @@ public class FileUtils {
      * @param path 文件或目录。
      * @return true 表示删除成功，否则为失败
      */
-    synchronized public static boolean delete(File path) {
+    synchronized public static boolean delete(@Nullable File path) {
         if (path != null && path.isDirectory()) {
             File[] files = path.listFiles();
             if (files != null && files.length > 0) {
@@ -737,7 +743,7 @@ public class FileUtils {
      * @param srcPath 源文件路径
      * @return false if file copy failed, true if file copy succeeded..
      */
-    public static boolean copy(String desPath, String srcPath) {
+    public static boolean copy(@Nullable String desPath, @Nullable String srcPath) {
         if (desPath == null || srcPath == null) {
             throw new NullPointerException("path should not be null.");
         }
@@ -767,7 +773,7 @@ public class FileUtils {
      * @param path
      * @return
      */
-    synchronized public static boolean saveObject(Object obj, String path) {
+    synchronized public static boolean saveObject(@Nullable Object obj, @NonNull String path) {
         if (obj == null) {
             return false;
         }
@@ -799,12 +805,12 @@ public class FileUtils {
      * @return
      */
     @SuppressWarnings("unchecked ")
-    synchronized public static <T> T readObject(String path) {
+    synchronized public static <T> T readObject(@NonNull String path) {
         ObjectInputStream ojs = null;
         try {
             ojs = new ObjectInputStream(new FileInputStream(path));
             return (T) ojs.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (@NonNull IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             close(ojs);
@@ -819,7 +825,7 @@ public class FileUtils {
      * @param path        文件路径
      * @return boolean
      */
-    synchronized public static boolean store(InputStream inputStream, String path) {
+    synchronized public static boolean store(@NonNull InputStream inputStream, @Nullable String path) {
         if (path == null) {
             throw new NullPointerException("path should not be null.");
         }
@@ -863,7 +869,7 @@ public class FileUtils {
      * @param path 文件路径
      * @return 创建好的文件对象, 返回为空表示失败
      */
-    synchronized public static File createFile(String path) {
+    synchronized public static File createFile(@NonNull String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
@@ -893,7 +899,8 @@ public class FileUtils {
      * @param context
      * @return
      */
-    public static File getCacheDir(Context context) {
+    @Nullable
+    public static File getCacheDir(@NonNull Context context) {
         return context.getExternalCacheDir();
     }
 

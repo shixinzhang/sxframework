@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.utils.encrypt;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.apache.commons.codec.binary.Base64;
@@ -29,6 +31,7 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class Base64Utils {
 
+    @NonNull
     private static Base64 mBase64 = new Base64();
 
     /**
@@ -36,7 +39,8 @@ public class Base64Utils {
      * @param source source
      * @return String
      */
-    public static String encode(String source) {
+    @NonNull
+    public static String encode(@NonNull String source) {
         if (!TextUtils.isEmpty(source)) {
             return new String(mBase64.encode(source.getBytes()));
         }
@@ -48,7 +52,8 @@ public class Base64Utils {
      * @param source source
      * @return String
      */
-    public static String decode(String source) {
+    @NonNull
+    public static String decode(@NonNull String source) {
         if (!TextUtils.isEmpty(source)) {
             return new String(mBase64.decode(source.getBytes()));
         }
@@ -60,7 +65,8 @@ public class Base64Utils {
      * @param source source
      * @return String
      */
-    public static String encodeByte(byte[] source) {
+    @NonNull
+    public static String encodeByte(@Nullable byte[] source) {
         if (source != null) {
             return new String(mBase64.encode(source));
         }
@@ -72,7 +78,8 @@ public class Base64Utils {
      * @param source source
      * @return String
      */
-    public static byte[] encodeToByte(byte[] source) {
+    @Nullable
+    public static byte[] encodeToByte(@Nullable byte[] source) {
         if (source != null) {
             return mBase64.encode(source);
         }
@@ -84,7 +91,7 @@ public class Base64Utils {
      * @param source source
      * @return String
      */
-    public static byte[] decodeByte(String source) {
+    public static byte[] decodeByte(@NonNull String source) {
         if (!TextUtils.isEmpty(source)) {
             return mBase64.decode(source.getBytes());
         }

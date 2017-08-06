@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.utils.encrypt;
 
+import android.support.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -99,6 +101,7 @@ public class RSAUtils {
 	 * @return Map
 	 * @throws Exception
 	 */
+	@NonNull
 	public static Map<String, Object> genKeyPair() throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(2048);
@@ -181,7 +184,7 @@ public class RSAUtils {
 	 * @throws IllegalBlockSizeException
 	 * @throws IOException
 	 */
-	public static byte[] decryptByPrivateKey(byte[] encryptedData, String privateKey)
+	public static byte[] decryptByPrivateKey(@NonNull byte[] encryptedData, String privateKey)
 			throws NoSuchAlgorithmException, InvalidKeySpecException,
 			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
 			BadPaddingException, IOException {
@@ -224,7 +227,7 @@ public class RSAUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] decryptByPublicKey(byte[] encryptedData, String publicKey)
+	public static byte[] decryptByPublicKey(@NonNull byte[] encryptedData, String publicKey)
 			throws Exception {
 		byte[] keyBytes = Base64Utils.decodeByte(publicKey);
 		X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
@@ -265,7 +268,7 @@ public class RSAUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] encryptByPublicKey(byte[] data, String publicKey)
+	public static byte[] encryptByPublicKey(@NonNull byte[] data, String publicKey)
 			throws Exception {
 		byte[] keyBytes = Base64Utils.decodeByte(publicKey);
 		X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
@@ -313,7 +316,7 @@ public class RSAUtils {
 	 * @throws IllegalBlockSizeException
 	 * @throws IOException
 	 */
-	public static byte[] encryptByPrivateKey(byte[] data, String privateKey)
+	public static byte[] encryptByPrivateKey(@NonNull byte[] data, String privateKey)
 			throws NoSuchAlgorithmException, InvalidKeySpecException,
 			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
 			BadPaddingException, IOException {
@@ -354,7 +357,7 @@ public class RSAUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
+	public static String getPrivateKey(@NonNull Map<String, Object> keyMap) throws Exception {
 		Key key = (Key) keyMap.get(PRIVATE_KEY);
 		return Base64Utils.encodeByte(key.getEncoded());
 	}
@@ -369,7 +372,7 @@ public class RSAUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
+	public static String getPublicKey(@NonNull Map<String, Object> keyMap) throws Exception {
 		Key key = (Key) keyMap.get(PUBLIC_KEY);
 		return Base64Utils.encodeByte(key.getEncoded());
 	}

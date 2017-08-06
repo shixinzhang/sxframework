@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.utils;
 
+import android.support.annotation.NonNull;
+
 /**
  * description: 倒计时控件，底部也是 handler
  * <br/>
@@ -30,6 +32,7 @@ public class CountDownTimer extends android.os.CountDownTimer {
     private OnFinishListener mOnFinishListener;
 
 
+    @NonNull
     public static CountDownTimer create(long millisInFuture, long countDownInterval) {
         return new CountDownTimer(millisInFuture, countDownInterval);
     }
@@ -60,6 +63,7 @@ public class CountDownTimer extends android.os.CountDownTimer {
         return mOnTickListener;
     }
 
+    @NonNull
     public CountDownTimer setOnTickListener(OnTickListener onTickListener) {
         mOnTickListener = onTickListener;
         return this;
@@ -69,6 +73,7 @@ public class CountDownTimer extends android.os.CountDownTimer {
         return mOnFinishListener;
     }
 
+    @NonNull
     public CountDownTimer setOnFinishListener(OnFinishListener onFinishListener) {
         mOnFinishListener = onFinishListener;
         return this;

@@ -17,6 +17,7 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,9 @@ public interface Downloader {
 
   /** Response stream or bitmap and info. */
   class Response {
+    @Nullable
     final InputStream stream;
+    @Nullable
     final Bitmap bitmap;
     final boolean cached;
     final long contentLength;
@@ -68,7 +71,7 @@ public interface Downloader {
      * @deprecated Use {@link RequestHandler} for directly loading {@link Bitmap} instances.
      */
     @Deprecated
-    public Response(Bitmap bitmap, boolean loadedFromCache) {
+    public Response(@Nullable Bitmap bitmap, boolean loadedFromCache) {
       if (bitmap == null) {
         throw new IllegalArgumentException("Bitmap may not be null.");
       }
@@ -113,7 +116,7 @@ public interface Downloader {
      * @param contentLength The content length of the response, typically derived by the
      * {@code Content-Length} HTTP header.
      */
-    public Response(InputStream stream, boolean loadedFromCache, long contentLength) {
+    public Response(@Nullable InputStream stream, boolean loadedFromCache, long contentLength) {
       if (stream == null) {
         throw new IllegalArgumentException("Stream may not be null.");
       }
@@ -128,6 +131,7 @@ public interface Downloader {
      * <p>
      * If this returns {@code null}, image data will be available via {@link #getBitmap()}.
      */
+    @Nullable
     public InputStream getInputStream() {
       return stream;
     }
@@ -139,6 +143,7 @@ public interface Downloader {
      *
      * @deprecated Use {@link RequestHandler} for directly loading {@link Bitmap} instances.
      */
+    @Nullable
     @Deprecated
     public Bitmap getBitmap() {
       return bitmap;

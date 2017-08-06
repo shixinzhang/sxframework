@@ -19,6 +19,7 @@ package top.shixinzhang.sxframework.manager.update;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import top.shixinzhang.sxframework.network.download.DownloadStatus;
@@ -50,7 +51,7 @@ public class APKDownloader {
 
     private IAPKDownloader mDownload;
 
-    private APKDownloader(Builder builder) {
+    private APKDownloader(@NonNull Builder builder) {
         mContext = builder.mContext;
         mUrl = builder.mUrl;
         mTitle = builder.mTitle;
@@ -100,7 +101,7 @@ public class APKDownloader {
         LogUtils.i(TAG, "apk start download , id is " + id);
     }
 
-    private void installPackage(Context context, Uri uri) {
+    private void installPackage(@NonNull Context context, Uri uri) {
         ApplicationUtils.installPackage(context, uri);
     }
 
@@ -111,7 +112,7 @@ public class APKDownloader {
      * @param uri
      * @return 当前 pkg 比 uri 的文件版本小时返回 true
      */
-    private boolean compareVersion(Context context, Uri uri) {
+    private boolean compareVersion(@NonNull Context context, @NonNull Uri uri) {
         int result = ApplicationUtils.compareVersion(context, uri);
         return result < 0;
     }
@@ -157,26 +158,31 @@ public class APKDownloader {
         public Builder() {
         }
 
+        @NonNull
         public Builder context(Context mContext) {
             this.mContext = mContext;
             return this;
         }
 
+        @NonNull
         public Builder url(String mUrl) {
             this.mUrl = mUrl;
             return this;
         }
 
+        @NonNull
         public Builder title(String mTitle) {
             this.mTitle = mTitle;
             return this;
         }
 
+        @NonNull
         public Builder apkName(String mApkName) {
             this.mApkName = mApkName;
             return this;
         }
 
+        @NonNull
         public APKDownloader build() {
             return new APKDownloader(this);
         }

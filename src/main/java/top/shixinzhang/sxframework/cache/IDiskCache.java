@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.cache;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ public interface IDiskCache {
      * @param key Cache key
      * @return An {@link Entry} or null in the event of a cache miss
      */
+    @Nullable
     public Entry get(String key);
 
     /**
@@ -69,6 +72,7 @@ public interface IDiskCache {
         public byte[] data;
 
         /** ETag for cache coherency. */
+        @Nullable
         public String etag;
 
         /** Date of this response as reported by the server. */

@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.utils;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -40,8 +42,10 @@ import java.util.Set;
  */
 public class GsonUtils {
 
+    @NonNull
     private static Gson mGson = new GsonBuilder().disableHtmlEscaping().create();
 
+    @NonNull
     public static Gson getGson() {
         return mGson;
     }
@@ -54,7 +58,7 @@ public class GsonUtils {
      * @param <T>  <T>
      * @return T
      */
-    public static <T> T fromJson(String json, Class<T> c) {
+    public static <T> T fromJson(String json, @NonNull Class<T> c) {
         return mGson.fromJson(json, c);
     }
 
@@ -66,7 +70,7 @@ public class GsonUtils {
      * @param <T>  <T>
      * @return T
      */
-    public static <T> T fromJson(JsonElement json, Class<T> c) {
+    public static <T> T fromJson(JsonElement json, @NonNull Class<T> c) {
         return mGson.fromJson(json, c);
     }
 
@@ -102,7 +106,7 @@ public class GsonUtils {
      * @param <T>  <T>
      * @return T
      */
-    public static <T> T fromJson(Reader json, Type type) {
+    public static <T> T fromJson(@NonNull Reader json, Type type) {
         return mGson.fromJson(json, type);
     }
 
@@ -159,7 +163,8 @@ public class GsonUtils {
      * @param jsonArray
      * @return
      */
-    public static JsonObject getJsonObjectFromArray(JsonArray jsonArray) {
+    @NonNull
+    public static JsonObject getJsonObjectFromArray(@Nullable JsonArray jsonArray) {
         JsonObject jsonObject = new JsonObject();
         if (null == jsonArray || jsonArray.size() <= 0)
             return jsonObject;

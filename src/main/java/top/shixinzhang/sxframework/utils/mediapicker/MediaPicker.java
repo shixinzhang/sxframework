@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -67,7 +68,7 @@ public class MediaPicker implements View.OnClickListener {
     private OnMediaPickerListener mMediaPickerListener;
     private PopupWindow mPopupWindow;
 
-    public MediaPicker(Fragment fragment) {
+    public MediaPicker(@NonNull Fragment fragment) {
         this(fragment.getActivity());
     }
 
@@ -96,7 +97,7 @@ public class MediaPicker implements View.OnClickListener {
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -162,6 +163,7 @@ public class MediaPicker implements View.OnClickListener {
         }
     }
 
+    @NonNull
     private File createTempFile() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return new File(Environment.getExternalStorageDirectory(), +System.currentTimeMillis() + "image.png");
@@ -178,7 +180,7 @@ public class MediaPicker implements View.OnClickListener {
      * @param outputY
      * @return
      */
-    private void cropImageUri(Uri uri, int outputX, int outputY, int requestCode) {
+    private void cropImageUri(@NonNull Uri uri, int outputX, int outputY, int requestCode) {
         if (!mCropImage && mMediaPickerListener != null) {
             mMediaPickerListener.onSelectedMediaChanged(uri.getPath());
             return;
@@ -207,7 +209,7 @@ public class MediaPicker implements View.OnClickListener {
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int i = v.getId();
         if (i == R.id.tv_camera) {
             openSystemCamera();

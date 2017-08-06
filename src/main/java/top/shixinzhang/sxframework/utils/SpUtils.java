@@ -18,6 +18,8 @@ package top.shixinzhang.sxframework.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Set;
 
@@ -36,12 +38,13 @@ public class SpUtils {
     private static final String DEFAULT_NAME = "shixinzhang_sp";
     private static final Object mLockObj = new Object();     // TODO: 17/4/21 改成读写锁，效率更好？
 
+    @NonNull
     private static String mName = DEFAULT_NAME;
 
     private SpUtils() {
     }
 
-    public static void saveDataInDefault(Context context, String key, Object object) {
+    public static void saveDataInDefault(@NonNull Context context, String key, Object object) {
         saveData(context, mName, key, object);
     }
 
@@ -53,7 +56,7 @@ public class SpUtils {
      * @param key
      * @param object
      */
-    public static void saveData(Context context, String spName, String key, Object object) {
+    public static void saveData(@NonNull Context context, String spName, String key, @Nullable Object object) {
         if (object == null) {
             return;
         }
@@ -86,8 +89,9 @@ public class SpUtils {
         }
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
-    public static Object getDataFromDefault(Context context, String key, Object defaultValue) {
+    public static Object getDataFromDefault(@NonNull Context context, String key, Object defaultValue) {
         return getData(context, mName, key, defaultValue);
     }
 
@@ -99,7 +103,8 @@ public class SpUtils {
      * @param key
      * @param defaultValue
      */
-    public static Object getData(Context context, String spName, String key, Object defaultValue) {
+    @Nullable
+    public static Object getData(@NonNull Context context, String spName, String key, @Nullable Object defaultValue) {
         if (defaultValue == null) {
             throw new IllegalArgumentException("Default value used for get data type, so it can't be null!");
         }
@@ -143,7 +148,7 @@ public class SpUtils {
      * @param spName
      * @param key
      */
-    public static void removeData(Context context, String spName, String key) {
+    public static void removeData(@Nullable Context context, String spName, String key) {
         if (context == null) {
             return;
         }
@@ -160,7 +165,7 @@ public class SpUtils {
      * @param context
      * @param spName
      */
-    public static void clear(Context context, String spName) {
+    public static void clear(@NonNull Context context, String spName) {
         synchronized (mLockObj) {
             SharedPreferences sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();

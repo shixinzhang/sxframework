@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +35,7 @@ public class MarqueeTextView extends TextSwitcher implements ViewSwitcher.ViewFa
             "一生劳碌的他在去世前竟然说出这样的话"
     };
     private Timer timer; //
+    @NonNull
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             updateText();  //更新TextSwitcher显示内容;
@@ -91,6 +93,7 @@ public class MarqueeTextView extends TextSwitcher implements ViewSwitcher.ViewFa
         return index++ % resources.length;
     }
 
+    @NonNull
     @Override
     public View makeView() {
         return new TextView(context);

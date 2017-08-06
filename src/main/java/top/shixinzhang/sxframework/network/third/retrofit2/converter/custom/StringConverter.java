@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.network.third.retrofit2.converter.custom;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -33,8 +35,9 @@ import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
  */
 
 public class StringConverter implements Converter<ResponseBody, String> {
+    @NonNull
     @Override
-    public String convert(ResponseBody value) throws IOException {
+    public String convert(@NonNull ResponseBody value) throws IOException {
         return value.string();
     }
 }

@@ -33,6 +33,7 @@ public class RxBusOlder {
 
     private static RxBusOlder sInstance;
 
+    @NonNull
     private ConcurrentHashMap<Object, List<Subject>> mSubjectsMapper = new ConcurrentHashMap<>();
 
     public static synchronized RxBusOlder instance() {
@@ -45,6 +46,7 @@ public class RxBusOlder {
     private RxBusOlder() {
     }
 
+    @NonNull
     public <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> clazz) {
         List<Subject> subjectList = mSubjectsMapper.get(tag);
         if (subjectList == null) {

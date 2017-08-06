@@ -16,6 +16,7 @@
 package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 
 /**
  * A memory cache for storing the most recently used images.
@@ -26,6 +27,7 @@ import android.graphics.Bitmap;
  */
 public interface Cache {
   /** Retrieve an image for the specified {@code key} or {@code null}. */
+  @Nullable
   Bitmap get(String key);
 
   /** Store an image in the cache for the specified {@code key}. */
@@ -44,7 +46,9 @@ public interface Cache {
   void clearKeyUri(String keyPrefix);
 
   /** A cache which does not store any values. */
+  @Nullable
   Cache NONE = new Cache() {
+    @Nullable
     @Override public Bitmap get(String key) {
       return null;
     }

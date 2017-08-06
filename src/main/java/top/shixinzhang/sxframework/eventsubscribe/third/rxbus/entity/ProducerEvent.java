@@ -16,6 +16,9 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.entity;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -34,10 +37,12 @@ public class ProducerEvent extends Event {
     /**
      * Object sporting the producer method.
      */
+    @Nullable
     private final Object target;
     /**
      * Producer method.
      */
+    @Nullable
     private final Method method;
     /**
      * Producer thread
@@ -52,7 +57,7 @@ public class ProducerEvent extends Event {
      */
     private boolean valid = true;
 
-    public ProducerEvent(Object target, Method method, EventThread thread) {
+    public ProducerEvent(@Nullable Object target, @Nullable Method method, EventThread thread) {
         if (target == null) {
             throw new NullPointerException("EventProducer target cannot be null.");
         }
@@ -90,7 +95,7 @@ public class ProducerEvent extends Event {
     public Observable produce() {
         return Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
-            public void call(Subscriber<? super Object> subscriber) {
+            public void call(@NonNull Subscriber<? super Object> subscriber) {
                 try {
                     subscriber.onNext(produceEvent());
                     subscriber.onCompleted();
@@ -124,6 +129,7 @@ public class ProducerEvent extends Event {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[EventProducer " + method + "]";
@@ -135,7 +141,7 @@ public class ProducerEvent extends Event {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -149,6 +155,7 @@ public class ProducerEvent extends Event {
         return method.equals(other.method) && target == other.target;
     }
 
+    @Nullable
     public Object getTarget() {
         return target;
     }

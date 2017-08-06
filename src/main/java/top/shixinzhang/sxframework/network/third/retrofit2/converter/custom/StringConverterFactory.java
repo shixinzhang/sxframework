@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.network.third.retrofit2.converter.custom;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -36,6 +38,7 @@ import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 public class StringConverterFactory extends Converter.Factory {
 
+    @NonNull
     public static StringConverterFactory create(){
         return new StringConverterFactory();
     }

@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.cache;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.gson.TypeAdapter;
@@ -47,6 +49,7 @@ public class CacheManager {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private Context mContext;
     private final DiskCache mDiskCache;
+    @NonNull
     private final MemoryCache mMemoryCache;
     private static CacheManager mCacheManager;
 
@@ -55,7 +58,7 @@ public class CacheManager {
      * @param context context
      * @return
      */
-    public static CacheManager init(Context context) {
+    public static CacheManager init(@NonNull Context context) {
         mCacheManager = new CacheManager(context);
         return mCacheManager;
     }
@@ -64,7 +67,7 @@ public class CacheManager {
      * CacheManager
      * @param context context
      */
-    private CacheManager(Context context) {
+    private CacheManager(@NonNull Context context) {
         mDiskCache = DiskCache.get(context);
         mMemoryCache = new MemoryCache(128);
         mContext = context;
@@ -100,7 +103,7 @@ public class CacheManager {
      * deleteFile
      * @param files files
      */
-    public static void deleteFile(File[] files) {
+    public static void deleteFile(@Nullable File[] files) {
         if (files == null) return;
         File fileWillDelete = null;
         for (File f : files) {
@@ -123,11 +126,11 @@ public class CacheManager {
      * @param saveTime   保存的时间，单位：秒,如果<0，则不会过期
      * @param isInMemory 是不是存在内存中
      */
-    private void put(String key, String value, int saveTime, boolean isInMemory) {
+    private void put(@NonNull String key, @NonNull String value, int saveTime, boolean isInMemory) {
         put( key, value, saveTime, null ,isInMemory);
     }
 
-    private void put(String key, String value, int saveTime, String eTag, boolean isInMemory) {
+    private void put(@NonNull String key, @NonNull String value, int saveTime, String eTag, boolean isInMemory) {
         if (saveTime == 0) return;
         if (isInMemory) {
             if (saveTime < 0) {
@@ -149,6 +152,7 @@ public class CacheManager {
      * @param key key
      * @return
      */
+    @Nullable
     private String getAsString(String key) {
         return getAsString(key, false);
     }
@@ -159,7 +163,8 @@ public class CacheManager {
      * @param findInMemory findInMemory
      * @return
      */
-    private String getAsString(String key, boolean findInMemory) {
+    @Nullable
+    private String getAsString(@Nullable String key, boolean findInMemory) {
         if (key == null) {
             return null;
         }
@@ -179,7 +184,7 @@ public class CacheManager {
         cacheResponse(request, response, null);
     }
 
-    public void cacheResponse(Request request, String response, String eTag) {
+    public void cacheResponse(@Nullable Request request, @Nullable String response, String eTag) {
         if (request == null || response == null) {
             return;
         }
@@ -223,6 +228,7 @@ public class CacheManager {
      * @param <T> <T>
      * @return
      */
+    @Nullable
     public <T>T getCacheResponse(Request request, Class<T> clz) {
         return getCacheResponse(request, (Type) clz);
     }
@@ -234,7 +240,8 @@ public class CacheManager {
      * @param <T> <T>
      * @return
      */
-    public <T>T getCacheResponse(Request request, Type type) {
+    @Nullable
+    public <T>T getCacheResponse(@Nullable Request request, @NonNull Type type) {
         if (request == null) {
             return null;
         }
@@ -266,7 +273,7 @@ public class CacheManager {
         T result = null;
         try {
             result = (T) adapter.fromJson(responseStr);
-        } catch (IOException | ClassCastException ex) {
+        } catch (@NonNull IOException | ClassCastException ex) {
             ex.printStackTrace();
         }
         return result;
@@ -277,7 +284,8 @@ public class CacheManager {
         return mDiskCache.getEntry(urlCacheKey);
     }
 
-    private String getCacheKey(Request request) {
+    @Nullable
+    private String getCacheKey(@Nullable Request request) {
         if( request == null )
             return null;
 
@@ -298,7 +306,7 @@ public class CacheManager {
      * 移除cache
      * @param key
      */
-    public void remove( String key ) {
+    public void remove(@NonNull String key ) {
         mMemoryCache.remove( key );
         mDiskCache.remove( key );
     }

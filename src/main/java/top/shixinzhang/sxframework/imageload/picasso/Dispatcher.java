@@ -26,6 +26,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -79,26 +81,35 @@ class Dispatcher {
   private static final String DISPATCHER_THREAD_NAME = "Dispatcher";
   private static final int BATCH_DELAY = 200; // ms
 
+  @NonNull
   final DispatcherThread dispatcherThread;
+  @NonNull
   final Context context;
   final ExecutorService service;
   final Downloader downloader;
+  @NonNull
   final Map<String, BitmapHunter> hunterMap;
+  @NonNull
   final Map<Object, Action> failedActions;
+  @NonNull
   final Map<Object, Action> pausedActions;
+  @NonNull
   final Set<Object> pausedTags;
+  @NonNull
   final Handler handler;
   final Handler mainThreadHandler;
   final Cache cache;
   final Stats stats;
+  @NonNull
   final List<BitmapHunter> batch;
+  @NonNull
   final NetworkBroadcastReceiver receiver;
   final boolean scansNetworkChanges;
 
   boolean airplaneMode;
 
-  Dispatcher(Context context, ExecutorService service, Handler mainThreadHandler,
-      Downloader downloader, Cache cache, Stats stats) {
+  Dispatcher(@NonNull Context context, ExecutorService service, Handler mainThreadHandler,
+             Downloader downloader, Cache cache, Stats stats) {
     this.dispatcherThread = new DispatcherThread();
     this.dispatcherThread.start();
     Utils.flushStackLocalLeaks(dispatcherThread.getLooper());
@@ -172,11 +183,11 @@ class Dispatcher {
         airplaneMode ? AIRPLANE_MODE_ON : AIRPLANE_MODE_OFF, 0));
   }
 
-  void performSubmit(Action action) {
+  void performSubmit(@NonNull Action action) {
     performSubmit(action, true);
   }
 
-  void performSubmit(Action action, boolean dismissFailed) {
+  void performSubmit(@NonNull Action action, boolean dismissFailed) {
     if (pausedTags.contains(action.getTag())) {
       pausedActions.put(action.getTarget(), action);
       if (action.getPicasso().loggingEnabled) {
@@ -211,7 +222,7 @@ class Dispatcher {
     }
   }
 
-  void performCancel(Action action) {
+  void performCancel(@NonNull Action action) {
     String key = action.getKey();
     BitmapHunter hunter = hunterMap.get(key);
     if (hunter != null) {
@@ -318,7 +329,7 @@ class Dispatcher {
     }
   }
 
-  void performRetry(BitmapHunter hunter) {
+  void performRetry(@NonNull BitmapHunter hunter) {
     if (hunter.isCancelled()) return;
 
     if (service.isShutdown()) {
@@ -366,7 +377,7 @@ class Dispatcher {
     }
   }
 
-  void performComplete(BitmapHunter hunter) {
+  void performComplete(@NonNull BitmapHunter hunter) {
     if (shouldWriteToMemoryCache(hunter.getMemoryPolicy())) {
       cache.set(hunter.getKey(), hunter.getResult());
     }
@@ -384,7 +395,7 @@ class Dispatcher {
     logBatch(copy);
   }
 
-  void performError(BitmapHunter hunter, boolean willReplay) {
+  void performError(@NonNull BitmapHunter hunter, boolean willReplay) {
     if (hunter.getPicasso().loggingEnabled) {
       log(OWNER_DISPATCHER, VERB_BATCHED, getLogIdsForHunter(hunter),
           "for error" + (willReplay ? " (will replay)" : ""));
@@ -397,7 +408,7 @@ class Dispatcher {
     this.airplaneMode = airplaneMode;
   }
 
-  void performNetworkStateChange(NetworkInfo info) {
+  void performNetworkStateChange(@Nullable NetworkInfo info) {
     if (service instanceof PicassoExecutorService) {
       ((PicassoExecutorService) service).adjustThreadCount(info);
     }
@@ -421,7 +432,7 @@ class Dispatcher {
     }
   }
 
-  private void markForReplay(BitmapHunter hunter) {
+  private void markForReplay(@NonNull BitmapHunter hunter) {
     Action action = hunter.getAction();
     if (action != null) {
       markForReplay(action);
@@ -436,7 +447,7 @@ class Dispatcher {
     }
   }
 
-  private void markForReplay(Action action) {
+  private void markForReplay(@NonNull Action action) {
     Object target = action.getTarget();
     if (target != null) {
       action.willReplay = true;
@@ -444,7 +455,7 @@ class Dispatcher {
     }
   }
 
-  private void batch(BitmapHunter hunter) {
+  private void batch(@NonNull BitmapHunter hunter) {
     if (hunter.isCancelled()) {
       return;
     }
@@ -454,7 +465,7 @@ class Dispatcher {
     }
   }
 
-  private void logBatch(List<BitmapHunter> copy) {
+  private void logBatch(@Nullable List<BitmapHunter> copy) {
     if (copy == null || copy.isEmpty()) return;
     BitmapHunter hunter = copy.get(0);
     Picasso picasso = hunter.getPicasso();
@@ -476,7 +487,7 @@ class Dispatcher {
       this.dispatcher = dispatcher;
     }
 
-    @Override public void handleMessage(final Message msg) {
+    @Override public void handleMessage(@NonNull final Message msg) {
       switch (msg.what) {
         case REQUEST_SUBMIT: {
           Action action = (Action) msg.obj;
@@ -564,7 +575,7 @@ class Dispatcher {
       dispatcher.context.unregisterReceiver(this);
     }
 
-    @Override public void onReceive(Context context, Intent intent) {
+    @Override public void onReceive(@NonNull Context context, @Nullable Intent intent) {
       // On some versions of Android this may be called with a null Intent,
       // also without extras (getExtras() == null), in such case we use defaults.
       if (intent == null) {

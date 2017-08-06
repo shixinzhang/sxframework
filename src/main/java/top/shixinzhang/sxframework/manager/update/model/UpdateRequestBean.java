@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.manager.update.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Description:
@@ -41,7 +42,7 @@ public class UpdateRequestBean implements Parcelable {
     private String deviceType;
     private String changeLog;
 
-    private UpdateRequestBean(Parcel in) {
+    private UpdateRequestBean(@NonNull Parcel in) {
         appKey = in.readString();
         appName = in.readString();
         latestVersionCode = in.readString();
@@ -54,7 +55,7 @@ public class UpdateRequestBean implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(appKey);
         dest.writeString(appName);
         dest.writeString(latestVersionCode);
@@ -72,11 +73,13 @@ public class UpdateRequestBean implements Parcelable {
     }
 
     public static final Creator<UpdateRequestBean> CREATOR = new Creator<UpdateRequestBean>() {
+        @NonNull
         @Override
-        public UpdateRequestBean createFromParcel(Parcel in) {
+        public UpdateRequestBean createFromParcel(@NonNull Parcel in) {
             return new UpdateRequestBean(in);
         }
 
+        @NonNull
         @Override
         public UpdateRequestBean[] newArray(int size) {
             return new UpdateRequestBean[size];
@@ -90,6 +93,7 @@ public class UpdateRequestBean implements Parcelable {
         return appKey;
     }
 
+    @NonNull
     public UpdateRequestBean setAppKey(String appKey) {
         this.appKey = appKey;
         return this;
@@ -99,6 +103,7 @@ public class UpdateRequestBean implements Parcelable {
         return appName;
     }
 
+    @NonNull
     public UpdateRequestBean setAppName(String appName) {
         this.appName = appName;
         return this;
@@ -108,6 +113,7 @@ public class UpdateRequestBean implements Parcelable {
         return latestVersionCode;
     }
 
+    @NonNull
     public UpdateRequestBean setLatestVersionCode(String latestVersionCode) {
         this.latestVersionCode = latestVersionCode;
         return this;
@@ -117,6 +123,7 @@ public class UpdateRequestBean implements Parcelable {
         return latestVersionName;
     }
 
+    @NonNull
     public UpdateRequestBean setLatestVersionName(String latestVersionName) {
         this.latestVersionName = latestVersionName;
         return this;
@@ -126,6 +133,7 @@ public class UpdateRequestBean implements Parcelable {
         return latestBuildNumber;
     }
 
+    @NonNull
     public UpdateRequestBean setLatestBuildNumber(String latestBuildNumber) {
         this.latestBuildNumber = latestBuildNumber;
         return this;
@@ -135,6 +143,7 @@ public class UpdateRequestBean implements Parcelable {
         return channelCode;
     }
 
+    @NonNull
     public UpdateRequestBean setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
@@ -144,6 +153,7 @@ public class UpdateRequestBean implements Parcelable {
         return channelName;
     }
 
+    @NonNull
     public UpdateRequestBean setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
@@ -153,6 +163,7 @@ public class UpdateRequestBean implements Parcelable {
         return deviceType;
     }
 
+    @NonNull
     public UpdateRequestBean setDeviceType(String deviceType) {
         this.deviceType = deviceType;
         return this;
@@ -162,6 +173,7 @@ public class UpdateRequestBean implements Parcelable {
         return changeLog;
     }
 
+    @NonNull
     public UpdateRequestBean setChangeLog(String changeLog) {
         this.changeLog = changeLog;
         return this;

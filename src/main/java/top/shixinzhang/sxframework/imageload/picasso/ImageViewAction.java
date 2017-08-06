@@ -18,13 +18,16 @@ package top.shixinzhang.sxframework.imageload.picasso;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 class ImageViewAction extends Action<ImageView> {
 
+  @Nullable
   Callback callback;
 
-  ImageViewAction(Picasso picasso, ImageView imageView, Request data, int memoryPolicy,
+  ImageViewAction(@NonNull Picasso picasso, ImageView imageView, Request data, int memoryPolicy,
                   int networkPolicy, int errorResId, Drawable errorDrawable, String key, Object tag,
                   Callback callback, boolean noFade) {
     super(picasso, imageView, data, memoryPolicy, networkPolicy, errorResId, errorDrawable, key,
@@ -32,7 +35,7 @@ class ImageViewAction extends Action<ImageView> {
     this.callback = callback;
   }
 
-  @Override public void complete(Bitmap result, Picasso.LoadedFrom from) {
+  @Override public void complete(@Nullable Bitmap result, Picasso.LoadedFrom from) {
     if (result == null) {
       throw new AssertionError(
           String.format("Attempted to complete action with no result!\n%s", this));

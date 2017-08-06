@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.thread;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,6 +28,7 @@ public interface ThreadHandler {
 
     Handler getHandler();
 
+    @Nullable
     static ThreadHandler DEFAULT = new ThreadHandler() {
         private Executor executor;
         private Handler handler;

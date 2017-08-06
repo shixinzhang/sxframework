@@ -19,6 +19,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.net.http.HttpResponseCache;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class UrlConnectionDownloader implements Downloader {
   private static final String FORCE_CACHE = "only-if-cached,max-age=2147483647";
   private static final ThreadLocal<StringBuilder> CACHE_HEADER_BUILDER =
       new ThreadLocal<StringBuilder>() {
+        @NonNull
         @Override protected StringBuilder initialValue() {
           return new StringBuilder();
         }
@@ -47,18 +49,20 @@ public class UrlConnectionDownloader implements Downloader {
 
   private final Context context;
 
-  public UrlConnectionDownloader(Context context) {
+  public UrlConnectionDownloader(@NonNull Context context) {
     this.context = context.getApplicationContext();
   }
 
-  protected HttpURLConnection openConnection(Uri path) throws IOException {
+  @NonNull
+  protected HttpURLConnection openConnection(@NonNull Uri path) throws IOException {
     HttpURLConnection connection = (HttpURLConnection) new URL(path.toString()).openConnection();
     connection.setConnectTimeout(Utils.DEFAULT_CONNECT_TIMEOUT_MILLIS);
     connection.setReadTimeout(Utils.DEFAULT_READ_TIMEOUT_MILLIS);
     return connection;
   }
 
-  @Override public Response load(Uri uri, int networkPolicy) throws IOException {
+  @NonNull
+  @Override public Response load(@NonNull Uri uri, int networkPolicy) throws IOException {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
       installCacheIfNeeded(context);
     }
@@ -110,7 +114,7 @@ public class UrlConnectionDownloader implements Downloader {
     }
   }
 
-  private static void installCacheIfNeeded(Context context) {
+  private static void installCacheIfNeeded(@NonNull Context context) {
     // DCL + volatile should be safe after Java 5.
     if (cache == null) {
       try {
@@ -125,7 +129,7 @@ public class UrlConnectionDownloader implements Downloader {
   }
 
   private static class ResponseCacheIcs {
-    static Object install(Context context) throws IOException {
+    static Object install(@NonNull Context context) throws IOException {
       File cacheDir = Utils.createDefaultCacheDir(context);
       HttpResponseCache cache = HttpResponseCache.getInstalled();
       if (cache == null) {
@@ -135,7 +139,7 @@ public class UrlConnectionDownloader implements Downloader {
       return cache;
     }
 
-    static void close(Object cache) {
+    static void close(@NonNull Object cache) {
       try {
         ((HttpResponseCache) cache).close();
       } catch (IOException ignored) {

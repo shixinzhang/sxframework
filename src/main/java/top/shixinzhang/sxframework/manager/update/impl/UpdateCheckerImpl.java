@@ -16,6 +16,9 @@
 
 package top.shixinzhang.sxframework.manager.update.impl;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -41,6 +44,7 @@ import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 public class UpdateCheckerImpl implements IUpdateChecker {
 
+    @NonNull
     public static UpdateCheckerImpl create(){
         return new UpdateCheckerImpl();
     }
@@ -51,7 +55,7 @@ public class UpdateCheckerImpl implements IUpdateChecker {
      * @param listener
      */
     @Override
-    public void check(final UpdateRequestBean requestBean, final IUpdateListener listener) {
+    public void check(@Nullable final UpdateRequestBean requestBean, @Nullable final IUpdateListener listener) {
         if (requestBean == null) {
             return;
         }

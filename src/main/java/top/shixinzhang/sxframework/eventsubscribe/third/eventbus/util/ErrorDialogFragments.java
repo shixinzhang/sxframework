@@ -25,6 +25,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
 import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBus;
@@ -37,7 +39,7 @@ public class ErrorDialogFragments {
     /** TODO Use config:  Event class to be fired on dismissing the dialog by the user. May be configured by each app. */
     public static Class<?> EVENT_TYPE_ON_CLICK;
 
-    public static Dialog createDialog(Context context, Bundle arguments, OnClickListener onClickListener) {
+    public static Dialog createDialog(Context context, @NonNull Bundle arguments, OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(arguments.getString(ErrorDialogManager.KEY_TITLE));
         builder.setMessage(arguments.getString(ErrorDialogManager.KEY_MESSAGE));
@@ -48,7 +50,7 @@ public class ErrorDialogFragments {
         return builder.create();
     }
 
-    public static void handleOnClick(DialogInterface dialog, int which, Activity activity, Bundle arguments) {
+    public static void handleOnClick(DialogInterface dialog, int which, @Nullable Activity activity, @NonNull Bundle arguments) {
         if (EVENT_TYPE_ON_CLICK != null) {
             Object event;
             try {
@@ -79,6 +81,7 @@ public class ErrorDialogFragments {
     }
 
     public static class Support extends DialogFragment implements OnClickListener {
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return createDialog(getActivity(), getArguments(), this);

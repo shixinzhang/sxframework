@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.manager;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.File;
 
@@ -46,11 +48,14 @@ import top.shixinzhang.sxframework.utils.NetworkUtils;
 
 public class UpdateManager {
     private final String TAG = this.getClass().getSimpleName();
+    @NonNull
     private static UpdateManager mInstance = new UpdateManager();
+    @Nullable
     private static Context mContext;
 
     private IDownloader mDownloader;
     private IUpdateChecker mUpdateChecker;
+    @Nullable
     private UpdateResponseInfo mUpdateResponseInfo;
     private IDownloadListener mDownloadListener;
 
@@ -59,7 +64,8 @@ public class UpdateManager {
         mDownloader = OkHttpDownloader.getInstance();
     }
 
-    public static UpdateManager getInstance(Context context) {
+    @NonNull
+    public static UpdateManager getInstance(@Nullable Context context) {
         if (context == null) {
             throw new IllegalArgumentException("Context can't be null");
         }
@@ -75,7 +81,7 @@ public class UpdateManager {
     public void request(UpdateRequestBean requestBean) {
         mUpdateChecker.check(requestBean, new IUpdateListener() {
             @Override
-            public void onUpdate(final UpdateResponseInfo response) {
+            public void onUpdate(@Nullable final UpdateResponseInfo response) {
                 if (response != null && response.isNeedUpdate()) {
                     mUpdateResponseInfo = response;
                     downloadOrInstall();
@@ -120,6 +126,7 @@ public class UpdateManager {
         return mDownloadListener;
     }
 
+    @NonNull
     public UpdateManager setDownloadListener(final IDownloadListener downloadListener) {
         mDownloadListener = downloadListener;
         return this;

@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,6 +28,7 @@ import static top.shixinzhang.sxframework.imageload.picasso.Utils.KEY_SEPARATOR;
 
 /** A memory cache which uses a least-recently used eviction policy. */
 public class LruCache implements Cache {
+  @NonNull
   final LinkedHashMap<String, Bitmap> map;
   private final int maxSize;
 
@@ -36,7 +39,7 @@ public class LruCache implements Cache {
   private int missCount;
 
   /** Create a cache using an appropriate portion of the available RAM as the maximum size. */
-  public LruCache(Context context) {
+  public LruCache(@NonNull Context context) {
     this(Utils.calculateMemoryCacheSize(context));
   }
 
@@ -49,7 +52,8 @@ public class LruCache implements Cache {
     this.map = new LinkedHashMap<String, Bitmap>(0, 0.75f, true);
   }
 
-  @Override public Bitmap get(String key) {
+  @Nullable
+  @Override public Bitmap get(@Nullable String key) {
     if (key == null) {
       throw new NullPointerException("key == null");
     }
@@ -67,7 +71,7 @@ public class LruCache implements Cache {
     return null;
   }
 
-  @Override public void set(String key, Bitmap bitmap) {
+  @Override public void set(@Nullable String key, @Nullable Bitmap bitmap) {
     if (key == null || bitmap == null) {
       throw new NullPointerException("key == null || bitmap == null");
     }
@@ -126,7 +130,7 @@ public class LruCache implements Cache {
     evictAll();
   }
 
-  @Override public final synchronized void clearKeyUri(String uri) {
+  @Override public final synchronized void clearKeyUri(@NonNull String uri) {
     boolean sizeChanged = false;
     int uriLength = uri.length();
     for (Iterator<Map.Entry<String, Bitmap>> i = map.entrySet().iterator(); i.hasNext();) {

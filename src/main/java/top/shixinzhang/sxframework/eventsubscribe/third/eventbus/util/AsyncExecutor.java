@@ -16,6 +16,7 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.util;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 
@@ -41,29 +42,35 @@ public class AsyncExecutor {
         private Builder() {
         }
 
+        @NonNull
         public Builder threadPool(Executor threadPool) {
             this.threadPool = threadPool;
             return this;
         }
 
+        @NonNull
         public Builder failureEventType(Class<?> failureEventType) {
             this.failureEventType = failureEventType;
             return this;
         }
 
+        @NonNull
         public Builder eventBus(EventBus eventBus) {
             this.eventBus = eventBus;
             return this;
         }
 
+        @NonNull
         public AsyncExecutor build() {
             return buildForScope(null);
         }
 
-        public AsyncExecutor buildForActivityScope(Activity activity) {
+        @NonNull
+        public AsyncExecutor buildForActivityScope(@NonNull Activity activity) {
             return buildForScope(activity.getClass());
         }
 
+        @NonNull
         public AsyncExecutor buildForScope(Object executionContext) {
             if (eventBus == null) {
                 eventBus = EventBus.getDefault();
@@ -83,10 +90,12 @@ public class AsyncExecutor {
         void run() throws Exception;
     }
 
+    @NonNull
     public static Builder builder() {
         return new Builder();
     }
 
+    @NonNull
     public static AsyncExecutor create() {
         return new Builder().build();
     }
@@ -96,7 +105,7 @@ public class AsyncExecutor {
     private final EventBus eventBus;
     private final Object scope;
 
-    private AsyncExecutor(Executor threadPool, EventBus eventBus, Class<?> failureEventType, Object scope) {
+    private AsyncExecutor(Executor threadPool, EventBus eventBus, @NonNull Class<?> failureEventType, Object scope) {
         this.threadPool = threadPool;
         this.eventBus = eventBus;
         this.scope = scope;
@@ -109,7 +118,7 @@ public class AsyncExecutor {
     }
 
     /** Posts an failure event if the given {@link RunnableEx} throws an Exception. */
-    public void execute(final RunnableEx runnable) {
+    public void execute(@NonNull final RunnableEx runnable) {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {

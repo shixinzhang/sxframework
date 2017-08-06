@@ -16,6 +16,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +43,7 @@ import java.util.concurrent.ExecutorService;
 public class EventBus {
 
     /** Log tag, apps may override it. */
+    @NonNull
     public static String TAG = "EventBus";
 
     static volatile EventBus defaultInstance;
@@ -51,27 +54,35 @@ public class EventBus {
     ////////////
     //最关键的两个属性，注册、解除注册最后都是操作它们
     //  事件与对应的订阅者关联列表，
+    @NonNull
     private final Map<Class<?>, CopyOnWriteArrayList<Subscription>> subscriptionsByEventType;
     //  订阅者与订阅的事件关联列表
+    @NonNull
     private final Map<Object, List<Class<?>>> typesBySubscriber;
     ////////////
 
     //这个也挺重要，保存粘性事件
+    @NonNull
     private final Map<Class<?>, Object> stickyEvents;
 
     /**
      * 线程相关的发送状态
      */
     private final ThreadLocal<PostingThreadState> currentPostingThreadState = new ThreadLocal<PostingThreadState>() {
+        @NonNull
         @Override
         protected PostingThreadState initialValue() {
             return new PostingThreadState();
         }
     };
 
+    @NonNull
     private final HandlerPoster mainThreadPoster;
+    @NonNull
     private final BackgroundPoster backgroundPoster;
+    @NonNull
     private final AsyncPoster asyncPoster;
+    @NonNull
     private final SubscriberMethodFinder subscriberMethodFinder;
     private final ExecutorService executorService;      //使用的是 Executors.newCachedThreadPool()
 
@@ -96,6 +107,7 @@ public class EventBus {
         return defaultInstance;
     }
 
+    @NonNull
     public static EventBusBuilder builder() {
         return new EventBusBuilder();
     }
@@ -114,7 +126,7 @@ public class EventBus {
         this(DEFAULT_BUILDER);
     }
 
-    EventBus(EventBusBuilder builder) {
+    EventBus(@NonNull EventBusBuilder builder) {
         subscriptionsByEventType = new HashMap<>();
         typesBySubscriber = new HashMap<>();
         stickyEvents = new ConcurrentHashMap<>();
@@ -141,7 +153,7 @@ public class EventBus {
      * The {@link Subscribe} annotation also allows configuration like {@link
      * ThreadMode} and priority.
      */
-    public void register(Object subscriber) {
+    public void register(@NonNull Object subscriber) {
         Class<?> subscriberClass = subscriber.getClass();
         // 根据 Class 获取其中的订阅方法
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
@@ -154,7 +166,7 @@ public class EventBus {
     }
 
     // Must be called in synchronized block
-    private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
+    private void subscribe(@NonNull Object subscriber, @NonNull SubscriberMethod subscriberMethod) {
         Class<?> eventType = subscriberMethod.eventType;
         Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
         //获取这个事件对应的订阅者列表
@@ -213,7 +225,7 @@ public class EventBus {
      * @param newSubscription
      * @param stickyEvent
      */
-    private void checkPostStickyEventToSubscription(Subscription newSubscription, Object stickyEvent) {
+    private void checkPostStickyEventToSubscription(@NonNull Subscription newSubscription, @Nullable Object stickyEvent) {
         if (stickyEvent != null) {
             // If the subscriber is trying to abort the event, it will fail (event is not tracked in posting state)
             // --> Strange corner case, which we don't take care of here.
@@ -248,7 +260,7 @@ public class EventBus {
      * 解除注册很简单，就从两个属性中移除，画个图吧！
      * @param subscriber
      */
-    public synchronized void unregister(Object subscriber) {
+    public synchronized void unregister(@NonNull Object subscriber) {
         List<Class<?>> subscribedTypes = typesBySubscriber.get(subscriber);
         if (subscribedTypes != null) {
             //找到这个类中所有的订阅方法，挨个取消注册
@@ -296,7 +308,7 @@ public class EventBus {
      * {@link Subscribe#priority()}). Canceling is restricted to event handling methods running in posting thread
      * {@link ThreadMode#POSTING}.
      */
-    public void cancelEventDelivery(Object event) {
+    public void cancelEventDelivery(@Nullable Object event) {
         PostingThreadState postingState = currentPostingThreadState.get();
         if (!postingState.isPosting) {
             throw new EventBusException(
@@ -316,7 +328,7 @@ public class EventBus {
      * Posts the given event to the event bus and holds on to the event (because it is sticky). The most recent sticky
      * event of an event's type is kept in memory for future access by subscribers using {@link Subscribe#sticky()}.
      */
-    public void postSticky(Object event) {
+    public void postSticky(@NonNull Object event) {
         synchronized (stickyEvents) {
             stickyEvents.put(event.getClass(), event);
         }
@@ -329,7 +341,7 @@ public class EventBus {
      *
      * @see #postSticky(Object)
      */
-    public <T> T getStickyEvent(Class<T> eventType) {
+    public <T> T getStickyEvent(@NonNull Class<T> eventType) {
         synchronized (stickyEvents) {
             return eventType.cast(stickyEvents.get(eventType));
         }
@@ -340,7 +352,7 @@ public class EventBus {
      *  移除并返回最近的粘性事件
      * @see #postSticky(Object)
      */
-    public <T> T removeStickyEvent(Class<T> eventType) {
+    public <T> T removeStickyEvent(@NonNull Class<T> eventType) {
         synchronized (stickyEvents) {
             return eventType.cast(stickyEvents.remove(eventType));
         }
@@ -351,7 +363,7 @@ public class EventBus {
      *
      * @return true if the events matched and the sticky event was removed.
      */
-    public boolean removeStickyEvent(Object event) {
+    public boolean removeStickyEvent(@NonNull Object event) {
         synchronized (stickyEvents) {
             Class<?> eventType = event.getClass();
             Object existingEvent = stickyEvents.get(eventType);
@@ -392,7 +404,7 @@ public class EventBus {
     }
 
 
-    private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
+    private void postSingleEvent(@NonNull Object event, @NonNull PostingThreadState postingState) throws Error {
         Class<?> eventClass = event.getClass();
         boolean subscriptionFound = false;
         if (eventInheritance) {
@@ -423,7 +435,7 @@ public class EventBus {
      * @param eventClass 事件的 Class 对象
      * @return 是否调用成功
      */
-    private boolean postSingleEventForEventType(Object event, PostingThreadState postingState, Class<?> eventClass) {
+    private boolean postSingleEventForEventType(Object event, @NonNull PostingThreadState postingState, Class<?> eventClass) {
         CopyOnWriteArrayList<Subscription> subscriptions;
         synchronized (this) {   //拿到事件的订阅者列表                ，数据有可能在操作的同时添加，考虑使用 CopyOnWriteArrayList 与 synchronized
             subscriptions = subscriptionsByEventType.get(eventClass);
@@ -456,7 +468,7 @@ public class EventBus {
      * @param event
      * @param isMainThread
      */
-    private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
+    private void postToSubscription(@NonNull Subscription subscription, Object event, boolean isMainThread) {
         switch (subscription.subscriberMethod.threadMode) {
             case POSTING:       //直接在当前线程调用
                 invokeSubscriber(subscription, event);
@@ -507,7 +519,7 @@ public class EventBus {
     }
 
     /** Recurses through super interfaces. */
-    static void addInterfaces(List<Class<?>> eventTypes, Class<?>[] interfaces) {
+    static void addInterfaces(@NonNull List<Class<?>> eventTypes, @NonNull Class<?>[] interfaces) {
         for (Class<?> interfaceClass : interfaces) {
             if (!eventTypes.contains(interfaceClass)) {
                 eventTypes.add(interfaceClass);
@@ -527,7 +539,7 @@ public class EventBus {
      *          就是避免在订阅者解除注册后还调用，尤其是在主线程的 Activity 或者 Fragment 的生命周期中
      * @param pendingPost
      */
-    void invokeSubscriber(PendingPost pendingPost) {
+    void invokeSubscriber(@NonNull PendingPost pendingPost) {
         Object event = pendingPost.event;
         Subscription subscription = pendingPost.subscription;
         PendingPost.releasePendingPost(pendingPost);
@@ -541,7 +553,7 @@ public class EventBus {
      * @param subscription
      * @param event
      */
-    void invokeSubscriber(Subscription subscription, Object event) {
+    void invokeSubscriber(@NonNull Subscription subscription, Object event) {
         try {
             subscription.subscriberMethod.method.invoke(subscription.subscriber, event);
         } catch (InvocationTargetException e) {
@@ -551,7 +563,7 @@ public class EventBus {
         }
     }
 
-    private void handleSubscriberException(Subscription subscription, Object event, Throwable cause) {
+    private void handleSubscriberException(@NonNull Subscription subscription, Object event, Throwable cause) {
         if (event instanceof SubscriberExceptionEvent) {
             if (logSubscriberExceptions) {
                 // Don't send another SubscriberExceptionEvent to avoid infinite event recursion, just log
@@ -585,7 +597,9 @@ public class EventBus {
         final List<Object> eventQueue = new ArrayList<Object>();    //当前线程的事件队列
         boolean isPosting;
         boolean isMainThread;
+        @Nullable
         Subscription subscription;
+        @Nullable
         Object event;
         boolean canceled;
     }
@@ -599,6 +613,7 @@ public class EventBus {
         void onPostCompleted(List<SubscriberExceptionEvent> exceptionEvents);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "EventBus[indexCount=" + indexCount + ", eventInheritance=" + eventInheritance + "]";

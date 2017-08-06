@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
@@ -32,8 +33,10 @@ class Stats {
 
   private static final String STATS_THREAD_NAME = Utils.THREAD_PREFIX + "Stats";
 
+  @NonNull
   final HandlerThread statsThread;
   final Cache cache;
+  @NonNull
   final Handler handler;
 
   long cacheHits;
@@ -106,6 +109,7 @@ class Stats {
     averageTransformedBitmapSize = getAverage(originalBitmapCount, totalTransformedBitmapSize);
   }
 
+  @NonNull
   StatsSnapshot createSnapshot() {
     return new StatsSnapshot(cache.maxSize(), cache.size(), cacheHits, cacheMisses,
         totalDownloadSize, totalOriginalBitmapSize, totalTransformedBitmapSize, averageDownloadSize,
@@ -132,7 +136,7 @@ class Stats {
       this.stats = stats;
     }
 
-    @Override public void handleMessage(final Message msg) {
+    @Override public void handleMessage(@NonNull final Message msg) {
       switch (msg.what) {
         case CACHE_HIT:
           stats.performCacheHit();

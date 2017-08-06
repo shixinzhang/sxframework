@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.http;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -36,5 +38,5 @@ public @interface PATCH {
    * See {@linkplain Retrofit.Builder#baseUrl(HttpUrl) base URL} for details of how
    * this is resolved against a base URL to create the full endpoint URL.
    */
-  String value() default "";
+  @NonNull String value() default "";
 }

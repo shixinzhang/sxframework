@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.network.response;
 
+import android.support.annotation.NonNull;
+
 import rx.functions.Action1;
 
 /**
@@ -34,11 +36,13 @@ public class Observable<T> {
     private Action1<T> mSuccessAction;
     private Action1<T> mFailedAction;
 
+    @NonNull
     public Observable<T> onSuccess(Action1<T> action1) {
         mSuccessAction = action1;
         return this;
     }
 
+    @NonNull
     public Observable<T> onFailed(Action1<T> action1) {
         mFailedAction = action1;
         return this;

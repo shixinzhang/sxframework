@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -58,6 +59,7 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
     private boolean mShowGuide;
     private OnGuideFinishedListener mGuideFinishedListener;
     private int[] mImages = {R.drawable.guide_0, R.drawable.guide_1, R.drawable.guide_2};
+    @NonNull
     private List<View> mDotList = new ArrayList<>();
     private Animation mFadeInAnim;
     private Animation mFadeOutAnim;
@@ -72,7 +74,7 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
      *
      * @param context context
      */
-    public GuideView(Context context) {
+    public GuideView(@NonNull Context context) {
         super(context);
         init(context);
     }
@@ -83,7 +85,7 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
      * @param context context
      * @param attrs   attrs
      */
-    public GuideView(Context context, AttributeSet attrs) {
+    public GuideView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -95,12 +97,12 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
      * @param attrs        attrs
      * @param defStyleAttr defStyleAttr
      */
-    public GuideView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GuideView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    private void init(Context context) {
+    private void init(@NonNull Context context) {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(-1, -1);
         setLayoutParams(params);
 
@@ -141,6 +143,7 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
         return mImages;
     }
 
+    @NonNull
     public GuideView setImages(final int[] images) {
         mImages = images;
         return this;
@@ -246,8 +249,9 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
             return view == object;
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             ImageView item = new ImageView(context);
             item.setScaleType(ImageView.ScaleType.CENTER_CROP);
             item.setImageResource(mImages[position]);
@@ -256,7 +260,7 @@ public class GuideView extends RelativeLayout implements ViewPager.OnPageChangeL
         }
 
         @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
+        public void destroyItem(@NonNull ViewGroup collection, int position, Object view) {
             collection.removeView((View) view);
         }
     }

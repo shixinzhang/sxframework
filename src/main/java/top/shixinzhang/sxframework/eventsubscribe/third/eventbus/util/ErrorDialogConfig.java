@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.util;
 
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBus;
@@ -26,6 +27,7 @@ public class ErrorDialogConfig {
     final Resources resources;
     final int defaultTitleId;
     final int defaultErrorMsgId;
+    @NonNull
     final ExceptionToResourceMapping mapping;
 
     EventBus eventBus;
@@ -41,6 +43,7 @@ public class ErrorDialogConfig {
         mapping = new ExceptionToResourceMapping();
     }
 
+    @NonNull
     public ErrorDialogConfig addMapping(Class<? extends Throwable> clazz, int msgId) {
         mapping.addMapping(clazz, msgId);
         return this;

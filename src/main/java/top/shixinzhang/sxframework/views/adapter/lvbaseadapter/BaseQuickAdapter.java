@@ -16,6 +16,8 @@
 package top.shixinzhang.sxframework.views.adapter.lvbaseadapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
 
     protected final int layoutResId;
 
+    @NonNull
     protected final List<T> data;
 
     protected boolean displayIndeterminateProgress = false;
@@ -63,7 +66,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
+    public BaseQuickAdapter(Context context, int layoutResId, @Nullable List<T> data) {
         this.data = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.context = context;
         this.layoutResId = layoutResId;
@@ -75,6 +78,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
         return data.size() + extra;
     }
 
+    @Nullable
     @Override
     public T getItem(int position) {
         if (position >= data.size()) return null;
@@ -96,6 +100,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
         return position >= data.size() ? 1 : 0;
     }
 
+    @Nullable
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (getItemViewType(position) == 0) {
@@ -109,7 +114,8 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
         return createIndeterminateProgressView(convertView, parent);
     }
 
-    private View createIndeterminateProgressView(View convertView, ViewGroup parent) {
+    @Nullable
+    private View createIndeterminateProgressView(@Nullable View convertView, ViewGroup parent) {
         if (convertView == null) {
             FrameLayout container = new FrameLayout(context);
             container.setForegroundGravity(Gravity.CENTER);
@@ -130,7 +136,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
         notifyDataSetChanged();
     }
 
-    public void addAll(List<T> elem) {
+    public void addAll(@NonNull List<T> elem) {
         data.addAll(elem);
         notifyDataSetChanged();
     }
@@ -154,7 +160,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends B
         notifyDataSetChanged();
     }
 
-    public void replaceAll(List<T> elem) {
+    public void replaceAll(@NonNull List<T> elem) {
         data.clear();
         data.addAll(elem);
         notifyDataSetChanged();

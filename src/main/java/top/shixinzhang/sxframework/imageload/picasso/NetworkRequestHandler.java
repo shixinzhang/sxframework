@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +41,13 @@ class NetworkRequestHandler extends RequestHandler {
     this.stats = stats;
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     String scheme = data.uri.getScheme();
     return (SCHEME_HTTP.equals(scheme) || SCHEME_HTTPS.equals(scheme));
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @Nullable
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     Response response = downloader.load(request.uri, request.networkPolicy);
     if (response == null) {
       return null;
@@ -77,7 +80,7 @@ class NetworkRequestHandler extends RequestHandler {
     return RETRY_COUNT;
   }
 
-  @Override boolean shouldRetry(boolean airplaneMode, NetworkInfo info) {
+  @Override boolean shouldRetry(boolean airplaneMode, @Nullable NetworkInfo info) {
     return info == null || info.isConnected();
   }
 

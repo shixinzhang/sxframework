@@ -17,16 +17,18 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 final class TargetAction extends Action<Target> {
 
-  TargetAction(Picasso picasso, Target target, Request data, int memoryPolicy, int networkPolicy,
+  TargetAction(@NonNull Picasso picasso, Target target, Request data, int memoryPolicy, int networkPolicy,
                Drawable errorDrawable, String key, Object tag, int errorResId) {
     super(picasso, target, data, memoryPolicy, networkPolicy, errorResId, errorDrawable, key, tag,
         false);
   }
 
-  @Override void complete(Bitmap result, Picasso.LoadedFrom from) {
+  @Override void complete(@Nullable Bitmap result, Picasso.LoadedFrom from) {
     if (result == null) {
       throw new AssertionError(
           String.format("Attempted to complete action with no result!\n%s", this));

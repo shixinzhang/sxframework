@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.cache.imp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
@@ -48,28 +49,29 @@ public class DiskCache {
     private static final int MAX_SIZE = 1000 * 1000 * 5; // 5 mb
     private static final int MAX_COUNT = Integer.MAX_VALUE;
     private static final String DEFAULT_DIR_NAME = "DiskCache";
+    @NonNull
     private static Map<String, DiskCache> mInstanceMap = new HashMap<>();
     private BaseDiskCache mCache;
 
-    public static DiskCache get(Context ctx) {
+    public static DiskCache get(@NonNull Context ctx) {
         return get(ctx, DEFAULT_DIR_NAME);
     }
 
-    public static DiskCache get(Context ctx, String cacheName) {
+    public static DiskCache get(@NonNull Context ctx, @NonNull String cacheName) {
         File f = new File(ctx.getExternalCacheDir(), cacheName);
         return get(f, MAX_SIZE, MAX_COUNT);
     }
 
-    public static DiskCache get(File cacheDir) {
+    public static DiskCache get(@NonNull File cacheDir) {
         return get(cacheDir, MAX_SIZE, MAX_COUNT);
     }
 
-    public static DiskCache get(Context ctx, int max_size, int max_count) {
+    public static DiskCache get(@NonNull Context ctx, int max_size, int max_count) {
         File f = new File(ctx.getExternalCacheDir(), DEFAULT_DIR_NAME);
         return get(f, max_size, max_count);
     }
 
-    public static DiskCache get(File cacheDir, int max_size, int max_count) {
+    public static DiskCache get(@NonNull File cacheDir, int max_size, int max_count) {
         DiskCache manager = mInstanceMap.get(cacheDir.getAbsoluteFile() + myPid());
         if (manager == null) {
             manager = new DiskCache(cacheDir, max_size, max_count);
@@ -78,11 +80,12 @@ public class DiskCache {
         return manager;
     }
 
+    @NonNull
     private static String myPid() {
         return "_" + android.os.Process.myPid();
     }
 
-    private DiskCache(File cacheDir, int max_size, int max_count) {
+    private DiskCache(@NonNull File cacheDir, int max_size, int max_count) {
         if (!cacheDir.exists() && !cacheDir.mkdirs()) {
             throw new RuntimeException("can't make dirs in " + cacheDir.getAbsolutePath());
         }
@@ -107,15 +110,15 @@ public class DiskCache {
      * @param key   保存的key
      * @param value 保存的String数据
      */
-    public void put(String key, String value) {
+    public void put(String key, @NonNull String value) {
         put(key, value, MAX_CACHE_TIME);
     }
 
-    public void put(String key, String value, String eTag) {
+    public void put(String key, @NonNull String value, String eTag) {
         put(key, value.getBytes(), MAX_CACHE_TIME, eTag);
     }
 
-    public void put(String key, String value, int saveTime, String eTag) {
+    public void put(String key, @NonNull String value, int saveTime, String eTag) {
         put(key, value.getBytes(), saveTime, eTag);
     }
 
@@ -126,7 +129,7 @@ public class DiskCache {
      * @param value    保存的String数据
      * @param saveTime 保存的时间，单位：秒
      */
-    public void put(String key, String value, int saveTime) {
+    public void put(String key, @NonNull String value, int saveTime) {
         put(key, value.getBytes(), saveTime);
     }
 
@@ -135,6 +138,7 @@ public class DiskCache {
      *
      * @return String 数据
      */
+    @Nullable
     public String getAsString(String key) {
         byte[] data = getAsBinary(key);
         if (data == null) return null;
@@ -151,7 +155,7 @@ public class DiskCache {
      * @param key   保存的key
      * @param value 保存的JSON数据
      */
-    public void put(String key, JSONObject value) {
+    public void put(String key, @NonNull JSONObject value) {
         put(key, value.toString());
     }
 
@@ -162,7 +166,7 @@ public class DiskCache {
      * @param value    保存的JSONObject数据
      * @param saveTime 保存的时间，单位：秒
      */
-    public void put(String key, JSONObject value, int saveTime) {
+    public void put(String key, @NonNull JSONObject value, int saveTime) {
         put(key, value.toString(), saveTime);
     }
 
@@ -171,6 +175,7 @@ public class DiskCache {
      *
      * @return JSONObject数据
      */
+    @Nullable
     public JSONObject getAsJSONObject(String key) {
         String JSONString = getAsString(key);
         try {
@@ -191,7 +196,7 @@ public class DiskCache {
      * @param key   保存的key
      * @param value 保存的JSONArray数据
      */
-    public void put(String key, JSONArray value) {
+    public void put(String key, @NonNull JSONArray value) {
         put(key, value.toString());
     }
 
@@ -202,7 +207,7 @@ public class DiskCache {
      * @param value    保存的JSONArray数据
      * @param saveTime 保存的时间，单位：秒
      */
-    public void put(String key, JSONArray value, int saveTime) {
+    public void put(String key, @NonNull JSONArray value, int saveTime) {
         put(key, value.toString(), saveTime);
     }
 
@@ -211,6 +216,7 @@ public class DiskCache {
      *
      * @return JSONArray数据
      */
+    @Nullable
     public JSONArray getAsJSONArray(String key) {
         String JSONString = getAsString(key);
         try {
@@ -329,6 +335,7 @@ public class DiskCache {
      *
      * @return Serializable 数据
      */
+    @Nullable
     public Object getAsObject(String key) {
         byte[] data = getAsBinary(key);
         if (data != null) {

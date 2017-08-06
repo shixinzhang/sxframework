@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.finder;
 
 
+import android.support.annotation.NonNull;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -51,14 +53,14 @@ public final class AnnotatedFinder {
     private static final ConcurrentMap<Class<?>, Map<EventType, Set<SourceMethod>>> SUBSCRIBERS_CACHE =
             new ConcurrentHashMap<>();
 
-    private static void loadAnnotatedProducerMethods(Class<?> listenerClass,
-                                                     Map<EventType, SourceMethod> producerMethods) {
+    private static void loadAnnotatedProducerMethods(@NonNull Class<?> listenerClass,
+                                                     @NonNull Map<EventType, SourceMethod> producerMethods) {
         Map<EventType, Set<SourceMethod>> subscriberMethods = new HashMap<>();
         loadAnnotatedMethods(listenerClass, producerMethods, subscriberMethods);
     }
 
-    private static void loadAnnotatedSubscriberMethods(Class<?> listenerClass,
-                                                       Map<EventType, Set<SourceMethod>> subscriberMethods) {
+    private static void loadAnnotatedSubscriberMethods(@NonNull Class<?> listenerClass,
+                                                       @NonNull Map<EventType, Set<SourceMethod>> subscriberMethods) {
         Map<EventType, SourceMethod> producerMethods = new HashMap<>();
         loadAnnotatedMethods(listenerClass, producerMethods, subscriberMethods);
     }
@@ -67,8 +69,8 @@ public final class AnnotatedFinder {
      * Load all methods annotated with {@link Produce} or {@link Subscribe} into their respective caches for the
      * specified class.
      */
-    private static void loadAnnotatedMethods(Class<?> listenerClass,
-                                             Map<EventType, SourceMethod> producerMethods, Map<EventType, Set<SourceMethod>> subscriberMethods) {
+    private static void loadAnnotatedMethods(@NonNull Class<?> listenerClass,
+                                             @NonNull Map<EventType, SourceMethod> producerMethods, @NonNull Map<EventType, Set<SourceMethod>> subscriberMethods) {
         for (Method method : listenerClass.getDeclaredMethods()) {
             // The compiler sometimes creates synthetic bridge methods as part of the
             // type erasure process. As of JDK8 these methods now include the same
@@ -164,7 +166,8 @@ public final class AnnotatedFinder {
     /**
      * This implementation finds all methods marked with a {@link Produce} annotation.
      */
-    static Map<EventType, ProducerEvent> findAllProducers(Object listener) {
+    @NonNull
+    static Map<EventType, ProducerEvent> findAllProducers(@NonNull Object listener) {
         final Class<?> listenerClass = listener.getClass();
         Map<EventType, ProducerEvent> producersInMethod = new HashMap<>();
 
@@ -186,7 +189,8 @@ public final class AnnotatedFinder {
     /**
      * This implementation finds all methods marked with a {@link Subscribe} annotation.
      */
-    static Map<EventType, Set<SubscriberEvent>> findAllSubscribers(Object listener) {
+    @NonNull
+    static Map<EventType, Set<SubscriberEvent>> findAllSubscribers(@NonNull Object listener) {
         Class<?> listenerClass = listener.getClass();
         Map<EventType, Set<SubscriberEvent>> subscribersInMethod = new HashMap<>();
 

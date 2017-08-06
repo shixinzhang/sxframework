@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.network.third.retrofit2.adapter.custom;
 
+import android.support.annotation.NonNull;
+
 import java.lang.reflect.Type;
 
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
@@ -44,6 +46,7 @@ public class SxCallAdapter implements CallAdapter<Object, SxCall<?>> {
         return mResponseType;
     }
 
+    @NonNull
     @Override
     public SxCall<?> adapt(Call<Object> call) {
         return new SxCall<>(call);

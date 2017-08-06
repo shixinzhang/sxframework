@@ -16,6 +16,7 @@
 
 package top.shixinzhang.sxframework.views.recyclerview;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 
@@ -24,7 +25,7 @@ import top.shixinzhang.sxframework.views.recyclerview.BaseItemAnimator;
 public class TranslateItemAnimator extends BaseItemAnimator {
 
     @Override
-    protected void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
+    protected void animateRemoveImpl(@NonNull final RecyclerView.ViewHolder holder) {
         ViewCompat.animate(holder.itemView)
                 .translationY(holder.itemView.getHeight())
                 .alpha(0)
@@ -36,13 +37,13 @@ public class TranslateItemAnimator extends BaseItemAnimator {
     }
 
     @Override
-    protected void preAnimateAddImpl(RecyclerView.ViewHolder holder) {
+    protected void preAnimateAddImpl(@NonNull RecyclerView.ViewHolder holder) {
         ViewCompat.setTranslationY(holder.itemView, holder.itemView.getHeight());
         ViewCompat.setAlpha(holder.itemView, 0);
     }
 
     @Override
-    protected void animateAddImpl(final RecyclerView.ViewHolder holder) {
+    protected void animateAddImpl(@NonNull final RecyclerView.ViewHolder holder) {
         ViewCompat.animate(holder.itemView)
                 .translationY(0)
                 .alpha(1)

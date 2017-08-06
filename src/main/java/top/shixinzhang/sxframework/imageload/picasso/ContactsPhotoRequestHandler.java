@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +46,7 @@ class ContactsPhotoRequestHandler extends RequestHandler {
    */
   private static final int ID_DISPLAY_PHOTO = 4;
 
+  @NonNull
   private static final UriMatcher matcher;
 
   static {
@@ -61,19 +64,20 @@ class ContactsPhotoRequestHandler extends RequestHandler {
     this.context = context;
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     final Uri uri = data.uri;
     return (SCHEME_CONTENT.equals(uri.getScheme())
         && ContactsContract.Contacts.CONTENT_URI.getHost().equals(uri.getHost())
         && matcher.match(data.uri) != UriMatcher.NO_MATCH);
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @Nullable
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     InputStream is = getInputStream(request);
     return is != null ? new Result(is, DISK) : null;
   }
 
-  private InputStream getInputStream(Request data) throws IOException {
+  private InputStream getInputStream(@NonNull Request data) throws IOException {
     ContentResolver contentResolver = context.getContentResolver();
     Uri uri = data.uri;
     switch (matcher.match(uri)) {

@@ -17,6 +17,9 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.rxbus.entity;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -39,14 +42,17 @@ public class SubscriberEvent extends Event {
     /**
      * Object sporting the method.
      */
+    @Nullable
     private final Object target;
     /**
      * Subscriber method.
      */
+    @Nullable
     private final Method method;
     /**
      * Subscriber thread
      */
+    @Nullable
     private final EventThread thread;
     /**
      * RxJava {@link Subject}
@@ -61,7 +67,7 @@ public class SubscriberEvent extends Event {
      */
     private boolean valid = true;
 
-    public SubscriberEvent(Object target, Method method, EventThread thread) {
+    public SubscriberEvent(@Nullable Object target, @Nullable Method method, @Nullable EventThread thread) {
         if (target == null) {
             throw new NullPointerException("SubscriberEvent target cannot be null.");
         }
@@ -89,7 +95,7 @@ public class SubscriberEvent extends Event {
         subject.onBackpressureBuffer().observeOn(EventThread.getScheduler(thread))
                 .subscribe(new Action1<Object>() {
                     @Override
-                    public void call(Object event) {
+                    public void call(@NonNull Object event) {
                         try {
                             if (valid) {
                                 handleEvent(event);
@@ -146,6 +152,7 @@ public class SubscriberEvent extends Event {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[SubscriberEvent " + method + "]";
@@ -157,7 +164,7 @@ public class SubscriberEvent extends Event {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

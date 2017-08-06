@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -60,7 +63,7 @@ final class ServiceMethod<T> {
     private final boolean isMultipart;
     private final ParameterHandler<?>[] parameterHandlers;
 
-    ServiceMethod(Builder<T> builder) {
+    ServiceMethod(@NonNull Builder<T> builder) {
         this.callFactory = builder.retrofit.callFactory();
         this.callAdapter = builder.callAdapter;
         this.baseUrl = builder.retrofit.baseUrl();
@@ -78,7 +81,7 @@ final class ServiceMethod<T> {
     /**
      * Builds an HTTP request from method arguments.
      */
-    Request toRequest(Object... args) throws IOException {
+    Request toRequest(@Nullable Object... args) throws IOException {
         RequestBuilder requestBuilder = new RequestBuilder(httpMethod, baseUrl, relativeUrl, headers,
                 contentType, hasBody, isFormEncoded, isMultipart);
 
@@ -112,6 +115,7 @@ final class ServiceMethod<T> {
      */
     static final class Builder<T> {
         final Retrofit retrofit;
+        @NonNull
         final Method method;
         final Annotation[] methodAnnotations;
         final Annotation[][] parameterAnnotationsArray;
@@ -136,7 +140,7 @@ final class ServiceMethod<T> {
         Converter<ResponseBody, T> responseConverter;
         CallAdapter<?, ?> callAdapter;
 
-        public Builder(Retrofit retrofit, Method method) {
+        public Builder(Retrofit retrofit, @NonNull Method method) {
             this.retrofit = retrofit;
             this.method = method;
             this.methodAnnotations = method.getAnnotations();
@@ -144,6 +148,7 @@ final class ServiceMethod<T> {
             this.parameterAnnotationsArray = method.getParameterAnnotations();
         }
 
+        @NonNull
         public ServiceMethod build() {
             callAdapter = createCallAdapter();
             responseType = callAdapter.responseType();
@@ -263,7 +268,7 @@ final class ServiceMethod<T> {
             }
         }
 
-        private void parseHttpMethodAndPath(String httpMethod, String value, boolean hasBody) {
+        private void parseHttpMethodAndPath(String httpMethod, @NonNull String value, boolean hasBody) {
             if (this.httpMethod != null) {
                 throw methodError("Only one HTTP method is allowed. Found: %s and %s.",
                         this.httpMethod, httpMethod);
@@ -291,7 +296,7 @@ final class ServiceMethod<T> {
             this.relativeUrlParamNames = parsePathParameters(value);
         }
 
-        private Headers parseHeaders(String[] headers) {
+        private Headers parseHeaders(@NonNull String[] headers) {
             Headers.Builder builder = new Headers.Builder();
             for (String header : headers) {
                 int colon = header.indexOf(':');
@@ -314,8 +319,9 @@ final class ServiceMethod<T> {
             return builder.build();
         }
 
+        @Nullable
         private ParameterHandler<?> parseParameter(
-                int p, Type parameterType, Annotation[] annotations) {
+                int p, Type parameterType, @NonNull Annotation[] annotations) {
             ParameterHandler<?> result = null;
             for (Annotation annotation : annotations) {
                 ParameterHandler<?> annotationAction = parseParameterAnnotation(
@@ -675,7 +681,7 @@ final class ServiceMethod<T> {
             return null; // Not a Retrofit annotation.
         }
 
-        private void validatePathName(int p, String name) {
+        private void validatePathName(int p, @NonNull String name) {
             if (!PARAM_NAME_REGEX.matcher(name).matches()) {
                 throw parameterError(p, "@Path parameter name must match %s. Found: %s",
                         PARAM_URL_REGEX.pattern(), name);
@@ -686,6 +692,7 @@ final class ServiceMethod<T> {
             }
         }
 
+        @NonNull
         private Converter<ResponseBody, T> createResponseConverter() {
             Annotation[] annotations = method.getAnnotations();
             try {
@@ -695,10 +702,12 @@ final class ServiceMethod<T> {
             }
         }
 
+        @NonNull
         private RuntimeException methodError(String message, Object... args) {
             return methodError(null, message, args);
         }
 
+        @NonNull
         private RuntimeException methodError(Throwable cause, String message, Object... args) {
             message = String.format(message, args);
             return new IllegalArgumentException(message
@@ -708,11 +717,13 @@ final class ServiceMethod<T> {
                     + method.getName(), cause);
         }
 
+        @NonNull
         private RuntimeException parameterError(
                 Throwable cause, int p, String message, Object... args) {
             return methodError(cause, message + " (parameter #" + (p + 1) + ")", args);
         }
 
+        @NonNull
         private RuntimeException parameterError(int p, String message, Object... args) {
             return methodError(message + " (parameter #" + (p + 1) + ")", args);
         }
@@ -722,7 +733,8 @@ final class ServiceMethod<T> {
      * Gets the set of unique path parameters used in the given URI. If a parameter is used twice
      * in the URI, it will only show up once in the set.
      */
-    static Set<String> parsePathParameters(String path) {
+    @NonNull
+    static Set<String> parsePathParameters(@NonNull String path) {
         Matcher m = PARAM_URL_REGEX.matcher(path);
         Set<String> patterns = new LinkedHashSet<>();
         while (m.find()) {

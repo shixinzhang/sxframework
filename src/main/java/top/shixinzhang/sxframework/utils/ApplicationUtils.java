@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.io.DataOutputStream;
@@ -56,7 +57,7 @@ public final class ApplicationUtils {
      * @param context
      * @param packageName
      */
-    public static void startApplication(Context context, String packageName) {
+    public static void startApplication(@NonNull Context context, String packageName) {
         if (TextUtils.isEmpty(packageName)) {
             return;
         }
@@ -73,7 +74,7 @@ public final class ApplicationUtils {
      * @param context
      * @return
      */
-    public static String getForegroundAppName(Context context) {
+    public static String getForegroundAppName(@NonNull Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
         if (processInfoList == null) {
@@ -95,7 +96,7 @@ public final class ApplicationUtils {
      * @param context
      * @return
      */
-    public static String getForegroundActivity(Context context) {
+    public static String getForegroundActivity(@NonNull Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
         if (list != null && list.size() > 0) {
@@ -116,7 +117,7 @@ public final class ApplicationUtils {
      * @param context
      * @return
      */
-    public static PackageInfo getCurrentAppInfo(Context context) {
+    public static PackageInfo getCurrentAppInfo(@NonNull Context context) {
         PackageManager packageManager = context.getPackageManager();
         try {
             return packageManager.getPackageInfo(context.getPackageName(), 0);
@@ -133,7 +134,7 @@ public final class ApplicationUtils {
      * @param path
      * @return
      */
-    public static PackageInfo getApkInfo(Context context, String path) {
+    public static PackageInfo getApkInfo(@NonNull Context context, String path) {
         PackageManager packageManager = context.getPackageManager();
         if (packageManager != null) {
             return packageManager.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
@@ -148,7 +149,7 @@ public final class ApplicationUtils {
      * @param uri
      * @return 0 if version is same; lower than 0 if current package's version is lower; greater than 0 is current's version is greater
      */
-    public static int compareVersion(Context context, Uri uri) {
+    public static int compareVersion(@NonNull Context context, @NonNull Uri uri) {
         PackageInfo apkInfo = getApkInfo(context, uri.getPath());   //获取指定 uri 对应 apk 的信息
         if (apkInfo == null) {
             return 1;
@@ -168,7 +169,7 @@ public final class ApplicationUtils {
      * @param context
      * @param apkPath
      */
-    public static void installApp(Context context, String apkPath) {
+    public static void installApp(@NonNull Context context, @NonNull String apkPath) {
         File file = new File(apkPath);
         if (!file.exists()) {
             LogUtils.e(TAG, apkPath + " apk file is not exists");
@@ -177,12 +178,12 @@ public final class ApplicationUtils {
         installApp(context, file);
     }
 
-    public static void installApp(Context context, File file) {
+    public static void installApp(@NonNull Context context, File file) {
         installPackage(context, Uri.fromFile(file));
     }
 
 
-    public static void installPackage(Context context, Uri uri) {
+    public static void installPackage(@NonNull Context context, Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

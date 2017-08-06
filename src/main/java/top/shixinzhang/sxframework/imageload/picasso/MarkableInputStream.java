@@ -15,6 +15,8 @@
  */
 package top.shixinzhang.sxframework.imageload.picasso;
 
+import android.support.annotation.NonNull;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +29,7 @@ import java.io.InputStream;
 final class MarkableInputStream extends InputStream {
   private static final int DEFAULT_BUFFER_SIZE = 4096;
 
+  @NonNull
   private final InputStream in;
 
   private long offset;
@@ -34,11 +37,11 @@ final class MarkableInputStream extends InputStream {
   private long limit;
   private long defaultMark = -1;
 
-  public MarkableInputStream(InputStream in) {
+  public MarkableInputStream(@NonNull InputStream in) {
     this(in, DEFAULT_BUFFER_SIZE);
   }
 
-  public MarkableInputStream(InputStream in, int size) {
+  public MarkableInputStream(@NonNull InputStream in, int size) {
     if (!in.markSupported()) {
       in = new BufferedInputStream(in, size);
     }
@@ -126,7 +129,7 @@ final class MarkableInputStream extends InputStream {
     return result;
   }
 
-  @Override public int read(byte[] buffer) throws IOException {
+  @Override public int read(@NonNull byte[] buffer) throws IOException {
     int count = in.read(buffer);
     if (count != -1) {
       offset += count;
@@ -134,7 +137,7 @@ final class MarkableInputStream extends InputStream {
     return count;
   }
 
-  @Override public int read(byte[] buffer, int offset, int length) throws IOException {
+  @Override public int read(@NonNull byte[] buffer, int offset, int length) throws IOException {
     int count = in.read(buffer, offset, length);
     if (count != -1) {
       this.offset += count;

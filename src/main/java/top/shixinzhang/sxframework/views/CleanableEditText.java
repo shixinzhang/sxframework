@@ -2,6 +2,7 @@ package top.shixinzhang.sxframework.views;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -26,7 +27,7 @@ public class CleanableEditText extends EditText implements TextWatcher {
     /**
      * @param context context
      */
-    public CleanableEditText(Context context) {
+    public CleanableEditText(@NonNull Context context) {
         super(context);
         init(context);
     }
@@ -35,7 +36,7 @@ public class CleanableEditText extends EditText implements TextWatcher {
      * @param context context
      * @param attrs   attrs
      */
-    public CleanableEditText(Context context, AttributeSet attrs) {
+    public CleanableEditText(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -45,13 +46,13 @@ public class CleanableEditText extends EditText implements TextWatcher {
      * @param attrs    attrs
      * @param defStyle defStyle
      */
-    public CleanableEditText(Context context, AttributeSet attrs, int defStyle) {
+    public CleanableEditText(@NonNull Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
 
-    private void init(Context context) {
+    private void init(@NonNull Context context) {
         final int PADDING_RIGHT = (int) ViewHelper.dp2Px(context, 6);
         final int PADDING_TOP = (int) ViewHelper.dp2Px(context, 4);
 
@@ -68,7 +69,7 @@ public class CleanableEditText extends EditText implements TextWatcher {
 
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (getCompoundDrawables()[2] != null) {
 
@@ -91,7 +92,7 @@ public class CleanableEditText extends EditText implements TextWatcher {
 
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int count, int after) {
+    public void onTextChanged(@NonNull CharSequence s, int start, int count, int after) {
         setClearIconVisible(s.length() > 0);
     }
 

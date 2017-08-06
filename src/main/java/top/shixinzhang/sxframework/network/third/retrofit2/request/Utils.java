@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -37,7 +40,8 @@ public final class Utils {
         // No instances.
     }
 
-    static Class<?> getRawType(Type type) {
+    @Nullable
+    static Class<?> getRawType(@Nullable Type type) {
         if (type == null) throw new NullPointerException("type == null");
 
         if (type instanceof Class<?>) {
@@ -118,7 +122,7 @@ public final class Utils {
      * IntegerSet}, the result for when supertype is {@code Set.class} is {@code Set<Integer>} and the
      * result when the supertype is {@code Collection.class} is {@code Collection<Integer>}.
      */
-    static Type getGenericSupertype(Type context, Class<?> rawType, Class<?> toResolve) {
+    static Type getGenericSupertype(Type context, @NonNull Class<?> rawType, @NonNull Class<?> toResolve) {
         if (toResolve == rawType) return context;
 
         // We skip searching through interfaces if unknown is an interface.
@@ -150,18 +154,18 @@ public final class Utils {
         return toResolve;
     }
 
-    private static int indexOf(Object[] array, Object toFind) {
+    private static int indexOf(@NonNull Object[] array, @NonNull Object toFind) {
         for (int i = 0; i < array.length; i++) {
             if (toFind.equals(array[i])) return i;
         }
         throw new NoSuchElementException();
     }
 
-    private static boolean equal(Object a, Object b) {
+    private static boolean equal(@Nullable Object a, Object b) {
         return a == b || (a != null && a.equals(b));
     }
 
-    static int hashCodeOrZero(Object o) {
+    static int hashCodeOrZero(@Nullable Object o) {
         return o != null ? o.hashCode() : 0;
     }
 
@@ -176,13 +180,13 @@ public final class Utils {
      *
      * @param supertype a superclass of, or interface implemented by, this.
      */
-    static Type getSupertype(Type context, Class<?> contextRawType, Class<?> supertype) {
+    static Type getSupertype(Type context, @NonNull Class<?> contextRawType, @NonNull Class<?> supertype) {
         if (!supertype.isAssignableFrom(contextRawType)) throw new IllegalArgumentException();
         return resolve(context, contextRawType,
                 getGenericSupertype(context, contextRawType, supertype));
     }
 
-    static Type resolve(Type context, Class<?> contextRawType, Type toResolve) {
+    static Type resolve(Type context, @NonNull Class<?> contextRawType, Type toResolve) {
         // This implementation is made a little more complicated in an attempt to avoid object-creation.
         while (true) {
             if (toResolve instanceof TypeVariable) {
@@ -253,7 +257,7 @@ public final class Utils {
     }
 
     private static Type resolveTypeVariable(
-            Type context, Class<?> contextRawType, TypeVariable<?> unknown) {
+            Type context, @NonNull Class<?> contextRawType, @NonNull TypeVariable<?> unknown) {
         Class<?> declaredByRaw = declaringClassOf(unknown);
 
         // We can't reduce this further.
@@ -272,7 +276,7 @@ public final class Utils {
      * Returns the declaring class of {@code typeVariable}, or {@code null} if it was not declared by
      * a class.
      */
-    private static Class<?> declaringClassOf(TypeVariable<?> typeVariable) {
+    private static Class<?> declaringClassOf(@NonNull TypeVariable<?> typeVariable) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
         return genericDeclaration instanceof Class ? (Class<?>) genericDeclaration : null;
     }
@@ -283,7 +287,8 @@ public final class Utils {
         }
     }
 
-    public static <T> T checkNotNull(T object, String message) {
+    @Nullable
+    public static <T> T checkNotNull(@Nullable T object, String message) {
         if (object == null) {
             throw new NullPointerException(message);
         }
@@ -293,8 +298,8 @@ public final class Utils {
     /**
      * Returns true if {@code annotations} contains an instance of {@code cls}.
      */
-    static boolean isAnnotationPresent(Annotation[] annotations,
-                                       Class<? extends Annotation> cls) {
+    static boolean isAnnotationPresent(@NonNull Annotation[] annotations,
+                                       @NonNull Class<? extends Annotation> cls) {
         for (Annotation annotation : annotations) {
             if (cls.isInstance(annotation)) {
                 return true;
@@ -303,13 +308,13 @@ public final class Utils {
         return false;
     }
 
-    static ResponseBody buffer(final ResponseBody body) throws IOException {
+    static ResponseBody buffer(@NonNull final ResponseBody body) throws IOException {
         Buffer buffer = new Buffer();
         body.source().readAll(buffer);
         return ResponseBody.create(body.contentType(), body.contentLength(), buffer);
     }
 
-    static <T> void validateServiceInterface(Class<T> service) {
+    static <T> void validateServiceInterface(@NonNull Class<T> service) {
         if (!service.isInterface()) {
             throw new IllegalArgumentException("API declarations must be interfaces.");
         }
@@ -321,7 +326,7 @@ public final class Utils {
         }
     }
 
-    static Type getParameterUpperBound(int index, ParameterizedType type) {
+    static Type getParameterUpperBound(int index, @NonNull ParameterizedType type) {
         Type[] types = type.getActualTypeArguments();
         if (index < 0 || index >= types.length) {
             throw new IllegalArgumentException(
@@ -370,11 +375,12 @@ public final class Utils {
     }
 
     private static final class ParameterizedTypeImpl implements ParameterizedType {
+        @Nullable
         private final Type ownerType;
         private final Type rawType;
         private final Type[] typeArguments;
 
-        public ParameterizedTypeImpl(Type ownerType, Type rawType, Type... typeArguments) {
+        public ParameterizedTypeImpl(@Nullable Type ownerType, Type rawType, @NonNull Type... typeArguments) {
             // Require an owner type if the raw type needs it.
             if (rawType instanceof Class<?>
                     && (ownerType == null) != (((Class<?>) rawType).getEnclosingClass() == null)) {
@@ -401,6 +407,7 @@ public final class Utils {
             return rawType;
         }
 
+        @Nullable
         @Override
         public Type getOwnerType() {
             return ownerType;
@@ -452,6 +459,7 @@ public final class Utils {
             return componentType.hashCode();
         }
 
+        @NonNull
         @Override
         public String toString() {
             return typeToString(componentType) + "[]";
@@ -465,9 +473,10 @@ public final class Utils {
      */
     private static final class WildcardTypeImpl implements WildcardType {
         private final Type upperBound;
+        @Nullable
         private final Type lowerBound;
 
-        public WildcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) {
+        public WildcardTypeImpl(@NonNull Type[] upperBounds, @NonNull Type[] lowerBounds) {
             if (lowerBounds.length > 1) throw new IllegalArgumentException();
             if (upperBounds.length != 1) throw new IllegalArgumentException();
 
@@ -485,11 +494,13 @@ public final class Utils {
             }
         }
 
+        @NonNull
         @Override
         public Type[] getUpperBounds() {
             return new Type[]{upperBound};
         }
 
+        @Nullable
         @Override
         public Type[] getLowerBounds() {
             return lowerBound != null ? new Type[]{lowerBound} : EMPTY_TYPE_ARRAY;
@@ -506,6 +517,7 @@ public final class Utils {
             return (lowerBound != null ? 31 + lowerBound.hashCode() : 1) ^ (31 + upperBound.hashCode());
         }
 
+        @NonNull
         @Override
         public String toString() {
             if (lowerBound != null) return "? super " + typeToString(lowerBound);

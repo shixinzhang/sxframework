@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.manager.asynctask;
 
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -139,5 +140,6 @@ public abstract class ExecuteTask implements Runnable, Serializable {
      *
      * @return
      */
+    @NonNull
     public abstract ExecuteTask doTask();
 }

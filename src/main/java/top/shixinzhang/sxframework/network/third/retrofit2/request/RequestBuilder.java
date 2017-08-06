@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 
 import okhttp3.FormBody;
@@ -35,9 +38,11 @@ final class RequestBuilder {
   private final String method;
 
   private final HttpUrl baseUrl;
+  @Nullable
   private String relativeUrl;
   private HttpUrl.Builder urlBuilder;
 
+  @NonNull
   private final Request.Builder requestBuilder;
   private MediaType contentType;
 
@@ -46,8 +51,8 @@ final class RequestBuilder {
   private FormBody.Builder formBuilder;
   private RequestBody body;
 
-  RequestBuilder(String method, HttpUrl baseUrl, String relativeUrl, Headers headers,
-      MediaType contentType, boolean hasBody, boolean isFormEncoded, boolean isMultipart) {
+  RequestBuilder(String method, HttpUrl baseUrl, String relativeUrl, @Nullable Headers headers,
+                 MediaType contentType, boolean hasBody, boolean isFormEncoded, boolean isMultipart) {
     this.method = method;
     this.baseUrl = baseUrl;
     this.relativeUrl = relativeUrl;
@@ -69,7 +74,7 @@ final class RequestBuilder {
     }
   }
 
-  void setRelativeUrl(Object relativeUrl) {
+  void setRelativeUrl(@Nullable Object relativeUrl) {
     if (relativeUrl == null) throw new NullPointerException("@Url parameter is null.");
     this.relativeUrl = relativeUrl.toString();
   }
@@ -86,7 +91,7 @@ final class RequestBuilder {
     }
   }
 
-  void addPathParam(String name, String value, boolean encoded) {
+  void addPathParam(String name, @NonNull String value, boolean encoded) {
     if (relativeUrl == null) {
       // The relative URL is cleared when the first query parameter is set.
       throw new AssertionError();
@@ -94,7 +99,8 @@ final class RequestBuilder {
     relativeUrl = relativeUrl.replace("{" + name + "}", canonicalizeForPath(value, encoded));
   }
 
-  private static String canonicalizeForPath(String input, boolean alreadyEncoded) {
+  @NonNull
+  private static String canonicalizeForPath(@NonNull String input, boolean alreadyEncoded) {
     int codePoint;
     for (int i = 0, limit = input.length(); i < limit; i += Character.charCount(codePoint)) {
       codePoint = input.codePointAt(i);
@@ -113,8 +119,8 @@ final class RequestBuilder {
     return input;
   }
 
-  private static void canonicalizeForPath(Buffer out, String input, int pos, int limit,
-      boolean alreadyEncoded) {
+  private static void canonicalizeForPath(@NonNull Buffer out, @NonNull String input, int pos, int limit,
+                                          boolean alreadyEncoded) {
     Buffer utf8Buffer = null; // Lazily allocated.
     int codePoint;
     for (int i = pos; i < limit; i += Character.charCount(codePoint)) {
@@ -143,7 +149,7 @@ final class RequestBuilder {
     }
   }
 
-  void addQueryParam(String name, String value, boolean encoded) {
+  void addQueryParam(@NonNull String name, String value, boolean encoded) {
     if (relativeUrl != null) {
       // Do a one-time combination of the built relative URL and the base URL.
       urlBuilder = baseUrl.newBuilder(relativeUrl);
@@ -161,7 +167,7 @@ final class RequestBuilder {
     }
   }
 
-  void addFormField(String name, String value, boolean encoded) {
+  void addFormField(@NonNull String name, @NonNull String value, boolean encoded) {
     if (encoded) {
       formBuilder.addEncoded(name, value);
     } else {
@@ -169,11 +175,11 @@ final class RequestBuilder {
     }
   }
 
-  void addPart(Headers headers, RequestBody body) {
+  void addPart(Headers headers, @NonNull RequestBody body) {
     multipartBuilder.addPart(headers, body);
   }
 
-  void addPart(MultipartBody.Part part) {
+  void addPart(@NonNull MultipartBody.Part part) {
     multipartBuilder.addPart(part);
   }
 

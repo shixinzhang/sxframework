@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -41,6 +44,7 @@ final class OkHttpCall<T> implements Call<T> {
         this.args = args;
     }
 
+    @NonNull
     @SuppressWarnings("CloneDoesntCallSuperClone")
     // We are a final type & this saves clearing state.
     @Override
@@ -73,7 +77,7 @@ final class OkHttpCall<T> implements Call<T> {
     }
 
     @Override
-    public void enqueue(final Callback<T> callback) {
+    public void enqueue(@Nullable final Callback<T> callback) {
         if (callback == null) throw new NullPointerException("callback == null");
 
         okhttp3.Call call;
@@ -105,7 +109,7 @@ final class OkHttpCall<T> implements Call<T> {
 
         call.enqueue(new okhttp3.Callback() {
             @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse)
+            public void onResponse(okhttp3.Call call, @NonNull okhttp3.Response rawResponse)
                     throws IOException {
                 Response<T> response;
                 try {
@@ -149,6 +153,7 @@ final class OkHttpCall<T> implements Call<T> {
         return executed;
     }
 
+    @Nullable
     @Override
     public Response<T> execute() throws IOException {
         okhttp3.Call call;
@@ -169,7 +174,7 @@ final class OkHttpCall<T> implements Call<T> {
             if (call == null) {
                 try {
                     call = rawCall = createRawCall();
-                } catch (IOException | RuntimeException e) {
+                } catch (@NonNull IOException | RuntimeException e) {
                     creationFailure = e;
                     throw e;
                 }
@@ -192,7 +197,8 @@ final class OkHttpCall<T> implements Call<T> {
         return call;
     }
 
-    Response<T> parseResponse(okhttp3.Response rawResponse) throws IOException {
+    @Nullable
+    Response<T> parseResponse(@NonNull okhttp3.Response rawResponse) throws IOException {
         ResponseBody rawBody = rawResponse.body();
 
         // Remove the body's source (the only stateful object) so we can pass the response along.
@@ -263,6 +269,7 @@ final class OkHttpCall<T> implements Call<T> {
             return contentLength;
         }
 
+        @NonNull
         @Override
         public BufferedSource source() {
             throw new IllegalStateException("Cannot read raw response body of a converted body.");

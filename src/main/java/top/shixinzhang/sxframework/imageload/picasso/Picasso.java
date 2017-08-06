@@ -23,6 +23,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -108,9 +110,10 @@ public class Picasso {
     }
 
     static final String TAG = "Picasso";
+    @Nullable
     static final Handler HANDLER = new Handler(Looper.getMainLooper()) {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case HUNTER_BATCH_COMPLETE: {
                     @SuppressWarnings("unchecked") List<BitmapHunter> batch = (List<BitmapHunter>) msg.obj;
@@ -147,19 +150,25 @@ public class Picasso {
         }
     };
 
+    @Nullable
     static volatile Picasso singleton = null;
 
     private final Listener listener;
     private final RequestTransformer requestTransformer;
+    @NonNull
     private final CleanupThread cleanupThread;
     private final List<RequestHandler> requestHandlers;
 
     final Context context;
+    @NonNull
     final Dispatcher dispatcher;
     final Cache cache;
     final Stats stats;
+    @NonNull
     final Map<Object, Action> targetToAction;
+    @NonNull
     final Map<ImageView, DeferredRequestCreator> targetToDeferredRequestCreator;
+    @NonNull
     final ReferenceQueue<Object> referenceQueue;
     final Bitmap.Config defaultBitmapConfig;
 
@@ -168,8 +177,8 @@ public class Picasso {
 
     boolean shutdown;
 
-    Picasso(Context context, Dispatcher dispatcher, Cache cache, Listener listener,
-            RequestTransformer requestTransformer, List<RequestHandler> extraRequestHandlers, Stats stats,
+    Picasso(Context context, @NonNull Dispatcher dispatcher, Cache cache, Listener listener,
+            RequestTransformer requestTransformer, @Nullable List<RequestHandler> extraRequestHandlers, Stats stats,
             Bitmap.Config defaultBitmapConfig, boolean indicatorsEnabled, boolean loggingEnabled) {
         this.context = context;
         this.dispatcher = dispatcher;
@@ -280,6 +289,7 @@ public class Picasso {
      * @see #load(String)
      * @see #load(int)
      */
+    @NonNull
     public RequestCreator load(Uri uri) {
         return new RequestCreator(this, uri, 0);
     }
@@ -300,7 +310,8 @@ public class Picasso {
      * @see #load(File)
      * @see #load(int)
      */
-    public RequestCreator load(String path) {
+    @NonNull
+    public RequestCreator load(@Nullable String path) {
         if (path == null) {
             return new RequestCreator(this, null, 0);
         }
@@ -323,7 +334,8 @@ public class Picasso {
      * @see #load(String)
      * @see #load(int)
      */
-    public RequestCreator load(File file) {
+    @NonNull
+    public RequestCreator load(@Nullable File file) {
         if (file == null) {
             return new RequestCreator(this, null, 0);
         }
@@ -337,6 +349,7 @@ public class Picasso {
      * @see #load(String)
      * @see #load(File)
      */
+    @Nullable
     public RequestCreator load(int resourceId) {
         if (resourceId == 0) {
             throw new IllegalArgumentException("Resource ID must not be zero.");
@@ -350,7 +363,7 @@ public class Picasso {
      * @see #invalidate(String)
      * @see #invalidate(File)
      */
-    public void invalidate(Uri uri) {
+    public void invalidate(@Nullable Uri uri) {
         if (uri == null) {
             throw new IllegalArgumentException("uri == null");
         }
@@ -364,7 +377,7 @@ public class Picasso {
      * @see #invalidate(Uri)
      * @see #invalidate(File)
      */
-    public void invalidate(String path) {
+    public void invalidate(@Nullable String path) {
         if (path == null) {
             throw new IllegalArgumentException("path == null");
         }
@@ -377,7 +390,7 @@ public class Picasso {
      * @see #invalidate(Uri)
      * @see #invalidate(String)
      */
-    public void invalidate(File file) {
+    public void invalidate(@Nullable File file) {
         if (file == null) {
             throw new IllegalArgumentException("file == null");
         }
@@ -449,6 +462,7 @@ public class Picasso {
      * <b>NOTE:</b> The snapshot may not always be completely up-to-date if requests are still in
      * progress.
      */
+    @NonNull
     @SuppressWarnings("UnusedDeclaration")
     public StatsSnapshot getSnapshot() {
         return stats.createSnapshot();
@@ -494,7 +508,7 @@ public class Picasso {
         targetToDeferredRequestCreator.put(view, request);
     }
 
-    void enqueueAndSubmit(Action action) {
+    void enqueueAndSubmit(@NonNull Action action) {
         Object target = action.getTarget();
         if (target != null && targetToAction.get(target) != action) {
             // This will also check we are on the main thread.
@@ -508,6 +522,7 @@ public class Picasso {
         dispatcher.dispatchSubmit(action);
     }
 
+    @Nullable
     Bitmap quickMemoryCacheCheck(String key) {
         Bitmap cached = cache.get(key);
         if (cached != null) {
@@ -518,7 +533,7 @@ public class Picasso {
         return cached;
     }
 
-    void complete(BitmapHunter hunter) {
+    void complete(@NonNull BitmapHunter hunter) {
         Action single = hunter.getAction();
         List<Action> joined = hunter.getActions();
 
@@ -551,7 +566,7 @@ public class Picasso {
         }
     }
 
-    void resumeAction(Action action) {
+    void resumeAction(@NonNull Action action) {
         Bitmap bitmap = null;
         if (shouldReadFromMemoryCache(action.memoryPolicy)) {
             bitmap = quickMemoryCacheCheck(action.getKey());
@@ -572,7 +587,7 @@ public class Picasso {
         }
     }
 
-    private void deliverAction(Bitmap result, LoadedFrom from, Action action) {
+    private void deliverAction(@Nullable Bitmap result, @Nullable LoadedFrom from, @NonNull Action action) {
         if (action.isCancelled()) {
             return;
         }
@@ -652,7 +667,7 @@ public class Picasso {
 //          }
                 } catch (InterruptedException e) {
                     break;
-                } catch (final Exception e) {
+                } catch (@NonNull final Exception e) {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -687,6 +702,7 @@ public class Picasso {
      * {@link Picasso} instance. You can either use this directly or by setting it as the global
      * instance with {@link #setSingletonInstance}.
      */
+    @Nullable
     public static Picasso with(Context context) {
         if (singleton == null) {
             synchronized (Picasso.class) {
@@ -718,12 +734,18 @@ public class Picasso {
     @SuppressWarnings("UnusedDeclaration") // Public API.
     public static class Builder {
         private final Context context;
+        @Nullable
         private Downloader downloader;
+        @Nullable
         private ExecutorService service;
+        @Nullable
         private Cache cache;
+        @Nullable
         private Listener listener;
+        @Nullable
         private RequestTransformer transformer;
         private List<RequestHandler> requestHandlers;
+        @Nullable
         private Bitmap.Config defaultBitmapConfig;
 
         private boolean indicatorsEnabled;
@@ -732,7 +754,7 @@ public class Picasso {
         /**
          * Start building a new {@link Picasso} instance.
          */
-        public Builder(Context context) {
+        public Builder(@Nullable Context context) {
             if (context == null) {
                 throw new IllegalArgumentException("Context must not be null.");
             }
@@ -743,7 +765,8 @@ public class Picasso {
          * Specify the default {@link Bitmap.Config} used when decoding images. This can be overridden
          * on a per-request basis using {@link RequestCreator#config(Bitmap.Config) config(..)}.
          */
-        public Builder defaultBitmapConfig(Bitmap.Config bitmapConfig) {
+        @NonNull
+        public Builder defaultBitmapConfig(@Nullable Bitmap.Config bitmapConfig) {
             if (bitmapConfig == null) {
                 throw new IllegalArgumentException("Bitmap config must not be null.");
             }
@@ -754,7 +777,8 @@ public class Picasso {
         /**
          * Specify the {@link Downloader} that will be used for downloading images.
          */
-        public Builder downloader(Downloader downloader) {
+        @NonNull
+        public Builder downloader(@Nullable Downloader downloader) {
             if (downloader == null) {
                 throw new IllegalArgumentException("Downloader must not be null.");
             }
@@ -770,7 +794,8 @@ public class Picasso {
          * <p>
          * Note: Calling {@link Picasso#shutdown() shutdown()} will not shutdown supplied executors.
          */
-        public Builder executor(ExecutorService executorService) {
+        @NonNull
+        public Builder executor(@Nullable ExecutorService executorService) {
             if (executorService == null) {
                 throw new IllegalArgumentException("Executor service must not be null.");
             }
@@ -784,7 +809,8 @@ public class Picasso {
         /**
          * Specify the memory cache used for the most recent images.
          */
-        public Builder memoryCache(Cache memoryCache) {
+        @NonNull
+        public Builder memoryCache(@Nullable Cache memoryCache) {
             if (memoryCache == null) {
                 throw new IllegalArgumentException("Memory cache must not be null.");
             }
@@ -798,7 +824,8 @@ public class Picasso {
         /**
          * Specify a listener for interesting events.
          */
-        public Builder listener(Listener listener) {
+        @NonNull
+        public Builder listener(@Nullable Listener listener) {
             if (listener == null) {
                 throw new IllegalArgumentException("Listener must not be null.");
             }
@@ -815,7 +842,8 @@ public class Picasso {
          * <b>NOTE:</b> This is a beta feature. The API is subject to change in a backwards incompatible
          * way at any time.
          */
-        public Builder requestTransformer(RequestTransformer transformer) {
+        @NonNull
+        public Builder requestTransformer(@Nullable RequestTransformer transformer) {
             if (transformer == null) {
                 throw new IllegalArgumentException("Transformer must not be null.");
             }
@@ -829,7 +857,8 @@ public class Picasso {
         /**
          * Register a {@link RequestHandler}.
          */
-        public Builder addRequestHandler(RequestHandler requestHandler) {
+        @NonNull
+        public Builder addRequestHandler(@Nullable RequestHandler requestHandler) {
             if (requestHandler == null) {
                 throw new IllegalArgumentException("RequestHandler must not be null.");
             }
@@ -847,6 +876,7 @@ public class Picasso {
          * @deprecated Use {@link #indicatorsEnabled(boolean)} instead.
          * Whether debugging is enabled or not.
          */
+        @NonNull
         @Deprecated
         public Builder debugging(boolean debugging) {
             return indicatorsEnabled(debugging);
@@ -855,6 +885,7 @@ public class Picasso {
         /**
          * Toggle whether to display debug indicators on images.
          */
+        @NonNull
         public Builder indicatorsEnabled(boolean enabled) {
             this.indicatorsEnabled = enabled;
             return this;
@@ -866,6 +897,7 @@ public class Picasso {
          * <b>WARNING:</b> Enabling this will result in excessive object allocation. This should be only
          * be used for debugging purposes. Do NOT pass {@code BuildConfig.DEBUG}.
          */
+        @NonNull
         public Builder loggingEnabled(boolean enabled) {
             this.loggingEnabled = enabled;
             return this;
@@ -874,6 +906,7 @@ public class Picasso {
         /**
          * Create the {@link Picasso} instance.
          */
+        @NonNull
         public Picasso build() {
             Context context = this.context;
 

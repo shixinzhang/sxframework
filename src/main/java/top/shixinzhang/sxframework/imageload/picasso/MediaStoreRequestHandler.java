@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 
@@ -46,13 +48,14 @@ class MediaStoreRequestHandler extends ContentStreamRequestHandler {
     super(context);
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     final Uri uri = data.uri;
     return (SCHEME_CONTENT.equals(uri.getScheme())
             && MediaStore.AUTHORITY.equals(uri.getAuthority()));
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @Nullable
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     ContentResolver contentResolver = context.getContentResolver();
     int exifOrientation = getExifOrientation(contentResolver, request.uri);
 
@@ -93,6 +96,7 @@ class MediaStoreRequestHandler extends ContentStreamRequestHandler {
     return new Result(null, getInputStream(request), DISK, exifOrientation);
   }
 
+  @NonNull
   static PicassoKind getPicassoKind(int targetWidth, int targetHeight) {
     if (targetWidth <= MICRO.width && targetHeight <= MICRO.height) {
       return MICRO;
@@ -102,7 +106,7 @@ class MediaStoreRequestHandler extends ContentStreamRequestHandler {
     return FULL;
   }
 
-  static int getExifOrientation(ContentResolver contentResolver, Uri uri) {
+  static int getExifOrientation(@NonNull ContentResolver contentResolver, @NonNull Uri uri) {
     Cursor cursor = null;
     try {
       cursor = contentResolver.query(uri, CONTENT_ORIENTATION, null, null, null);

@@ -16,6 +16,8 @@
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus.meta;
 
 
+import android.support.annotation.NonNull;
+
 import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.SubscriberMethod;
 
 /**
@@ -30,6 +32,7 @@ public class SimpleSubscriberInfo extends AbstractSubscriberInfo {
         this.methodInfos = methodInfos;
     }
 
+    @NonNull
     @Override
     public synchronized SubscriberMethod[] getSubscriberMethods() {
         int length = methodInfos.length;

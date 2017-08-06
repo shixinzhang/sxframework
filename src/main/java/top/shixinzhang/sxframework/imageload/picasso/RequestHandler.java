@@ -18,6 +18,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,8 +53,11 @@ public abstract class RequestHandler {
    * @see #load(Request, int)
    */
   public static final class Result {
+    @Nullable
     private final Picasso.LoadedFrom loadedFrom;
+    @Nullable
     private final Bitmap bitmap;
+    @Nullable
     private final InputStream stream;
     private final int exifOrientation;
 
@@ -64,7 +69,7 @@ public abstract class RequestHandler {
       this(null, checkNotNull(stream, "stream == null"), loadedFrom, 0);
     }
 
-    Result(Bitmap bitmap, InputStream stream, Picasso.LoadedFrom loadedFrom, int exifOrientation) {
+    Result(@Nullable Bitmap bitmap, @Nullable InputStream stream, Picasso.LoadedFrom loadedFrom, int exifOrientation) {
       if (!(bitmap != null ^ stream != null)) {
         throw new AssertionError();
       }
@@ -75,11 +80,13 @@ public abstract class RequestHandler {
     }
 
     /** The loaded {@link Bitmap}. Mutually exclusive with {@link #getStream()}. */
+    @Nullable
     public Bitmap getBitmap() {
       return bitmap;
     }
 
     /** A stream of image data. Mutually exclusive with {@link #getBitmap()}. */
+    @Nullable
     public InputStream getStream() {
       return stream;
     }
@@ -88,6 +95,7 @@ public abstract class RequestHandler {
      * Returns the resulting {@link Picasso.LoadedFrom} generated from a
      * {@link #load(Request, int)} call.
      */
+    @Nullable
     public Picasso.LoadedFrom getLoadedFrom() {
       return loadedFrom;
     }
@@ -130,7 +138,8 @@ public abstract class RequestHandler {
    * Lazily create {@link BitmapFactory.Options} based in given
    * {@link Request}, only instantiating them if needed.
    */
-  static BitmapFactory.Options createBitmapOptions(Request data) {
+  @Nullable
+  static BitmapFactory.Options createBitmapOptions(@NonNull Request data) {
     final boolean justBounds = data.hasSize();
     final boolean hasConfig = data.config != null;
     BitmapFactory.Options options = null;
@@ -144,18 +153,18 @@ public abstract class RequestHandler {
     return options;
   }
 
-  static boolean requiresInSampleSize(BitmapFactory.Options options) {
+  static boolean requiresInSampleSize(@Nullable BitmapFactory.Options options) {
     return options != null && options.inJustDecodeBounds;
   }
 
-  static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
-      Request request) {
+  static void calculateInSampleSize(int reqWidth, int reqHeight, @NonNull BitmapFactory.Options options,
+                                    @NonNull Request request) {
     calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options,
         request);
   }
 
   static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
-      BitmapFactory.Options options, Request request) {
+                                    @NonNull BitmapFactory.Options options, @NonNull Request request) {
     int sampleSize = 1;
     if (height > reqHeight || width > reqWidth) {
       final int heightRatio;

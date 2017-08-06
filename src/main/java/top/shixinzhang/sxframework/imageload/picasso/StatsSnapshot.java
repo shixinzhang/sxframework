@@ -15,6 +15,7 @@
  */
 package top.shixinzhang.sxframework.imageload.picasso;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.PrintWriter;
@@ -68,7 +69,7 @@ public class StatsSnapshot {
   }
 
   /** Prints out this {@link StatsSnapshot} with the the provided {@link PrintWriter}. */
-  public void dump(PrintWriter writer) {
+  public void dump(@NonNull PrintWriter writer) {
     writer.println("===============BEGIN PICASSO STATS ===============");
     writer.println("Memory Cache Stats");
     writer.print("  Max Cache Size: ");
@@ -105,6 +106,7 @@ public class StatsSnapshot {
     writer.flush();
   }
 
+  @NonNull
   @Override public String toString() {
     return "StatsSnapshot{"
         + "maxSize="

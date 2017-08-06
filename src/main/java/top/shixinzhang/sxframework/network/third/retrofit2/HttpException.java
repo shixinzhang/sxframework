@@ -15,22 +15,26 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2;
 
+import android.support.annotation.NonNull;
+
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 
 import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.checkNotNull;
 
 /** Exception for an unexpected, non-2xx HTTP response. */
 public class HttpException extends RuntimeException {
-  private static String getMessage(Response<?> response) {
+  @NonNull
+  private static String getMessage(@NonNull Response<?> response) {
     checkNotNull(response, "response == null");
     return "HTTP " + response.code() + " " + response.message();
   }
 
   private final int code;
   private final String message;
+  @NonNull
   private final transient Response<?> response;
 
-  public HttpException(Response<?> response) {
+  public HttpException(@NonNull Response<?> response) {
     super(getMessage(response));
     this.code = response.code();
     this.message = response.message();
@@ -50,6 +54,7 @@ public class HttpException extends RuntimeException {
   /**
    * The full HTTP response. This may be null if the exception was serialized.
    */
+  @NonNull
   public Response<?> response() {
     return response;
   }

@@ -17,6 +17,8 @@ package top.shixinzhang.sxframework.imageload.picasso;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,15 +34,17 @@ class ContentStreamRequestHandler extends RequestHandler {
     this.context = context;
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     return SCHEME_CONTENT.equals(data.uri.getScheme());
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @Nullable
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     return new Result(getInputStream(request), DISK);
   }
 
-  InputStream getInputStream(Request request) throws FileNotFoundException {
+  @Nullable
+  InputStream getInputStream(@NonNull Request request) throws FileNotFoundException {
     ContentResolver contentResolver = context.getContentResolver();
     return contentResolver.openInputStream(request.uri);
   }

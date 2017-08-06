@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.imageload.picasso;
 import android.content.Context;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 
@@ -35,15 +36,16 @@ class FileRequestHandler extends ContentStreamRequestHandler {
     super(context);
   }
 
-  @Override public boolean canHandleRequest(Request data) {
+  @Override public boolean canHandleRequest(@NonNull Request data) {
     return SCHEME_FILE.equals(data.uri.getScheme());
   }
 
-  @Override public Result load(Request request, int networkPolicy) throws IOException {
+  @NonNull
+  @Override public Result load(@NonNull Request request, int networkPolicy) throws IOException {
     return new Result(null, getInputStream(request), DISK, getFileExifRotation(request.uri));
   }
 
-  static int getFileExifRotation(Uri uri) throws IOException {
+  static int getFileExifRotation(@NonNull Uri uri) throws IOException {
     ExifInterface exifInterface = new ExifInterface(uri.getPath());
     int orientation = exifInterface.getAttributeInt(TAG_ORIENTATION, ORIENTATION_NORMAL);
     switch (orientation) {

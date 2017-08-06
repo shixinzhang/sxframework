@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +27,11 @@ import java.util.List;
 final class PendingPost {
     private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();  //对象复用池
 
+    @Nullable
     Object event;
+    @Nullable
     Subscription subscription;
+    @Nullable
     PendingPost next;
 
     private PendingPost(Object event, Subscription subscription) {
@@ -47,7 +53,7 @@ final class PendingPost {
         return new PendingPost(event, subscription);
     }
 
-    static void releasePendingPost(PendingPost pendingPost) {
+    static void releasePendingPost(@NonNull PendingPost pendingPost) {
         pendingPost.event = null;
         pendingPost.subscription = null;
         pendingPost.next = null;

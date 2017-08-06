@@ -15,6 +15,9 @@
  */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -41,6 +44,7 @@ final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
                 return responseType;
             }
 
+            @NonNull
             @Override
             public Call<Object> adapt(Call<Object> call) {
                 return new ExecutorCallbackCall<>(callbackExecutor, call);
@@ -58,7 +62,7 @@ final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
         }
 
         @Override
-        public void enqueue(final Callback<T> callback) {
+        public void enqueue(@Nullable final Callback<T> callback) {
             if (callback == null) throw new NullPointerException("callback == null");
 
             delegate.enqueue(new Callback<T>() {
@@ -109,6 +113,7 @@ final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
             return delegate.isCanceled();
         }
 
+        @NonNull
         @SuppressWarnings("CloneDoesntCallSuperClone") // Performing deep clone.
         @Override
         public Call<T> clone() {

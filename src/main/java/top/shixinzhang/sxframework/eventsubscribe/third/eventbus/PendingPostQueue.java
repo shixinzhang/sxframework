@@ -16,14 +16,18 @@
 
 package top.shixinzhang.sxframework.eventsubscribe.third.eventbus;
 
+import android.support.annotation.Nullable;
+
 /**
  * 待发送消息的双向链表，生产者-消费者模型, 出队 wait - 入队 nofityAll
  */
 final class PendingPostQueue {
+    @Nullable
     private PendingPost head;
+    @Nullable
     private PendingPost tail;
 
-    synchronized void enqueue(PendingPost pendingPost) {
+    synchronized void enqueue(@Nullable PendingPost pendingPost) {
         if (pendingPost == null) {
             throw new NullPointerException("null cannot be enqueued");
         }
@@ -38,6 +42,7 @@ final class PendingPostQueue {
         notifyAll();
     }
 
+    @Nullable
     synchronized PendingPost poll() {
         PendingPost pendingPost = head;
         if (head != null) {
@@ -49,6 +54,7 @@ final class PendingPostQueue {
         return pendingPost;
     }
 
+    @Nullable
     synchronized PendingPost poll(int maxMillisToWait) throws InterruptedException {
         if (head == null) {
             wait(maxMillisToWait);  //最大等待超时

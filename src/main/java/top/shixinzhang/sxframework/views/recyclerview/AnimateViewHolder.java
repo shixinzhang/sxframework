@@ -16,13 +16,14 @@
 
 package top.shixinzhang.sxframework.views.recyclerview;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 public abstract class AnimateViewHolder extends RecyclerView.ViewHolder {
 
-    public AnimateViewHolder(View itemView) {
+    public AnimateViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 

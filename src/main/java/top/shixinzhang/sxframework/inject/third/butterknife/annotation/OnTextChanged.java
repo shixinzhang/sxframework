@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework.inject.third.butterknife.annotation;
 
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.text.TextWatcher;
 import android.view.View;
 
@@ -60,10 +61,10 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 )
 public @interface OnTextChanged {
   /** View IDs to which the method will be bound. */
-  @IdRes int[] value() default { View.NO_ID };
+  @NonNull @IdRes int[] value() default { View.NO_ID };
 
   /** Listener callback to which the method will be bound. */
-  Callback callback() default Callback.TEXT_CHANGED;
+  @NonNull Callback callback() default Callback.TEXT_CHANGED;
 
   /** {@link TextWatcher} callback methods. */
   enum Callback {

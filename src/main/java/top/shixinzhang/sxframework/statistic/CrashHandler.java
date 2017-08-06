@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -55,8 +57,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public boolean openUpload = true;
     private static final String DEFAULT_LOG_DIR = "log";
     private static final String FILE_NAME_SUFFIX = ".log";
+    @Nullable
     private static volatile CrashHandler sInstance = null;
     private Thread.UncaughtExceptionHandler mDefaultCrashHandler;
+    @NonNull
     private static volatile List<OnCrashCallback> mCrashCallbackList = new LinkedList<>();
 
     /**
@@ -66,19 +70,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         void onCrash(Throwable throwable);
     }
 
-    public static void registerCallback(OnCrashCallback callback) {
+    public static void registerCallback(@Nullable OnCrashCallback callback) {
         if (callback != null) {
             mCrashCallbackList.add(callback);
         }
     }
 
-    public static void unRegisterCallback(OnCrashCallback callback) {
+    public static void unRegisterCallback(@Nullable OnCrashCallback callback) {
         if (callback != null) {
             mCrashCallbackList.remove(callback);
         }
     }
 
-    private CrashHandler(Context cxt) {
+    private CrashHandler(@NonNull Context cxt) {
         this.mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
 
         Thread.setDefaultUncaughtExceptionHandler(this);
@@ -86,7 +90,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         this.mContext = cxt.getApplicationContext();
     }
 
-    public static synchronized CrashHandler init(Context cxt) {
+    @Nullable
+    public static synchronized CrashHandler init(@NonNull Context cxt) {
         if (sInstance == null) {
             sInstance = new CrashHandler(cxt);
         }
@@ -95,7 +100,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
 
     @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
+    public void uncaughtException(Thread thread, @NonNull Throwable ex) {
 
         ex.printStackTrace();
 
@@ -134,7 +139,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
 
-    private void saveToSDCard(Throwable ex) throws Exception {
+    private void saveToSDCard(@NonNull Throwable ex) throws Exception {
         //#1
         Writer writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
@@ -167,7 +172,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         pw.close();
     }
 
-    private void dumpPhoneInfo(PrintWriter pw)
+    private void dumpPhoneInfo(@NonNull PrintWriter pw)
             throws PackageManager.NameNotFoundException {
         PackageInfo pi = ApplicationUtils.getCurrentAppInfo(mContext);
         if (pi == null) {
