@@ -85,4 +85,5 @@ hs_err_pid*
 .DS_Store
 /captures
 **/*.iml
+sxframework.iml
 repository

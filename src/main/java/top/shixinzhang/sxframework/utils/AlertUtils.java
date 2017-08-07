@@ -17,6 +17,8 @@
 package top.shixinzhang.sxframework.utils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -33,6 +35,8 @@ import android.widget.Toast;
  */
 
 public class AlertUtils {
+    private static Toast mToast;
+
     public static void toastShort(Context context, String msg) {
         toast(context, msg, Toast.LENGTH_SHORT);
     }
@@ -55,8 +59,18 @@ public class AlertUtils {
         if (TextUtils.isEmpty(msg)) {
             return;
         }
-//        duration = duration == Toast.LENGTH_SHORT ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
+//        duration = duration == Toast.LENGTH_SHORT ? Toast.LENGTH_SHORT : Toasts.LENGTH_LONG;
 
-        Toast.makeText(context, msg, duration).show();
+        try {
+            if (mToast == null) {
+                mToast = Toast.makeText(context, msg, duration);
+            } else {
+                mToast.setText(msg);
+            }
+            mToast.show();
+        } catch (Exception subThreadUpdateViewException) {  //子线程更新 UI
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toast.makeText(context, msg, duration).show());
+        }
     }
 }
