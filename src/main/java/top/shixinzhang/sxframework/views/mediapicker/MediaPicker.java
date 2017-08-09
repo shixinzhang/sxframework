@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.utils.mediapicker;
+package top.shixinzhang.sxframework.views.mediapicker;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

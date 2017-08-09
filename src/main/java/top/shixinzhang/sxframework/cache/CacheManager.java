@@ -35,8 +35,8 @@ import okhttp3.internal.Util;
 import okio.Buffer;
 import top.shixinzhang.sxframework.cache.imp.DiskCache;
 import top.shixinzhang.sxframework.cache.imp.MemoryCache;
-import top.shixinzhang.sxframework.utils.GsonUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.GsonUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * The Creator is Leone90 && E-mail: butleone@163.com

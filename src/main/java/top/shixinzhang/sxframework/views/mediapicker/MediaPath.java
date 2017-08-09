@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.utils.mediapicker;
+package top.shixinzhang.sxframework.views.mediapicker;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
