@@ -40,7 +40,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import top.shixinzhang.sxframework.R;
-import top.shixinzhang.sxframework.utils.CheckUtils;
+import top.shixinzhang.utils.CheckUtils;
 
 
 public class MediaPicker implements View.OnClickListener {

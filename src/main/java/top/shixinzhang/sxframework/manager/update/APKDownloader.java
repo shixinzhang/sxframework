@@ -24,12 +24,10 @@ import android.text.TextUtils;
 
 import top.shixinzhang.sxframework.network.download.DownloadStatus;
 import top.shixinzhang.sxframework.network.download.IAPKDownloader;
-import top.shixinzhang.sxframework.network.download.IDownloadListener;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
-import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
-import top.shixinzhang.sxframework.utils.ApplicationUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
-import top.shixinzhang.sxframework.utils.SpUtils;
+import top.shixinzhang.utils.ApplicationUtils;
+import top.shixinzhang.utils.LogUtils;
+import top.shixinzhang.utils.SpUtils;
 
 /**
  * <br> Description: 测试的 apk 下载

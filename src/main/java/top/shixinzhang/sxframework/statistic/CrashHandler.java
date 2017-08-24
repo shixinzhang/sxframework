@@ -34,10 +34,10 @@ import java.util.List;
 
 import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.BuildConfig;
-import top.shixinzhang.sxframework.utils.AlertUtils;
-import top.shixinzhang.sxframework.utils.ApplicationUtils;
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.FileUtils;
+import top.shixinzhang.utils.AlertUtils;
+import top.shixinzhang.utils.ApplicationUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.FileUtils;
 
 /**
  * <br> Description:

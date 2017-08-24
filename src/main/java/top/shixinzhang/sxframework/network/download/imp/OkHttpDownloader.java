@@ -34,8 +34,8 @@ import rx.schedulers.Schedulers;
 import top.shixinzhang.sxframework.network.download.IDownloadListener;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
-import top.shixinzhang.sxframework.utils.FileUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.FileUtils;
+import top.shixinzhang.utils.LogUtils;
 
 //import io.reactivex.Observable;
 //import io.reactivex.ObservableEmitter;

@@ -32,8 +32,8 @@ import top.shixinzhang.sxframework.network.download.IDownloadListener;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.OkHttpDownloader;
 import top.shixinzhang.sxframework.network.download.model.DownloadInfoBean;
-import top.shixinzhang.sxframework.utils.LogUtils;
-import top.shixinzhang.sxframework.utils.NetworkUtils;
+import top.shixinzhang.utils.LogUtils;
+import top.shixinzhang.utils.NetworkUtils;
 
 /**
  * Description:

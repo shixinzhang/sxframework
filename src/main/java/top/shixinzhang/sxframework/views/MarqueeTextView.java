@@ -18,7 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import top.shixinzhang.sxframework.R;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:

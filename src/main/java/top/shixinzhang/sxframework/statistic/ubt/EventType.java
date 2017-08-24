@@ -18,14 +18,22 @@ package top.shixinzhang.sxframework.statistic.ubt;
 
 /**
  * Description:
- * <br> 用户行为采集
+ * <br> 事件类型
  * <p>
- * <br> Created by shixinzhang on 17/5/12.
+ * <br> Created by shixinzhang on 17/8/24.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
- * <a  href="https://about.me/shixinzhang">About me</a>
+ * <br> https://about.me/shixinzhang
  */
 
-public class UserBehaviorTrace {
+public class EventType {
+    public static final String APP_START = "app_start"; //app 开始
+    public static final String APP_ESC = "app_esc"; //退出 app
+    public static final String APP_FRONT = "app_front"; //app 到了前台
+    public static final String APP_BACKGROUND = "app_background";   //app 到了后台
+
+    public static final String CLICK = "click"; //点击
+    public static final String LONG_CLICK = "long_click";   //长按
+    public static final String SWIPE = "swipe"; //滑动
 }

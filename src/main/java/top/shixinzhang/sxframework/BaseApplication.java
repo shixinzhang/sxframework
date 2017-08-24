@@ -17,6 +17,7 @@
 package top.shixinzhang.sxframework;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 
@@ -33,9 +34,17 @@ import android.support.multidex.MultiDexApplication;
 
 public class BaseApplication extends MultiDexApplication {
 
+
+    private static Context mApplication;
+
+    public static Context getAppContext() {
+        return mApplication;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mApplication = this;
 
         addLifecycleListener();
     }

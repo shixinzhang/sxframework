@@ -36,7 +36,7 @@ import top.shixinzhang.sxframework.imageload.picasso.LruCache;
 import top.shixinzhang.sxframework.imageload.picasso.OkHttpDownloader;
 import top.shixinzhang.sxframework.imageload.picasso.Picasso;
 import top.shixinzhang.sxframework.imageload.picasso.Target;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * The creator is Leone && E-mail: butleone@163.com

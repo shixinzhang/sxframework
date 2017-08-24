@@ -24,11 +24,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import java.io.IOException;
-
-import top.shixinzhang.sxframework.utils.ApplicationUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
-import top.shixinzhang.sxframework.utils.SpUtils;
+import top.shixinzhang.utils.ApplicationUtils;
+import top.shixinzhang.utils.LogUtils;
+import top.shixinzhang.utils.SpUtils;
 
 /**
  * Description:
