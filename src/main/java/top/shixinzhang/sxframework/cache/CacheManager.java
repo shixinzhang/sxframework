@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
-import okhttp3.CacheControl;
-import okhttp3.Request;
-import okhttp3.internal.Util;
+import top.shixinzhang.sxframework.network.third.okhttp3.CacheControl;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.internal.Util;
 import okio.Buffer;
 import top.shixinzhang.sxframework.cache.imp.DiskCache;
 import top.shixinzhang.sxframework.cache.imp.MemoryCache;

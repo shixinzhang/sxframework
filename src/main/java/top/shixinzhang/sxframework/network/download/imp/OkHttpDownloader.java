@@ -23,9 +23,9 @@ import android.support.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
