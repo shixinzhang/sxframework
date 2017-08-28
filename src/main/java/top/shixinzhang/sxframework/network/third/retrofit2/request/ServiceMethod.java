@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import android.support.annotation.NonNull;
@@ -30,13 +15,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.HttpUrl;
+import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
+import top.shixinzhang.sxframework.network.third.okhttp3.MultipartBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.*;
 
@@ -49,14 +33,14 @@ final class ServiceMethod<T> {
     static final Pattern PARAM_URL_REGEX = Pattern.compile("\\{(" + PARAM + ")\\}");
     static final Pattern PARAM_NAME_REGEX = Pattern.compile(PARAM);
 
-    final okhttp3.Call.Factory callFactory;
+    final top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory;
     final CallAdapter<?, ?> callAdapter;
 
     private final HttpUrl baseUrl;
     private final Converter<ResponseBody, T> responseConverter;
     private final String httpMethod;
     private final String relativeUrl;
-    private final Headers headers;
+    private final top.shixinzhang.sxframework.network.third.okhttp3.Headers headers;
     private final MediaType contentType;
     private final boolean hasBody;
     private final boolean isFormEncoded;
@@ -133,7 +117,7 @@ final class ServiceMethod<T> {
         boolean isFormEncoded;
         boolean isMultipart;
         String relativeUrl;
-        Headers headers;
+        top.shixinzhang.sxframework.network.third.okhttp3.Headers headers;
         MediaType contentType;
         Set<String> relativeUrlParamNames;
         ParameterHandler<?>[] parameterHandlers;
@@ -152,7 +136,7 @@ final class ServiceMethod<T> {
         public ServiceMethod build() {
             callAdapter = createCallAdapter();
             responseType = callAdapter.responseType();
-            if (responseType == Response.class || responseType == okhttp3.Response.class) {
+            if (responseType == Response.class || responseType == Response.class) {
                 throw methodError("'"
                         + Utils.getRawType(responseType).getName()
                         + "' is not a valid response body type. Did you mean ResponseBody?");
@@ -296,8 +280,8 @@ final class ServiceMethod<T> {
             this.relativeUrlParamNames = parsePathParameters(value);
         }
 
-        private Headers parseHeaders(@NonNull String[] headers) {
-            Headers.Builder builder = new Headers.Builder();
+        private top.shixinzhang.sxframework.network.third.okhttp3.Headers parseHeaders(@NonNull String[] headers) {
+            top.shixinzhang.sxframework.network.third.okhttp3.Headers.Builder builder = new top.shixinzhang.sxframework.network.third.okhttp3.Headers.Builder();
             for (String header : headers) {
                 int colon = header.indexOf(':');
                 if (colon == -1 || colon == 0 || colon == header.length() - 1) {
@@ -370,7 +354,7 @@ final class ServiceMethod<T> {
                     return new ParameterHandler.RelativeUrl();
                 } else {
                     throw parameterError(p,
-                            "@Url must be okhttp3.HttpUrl, String, java.net.URI, or android.net.Uri type.");
+                            "@Url must be HttpUrl, String, java.net.URI, or android.net.Uri type.");
                 }
 
             } else if (annotation instanceof Path) {
@@ -587,8 +571,8 @@ final class ServiceMethod<T> {
                                 "@Part annotation must supply a name or use MultipartBody.Part parameter type.");
                     }
                 } else {
-                    Headers headers =
-                            Headers.of("Content-Disposition", "form-data; name=\"" + partName + "\"",
+                    top.shixinzhang.sxframework.network.third.okhttp3.Headers headers =
+                            top.shixinzhang.sxframework.network.third.okhttp3.Headers.of("Content-Disposition", "form-data; name=\"" + partName + "\"",
                                     "Content-Transfer-Encoding", part.encoding());
 
                     if (Iterable.class.isAssignableFrom(rawParameterType)) {

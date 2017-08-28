@@ -25,8 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 /**

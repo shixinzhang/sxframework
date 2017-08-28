@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import android.support.annotation.NonNull;
@@ -20,13 +5,13 @@ import android.support.annotation.Nullable;
 
 import java.io.IOException;
 
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
+import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 
 final class OkHttpCall<T> implements Call<T> {
     private final ServiceMethod<T> serviceMethod;
@@ -35,7 +20,7 @@ final class OkHttpCall<T> implements Call<T> {
     private volatile boolean canceled;
 
     // All guarded by this.
-    private okhttp3.Call rawCall;
+    private top.shixinzhang.sxframework.network.third.okhttp3.Call rawCall;
     private Throwable creationFailure; // Either a RuntimeException or IOException.
     private boolean executed;
 
@@ -54,7 +39,7 @@ final class OkHttpCall<T> implements Call<T> {
 
     @Override
     public synchronized Request request() {
-        okhttp3.Call call = rawCall;
+        top.shixinzhang.sxframework.network.third.okhttp3.Call call = rawCall;
         if (call != null) {
             return call.request();
         }
@@ -80,7 +65,7 @@ final class OkHttpCall<T> implements Call<T> {
     public void enqueue(@Nullable final Callback<T> callback) {
         if (callback == null) throw new NullPointerException("callback == null");
 
-        okhttp3.Call call;
+        top.shixinzhang.sxframework.network.third.okhttp3.Call call;
         Throwable failure;
 
         synchronized (this) {
@@ -107,10 +92,9 @@ final class OkHttpCall<T> implements Call<T> {
             call.cancel();
         }
 
-        call.enqueue(new okhttp3.Callback() {
+        call.enqueue(new top.shixinzhang.sxframework.network.third.okhttp3.Callback() {
             @Override
-            public void onResponse(okhttp3.Call call, @NonNull okhttp3.Response rawResponse)
-                    throws IOException {
+            public void onResponse(top.shixinzhang.sxframework.network.third.okhttp3.Call call, @NonNull top.shixinzhang.sxframework.network.third.okhttp3.Response rawResponse) {
                 Response<T> response;
                 try {
                     response = parseResponse(rawResponse);
@@ -122,7 +106,7 @@ final class OkHttpCall<T> implements Call<T> {
             }
 
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
+            public void onFailure(top.shixinzhang.sxframework.network.third.okhttp3.Call call, IOException e) {
                 try {
                     callback.onFailure(OkHttpCall.this, e);
                 } catch (Throwable t) {
@@ -156,7 +140,7 @@ final class OkHttpCall<T> implements Call<T> {
     @Nullable
     @Override
     public Response<T> execute() throws IOException {
-        okhttp3.Call call;
+        top.shixinzhang.sxframework.network.third.okhttp3.Call call;
 
         synchronized (this) {
             if (executed) throw new IllegalStateException("Already executed.");
@@ -188,9 +172,9 @@ final class OkHttpCall<T> implements Call<T> {
         return parseResponse(call.execute());
     }
 
-    private okhttp3.Call createRawCall() throws IOException {
+    private top.shixinzhang.sxframework.network.third.okhttp3.Call createRawCall() throws IOException {
         Request request = serviceMethod.toRequest(args);
-        okhttp3.Call call = serviceMethod.callFactory.newCall(request);
+        top.shixinzhang.sxframework.network.third.okhttp3.Call call = serviceMethod.callFactory.newCall(request);
         if (call == null) {
             throw new NullPointerException("Call.Factory returned null.");
         }
@@ -198,7 +182,7 @@ final class OkHttpCall<T> implements Call<T> {
     }
 
     @Nullable
-    Response<T> parseResponse(@NonNull okhttp3.Response rawResponse) throws IOException {
+    Response<T> parseResponse(@NonNull top.shixinzhang.sxframework.network.third.okhttp3.Response rawResponse) throws IOException {
         ResponseBody rawBody = rawResponse.body();
 
         // Remove the body's source (the only stateful object) so we can pass the response along.
@@ -236,7 +220,7 @@ final class OkHttpCall<T> implements Call<T> {
     public void cancel() {
         canceled = true;
 
-        okhttp3.Call call;
+        top.shixinzhang.sxframework.network.third.okhttp3.Call call;
         synchronized (this) {
             call = rawCall;
         }

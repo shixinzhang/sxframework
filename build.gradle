@@ -73,10 +73,11 @@ dependencies {
     compile "com.github.shixinzhang:android-utils:$rootProject.utilsVersion"
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okio:okio:1.13.0'
+//    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 //    compile 'com.hwangjr.rxbus:rxbus:1.0.5'
 //    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.okhttp:okhttp:2.3.0'
+//    compile 'com.squareup.okhttp:okhttp:2.3.0'
 }
 
 //def siteUrl = 'https://github.com/shixinzhang/android-framework'

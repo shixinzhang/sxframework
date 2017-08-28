@@ -57,6 +57,6 @@ public interface Call {
     boolean isCanceled();
 
     interface Factory {
-        top.shixinzhang.sxframework.network.third.okhttp3.Call newCall(Request request);
+        Call newCall(Request request);
     }
 }

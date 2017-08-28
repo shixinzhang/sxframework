@@ -22,7 +22,7 @@ import com.google.gson.TypeAdapter;
 import java.io.IOException;
 import java.io.Reader;
 
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     private final TypeAdapter<T> adapter;

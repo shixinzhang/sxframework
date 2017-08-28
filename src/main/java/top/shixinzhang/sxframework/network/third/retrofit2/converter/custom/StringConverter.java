@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 
 /**

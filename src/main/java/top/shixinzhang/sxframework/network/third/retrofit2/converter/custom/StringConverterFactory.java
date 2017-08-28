@@ -21,7 +21,7 @@ import android.support.annotation.NonNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 

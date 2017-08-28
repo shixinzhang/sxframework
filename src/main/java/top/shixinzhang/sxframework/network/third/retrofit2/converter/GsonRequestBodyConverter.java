@@ -24,8 +24,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
 import okio.Buffer;
 
 final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {

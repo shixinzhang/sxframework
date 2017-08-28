@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package top.shixinzhang.sxframework.network.third.retrofit2.request;
 
 import android.support.annotation.NonNull;
@@ -29,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.HttpUrl;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.BuiltInConverters;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.*;
@@ -62,14 +47,14 @@ import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.
 public final class Retrofit {
     private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
 
-    private final okhttp3.Call.Factory callFactory;     //指定请求执行器，默认为 OkHttpClient
+    private final top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory;     //指定请求执行器，默认为 OkHttpClient
     private final HttpUrl baseUrl;
     private final List<Converter.Factory> converterFactories;
     private final List<CallAdapter.Factory> adapterFactories;
     private final Executor callbackExecutor;        //指定 Call.enqueue 异步时的 Executor
     private final boolean validateEagerly;      //是否在调用 create() 时检测接口是否正确，适合开发、测试时使用
 
-    Retrofit(okhttp3.Call.Factory callFactory, HttpUrl baseUrl,
+    Retrofit(top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory, HttpUrl baseUrl,
              @NonNull List<Converter.Factory> converterFactories, @NonNull List<CallAdapter.Factory> adapterFactories,
              Executor callbackExecutor, boolean validateEagerly) {
         this.callFactory = callFactory;
@@ -177,10 +162,10 @@ public final class Retrofit {
     }
 
     /**
-     * The factory used to create {@linkplain okhttp3.Call OkHttp calls} for sending a HTTP requests.
+     * The factory used to create {@linkplain top.shixinzhang.sxframework.network.third.okhttp3.Call OkHttp calls} for sending a HTTP requests.
      * Typically an instance of {@link OkHttpClient}.
      */
-    public okhttp3.Call.Factory callFactory() {
+    public top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory() {
         return callFactory;
     }
 
@@ -398,7 +383,7 @@ public final class Retrofit {
     public static final class Builder {
         private Platform platform;
         @Nullable
-        private okhttp3.Call.Factory callFactory;
+        private top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory;
         private HttpUrl baseUrl;
         @NonNull
         private List<Converter.Factory> converterFactories = new ArrayList<>();
@@ -439,7 +424,7 @@ public final class Retrofit {
          * Note: Calling {@link #client} automatically sets this value.
          */
         @NonNull
-        public Builder callFactory(okhttp3.Call.Factory factory) {
+        public Builder callFactory(top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory factory) {
             this.callFactory = checkNotNull(factory, "factory == null");
             return this;
         }
@@ -522,7 +507,7 @@ public final class Retrofit {
 
         /**
          * addConverterFactory 是有先后顺序的，如果有多个 ConverterFactory 都支持同一种类型，只有第一个会被使用
-         *
+         * <p>
          * Add converter factory for serialization and deserialization of objects.
          */
         @NonNull
@@ -576,7 +561,7 @@ public final class Retrofit {
                 throw new IllegalStateException("Base URL required.");
             }
 
-            okhttp3.Call.Factory callFactory = this.callFactory;
+            top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory = this.callFactory;
             if (callFactory == null) {
                 callFactory = new OkHttpClient();
             }

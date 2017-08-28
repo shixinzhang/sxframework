@@ -17,7 +17,7 @@ public enum TlsVersion {
         this.javaName = javaName;
     }
 
-    public static top.shixinzhang.sxframework.network.third.okhttp3.TlsVersion forJavaName(String javaName) {
+    public static TlsVersion forJavaName(String javaName) {
         switch (javaName) {
             case "TLSv1.2":
                 return TLS_1_2;
