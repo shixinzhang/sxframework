@@ -29,6 +29,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Executor;
 
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.DefaultCallAdapterFactory;
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.ExecutorCallAdapterFactory;
 
 
 class Platform {

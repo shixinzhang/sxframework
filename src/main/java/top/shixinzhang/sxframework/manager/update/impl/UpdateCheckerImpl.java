@@ -27,7 +27,7 @@ import top.shixinzhang.sxframework.manager.update.IUpdateListener;
 import top.shixinzhang.sxframework.manager.update.api.UpdateApi;
 import top.shixinzhang.sxframework.manager.update.model.UpdateRequestBean;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
-import top.shixinzhang.sxframework.network.third.retrofit2.adapter.RxJava2CallAdapterFactory;
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.rxjava.RxJava2CallAdapterFactory;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.GsonConverterFactory;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 

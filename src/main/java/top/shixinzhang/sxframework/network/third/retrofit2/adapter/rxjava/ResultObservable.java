@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
+package top.shixinzhang.sxframework.network.third.retrofit2.adapter.rxjava;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -21,6 +21,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.CompositeException;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.plugins.RxJavaPlugins;
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.Result;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 
 final class ResultObservable<T> extends Observable<Result<T>> {

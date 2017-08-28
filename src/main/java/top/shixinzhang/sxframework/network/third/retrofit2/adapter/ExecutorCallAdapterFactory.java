@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2.request;
+package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,11 +24,17 @@ import java.lang.reflect.Type;
 import java.util.concurrent.Executor;
 
 import okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.CallAdapter;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Callback;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Utils;
 
-final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
+public final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
     final Executor callbackExecutor;
 
-    ExecutorCallAdapterFactory(Executor callbackExecutor) {
+    public ExecutorCallAdapterFactory(Executor callbackExecutor) {
         this.callbackExecutor = callbackExecutor;
     }
 

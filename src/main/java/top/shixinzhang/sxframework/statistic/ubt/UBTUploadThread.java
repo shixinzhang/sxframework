@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.shixinzhang.sxframework.BaseApplication;
-import top.shixinzhang.sxframework.statistic.ubt.model.UBTPageEvent;
+import top.shixinzhang.sxframework.statistic.ubt.model.PageEventAllInfo;
 import top.shixinzhang.utils.FileUtils;
 import top.shixinzhang.utils.GsonUtils;
 import top.shixinzhang.utils.LogUtils;
@@ -51,7 +51,7 @@ import top.shixinzhang.utils.NetworkUtils;
  * <p>
  * <br> https://about.me/shixinzhang
  */
-
+@SuppressWarnings("FieldCanBeLocal")
 public class UBTUploadThread extends Thread {
     private final String TAG = this.getClass().getSimpleName();
     private final int EMPTY_UPLOAD_PAUSE_TIME = 3 * 1000;
@@ -62,7 +62,7 @@ public class UBTUploadThread extends Thread {
     private final String ZIP_FILE_NAME = "/file.zip";
     private final String DATA_FILE_NAME = "/ubt.json";
     private final AtomicBoolean mRunning;
-    private final ConcurrentLinkedQueue<UBTPageEvent> mEventQueue;
+    private final ConcurrentLinkedQueue<PageEventAllInfo> mEventQueue;
 
     private String mLogDirectoryPath;
     private File mZipFile;
@@ -88,7 +88,7 @@ public class UBTUploadThread extends Thread {
      *
      * @param event
      */
-    public synchronized void enqueueEvent(@NonNull UBTPageEvent event) {
+    public synchronized void enqueueEvent(@NonNull PageEventAllInfo event) {
         mEventQueue.add(event);
     }
 
@@ -105,7 +105,7 @@ public class UBTUploadThread extends Thread {
                 SystemClock.sleep(EMPTY_UPLOAD_PAUSE_TIME);
             }
 
-            UBTPageEvent ubtPageEvent = mEventQueue.poll();
+            PageEventAllInfo ubtPageEvent = mEventQueue.poll();
             if (ubtPageEvent == null) {
                 continue;
             }

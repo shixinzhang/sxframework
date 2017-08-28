@@ -18,6 +18,7 @@ package top.shixinzhang.sxframework.statistic.ubt.model;
 
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import top.shixinzhang.utils.GsonUtils;
@@ -34,7 +35,7 @@ public class UBTAction implements Serializable {
     private String action;
     private String name;
     private String timeInMills;
-    private Map<String, Object> params;
+    private List<String> params;
 
     public String getAction() {
         return action;
@@ -61,12 +62,13 @@ public class UBTAction implements Serializable {
         return this;
     }
 
-    public Map<String, Object> getParams() {
+    public List<String> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, Object> params) {
+    public UBTAction setParams(final List<String> params) {
         this.params = params;
+        return this;
     }
 
     @Override

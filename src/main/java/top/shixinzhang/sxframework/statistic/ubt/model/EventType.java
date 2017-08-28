@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.statistic.ubt;
+package top.shixinzhang.sxframework.statistic.ubt.model;
 
 /**
  * Description:
@@ -28,11 +28,17 @@ package top.shixinzhang.sxframework.statistic.ubt;
  */
 
 public class EventType {
+    //app
     public static final String APP_START = "app_start"; //app 开始
     public static final String APP_ESC = "app_esc"; //退出 app
     public static final String APP_FRONT = "app_front"; //app 到了前台
     public static final String APP_BACKGROUND = "app_background";   //app 到了后台
 
+    //页面
+    public static final String PAGE_SHOW = "page_show"; //进入页面
+    public static final String PAGE_ESC = "page_esc";   //离开页面
+
+    //点击事件
     public static final String CLICK = "click"; //点击
     public static final String LONG_CLICK = "long_click";   //长按
     public static final String SWIPE = "swipe"; //滑动

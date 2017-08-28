@@ -32,8 +32,19 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class BaseActivity extends AppCompatActivity {
+    private String mPageEventParam;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public String getPageEventParam() {
+        return mPageEventParam;
+    }
+
+    public BaseActivity setPageEventParam(final String pageEventParam) {
+        mPageEventParam = pageEventParam;
+        return this;
     }
 }

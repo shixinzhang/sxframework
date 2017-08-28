@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2.request;
+package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.CallAdapter;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Utils;
 
 
 /**
@@ -24,8 +29,8 @@ import java.lang.reflect.Type;
  * callbacks. For synchronous calls this is the application thread making the request; for
  * asynchronous calls this is a thread provided by OkHttp's dispatcher.
  */
-final class DefaultCallAdapterFactory extends CallAdapter.Factory {
-    static final CallAdapter.Factory INSTANCE = new DefaultCallAdapterFactory();
+public final class DefaultCallAdapterFactory extends CallAdapter.Factory {
+    public static final CallAdapter.Factory INSTANCE = new DefaultCallAdapterFactory();
 
     @Override
     public CallAdapter<?, ?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {

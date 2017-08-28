@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2.adapter;
+package top.shixinzhang.sxframework.network.third.retrofit2.adapter.rxjava;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +31,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import top.shixinzhang.sxframework.network.third.retrofit2.HttpException;
+import top.shixinzhang.sxframework.network.third.retrofit2.adapter.Result;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.CallAdapter;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;

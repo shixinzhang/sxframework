@@ -16,6 +16,8 @@
 
 package top.shixinzhang.sxframework.statistic.ubt;
 
+import android.support.annotation.NonNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -39,7 +41,8 @@ import java.lang.annotation.Target;
 public @interface PageEventInfo {
     String pageId() default "";
 
-    String pageName() default "";
+    @NonNull
+    String pageName() default "must set";       //如果使用注解，名称必须设置
 
     String param() default "";
 }

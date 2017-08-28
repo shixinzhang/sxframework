@@ -21,6 +21,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 
+import top.shixinzhang.sxframework.statistic.ubt.EventRecorder;
+
 /**
  * Description:
  * <br>
@@ -47,6 +49,8 @@ public class BaseApplication extends MultiDexApplication {
         mApplication = this;
 
         addLifecycleListener();
+        EventRecorder.init(this);
+        EventRecorder.setIsAutoRecord(true);
     }
 
 

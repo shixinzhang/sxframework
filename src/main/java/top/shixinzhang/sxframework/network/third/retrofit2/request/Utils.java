@@ -41,7 +41,7 @@ public final class Utils {
     }
 
     @Nullable
-    static Class<?> getRawType(@Nullable Type type) {
+    public static Class<?> getRawType(@Nullable Type type) {
         if (type == null) throw new NullPointerException("type == null");
 
         if (type instanceof Class<?>) {
@@ -298,7 +298,7 @@ public final class Utils {
     /**
      * Returns true if {@code annotations} contains an instance of {@code cls}.
      */
-    static boolean isAnnotationPresent(@NonNull Annotation[] annotations,
+    public static boolean isAnnotationPresent(@NonNull Annotation[] annotations,
                                        @NonNull Class<? extends Annotation> cls) {
         for (Annotation annotation : annotations) {
             if (cls.isInstance(annotation)) {
@@ -308,7 +308,7 @@ public final class Utils {
         return false;
     }
 
-    static ResponseBody buffer(@NonNull final ResponseBody body) throws IOException {
+    public static ResponseBody buffer(@NonNull final ResponseBody body) throws IOException {
         Buffer buffer = new Buffer();
         body.source().readAll(buffer);
         return ResponseBody.create(body.contentType(), body.contentLength(), buffer);

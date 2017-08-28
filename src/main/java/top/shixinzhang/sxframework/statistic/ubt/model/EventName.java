@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.statistic.ubt;
+package top.shixinzhang.sxframework.statistic.ubt.model;
 
 /**
  * Description:

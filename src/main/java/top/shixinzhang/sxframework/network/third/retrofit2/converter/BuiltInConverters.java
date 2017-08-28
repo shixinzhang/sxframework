@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.shixinzhang.sxframework.network.third.retrofit2.request;
+package top.shixinzhang.sxframework.network.third.retrofit2.converter;
 
 import android.support.annotation.NonNull;
 
@@ -25,8 +25,10 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.Streaming;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Utils;
 
-final class BuiltInConverters extends Converter.Factory {
+public final class BuiltInConverters extends Converter.Factory {
   @Override
   public Converter<ResponseBody, ?> responseBodyConverter(Type type, @NonNull Annotation[] annotations,
                                                           Retrofit retrofit) {
