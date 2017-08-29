@@ -37,6 +37,8 @@ import static top.shixinzhang.sxframework.network.third.okhttp3.internal.http.St
 import static top.shixinzhang.sxframework.network.third.okhttp3.internal.http.StatusLine.HTTP_TEMP_REDIRECT;
 
 /**
+ * 恢复重定向的错误？？
+ * <p>
  * This interceptor recovers from failures and follows redirects as necessary. It may throw an
  * {@link IOException} if the call was canceled.
  */

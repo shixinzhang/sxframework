@@ -15,6 +15,8 @@ import top.shixinzhang.sxframework.network.third.okhttp3.RealCall.AsyncCall;
 import top.shixinzhang.sxframework.network.third.okhttp3.internal.Util;
 
 /**
+ * 调度异步任务的执行
+ * <p>
  * Policy on when async requests are executed.
  * <p>
  * <p>Each dispatcher uses an {@link ExecutorService} to run calls internally. If you supply your
@@ -117,6 +119,10 @@ public final class Dispatcher {
         this.idleCallback = idleCallback;
     }
 
+    /**
+     * 异步任务入队
+     * @param call
+     */
     synchronized void enqueue(AsyncCall call) {
         if (runningAsyncCalls.size() < maxRequests && runningCallsForHost(call) < maxRequestsPerHost) {
             runningAsyncCalls.add(call);

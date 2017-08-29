@@ -46,6 +46,9 @@ import static java.net.HttpURLConnection.HTTP_PROXY_AUTH;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static top.shixinzhang.sxframework.network.third.okhttp3.internal.Util.closeQuietly;
 
+/***
+ * 最终建立 Socket 连接的类，一个连接可以被多个流共享
+ */
 public final class RealConnection extends FramedConnection.Listener implements Connection {
     private final Route route;
 
@@ -66,7 +69,10 @@ public final class RealConnection extends FramedConnection.Listener implements C
     public BufferedSource source;
     public BufferedSink sink;
     public int allocationLimit;
-    public final List<Reference<StreamAllocation>> allocations = new ArrayList<>();
+
+    //流分配连接的记录，即 socket 被引用的次数
+    //为 0 时表示没有连接，回收
+    public final List<Reference<StreamAllocation>> allocations = new ArrayList<>(); //共享这个链接的流
     public boolean noNewStreams;
     public long idleAtNanos = Long.MAX_VALUE;
 
@@ -125,6 +131,8 @@ public final class RealConnection extends FramedConnection.Listener implements C
     }
 
     /**
+     * 这里建立物理 Socket 连接
+     * <p>
      * Does all the work to build an HTTPS connection over a proxy tunnel. The catch here is that a
      * proxy server can issue an auth challenge and then close the connection.
      */

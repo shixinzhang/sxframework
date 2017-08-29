@@ -10,6 +10,8 @@ import top.shixinzhang.sxframework.network.third.okhttp3.internal.http.HttpStrea
 import top.shixinzhang.sxframework.network.third.okhttp3.internal.http.RealInterceptorChain;
 
 /**
+ * 开启连接
+ * <p>
  * Opens a connection to the target server and proceeds to the next interceptor.
  */
 public final class ConnectInterceptor implements Interceptor {

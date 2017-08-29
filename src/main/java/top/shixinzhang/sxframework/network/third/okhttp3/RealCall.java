@@ -88,6 +88,9 @@ final class RealCall implements Call {
         return retryAndFollowUpInterceptor.streamAllocation();
     }
 
+    /**
+     * RealCall 的内部类，异步任务执行，访问外部类的信息和方法
+     */
     final class AsyncCall extends NamedRunnable {
         private final Callback responseCallback;
 
@@ -108,24 +111,27 @@ final class RealCall implements Call {
             return RealCall.this;
         }
 
+        /**
+         * 异步任务执行
+         */
         @Override
         protected void execute() {
             boolean signalledCallback = false;
             try {
-                Response response = getResponseWithInterceptorChain();
+                Response response = getResponseWithInterceptorChain();  //拿到结果
                 if (retryAndFollowUpInterceptor.isCanceled()) {
                     signalledCallback = true;
                     responseCallback.onFailure(RealCall.this, new IOException("Canceled"));
                 } else {
                     signalledCallback = true;
-                    responseCallback.onResponse(RealCall.this, response);
+                    responseCallback.onResponse(RealCall.this, response);   //回调结果
                 }
             } catch (IOException e) {
                 if (signalledCallback) {
                     // Do not signal the callback twice!
                     Platform.get().log(INFO, "Callback failure for " + toLoggableString(), e);
                 } else {
-                    responseCallback.onFailure(RealCall.this, e);
+                    responseCallback.onFailure(RealCall.this, e);   //回调结果
                 }
             } finally {
                 client.dispatcher().finished(this);
@@ -146,22 +152,29 @@ final class RealCall implements Call {
         return originalRequest.url().resolve("/...");
     }
 
+    /**
+     * 拦截链开始执行！
+     *
+     * @return
+     * @throws IOException
+     */
     private Response getResponseWithInterceptorChain() throws IOException {
         // Build a full stack of interceptors.
+        //添加内置的拦截器
         List<Interceptor> interceptors = new ArrayList<>();
-        interceptors.addAll(client.interceptors());
+        interceptors.addAll(client.interceptors());     //我们添加的拦截器，在开头
         interceptors.add(retryAndFollowUpInterceptor);
         interceptors.add(new BridgeInterceptor(client.cookieJar()));
-        interceptors.add(new CacheInterceptor(client.internalCache()));
-        interceptors.add(new ConnectInterceptor(client));
+        interceptors.add(new CacheInterceptor(client.internalCache()));     //去缓存找下有没有
+        interceptors.add(new ConnectInterceptor(client));       //需要建立连接了
         if (!retryAndFollowUpInterceptor.isForWebSocket()) {
             interceptors.addAll(client.networkInterceptors());
         }
         interceptors.add(new CallServerInterceptor(
-                retryAndFollowUpInterceptor.isForWebSocket()));
+                retryAndFollowUpInterceptor.isForWebSocket())); //最后一个拦截，负责发出请求！
 
         Interceptor.Chain chain = new RealInterceptorChain(
-                interceptors, null, null, null, 0, originalRequest);
+                interceptors, null, null, null, 0, originalRequest);    //最终的执行者
         return chain.proceed(originalRequest);
     }
 }

@@ -19,6 +19,8 @@ import top.shixinzhang.sxframework.network.third.okhttp3.internal.http.HttpStrea
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
+ * 连接复用的判断依据
+ *
  * This class coordinates the relationship between three entities:
  * <p>
  * <ul>

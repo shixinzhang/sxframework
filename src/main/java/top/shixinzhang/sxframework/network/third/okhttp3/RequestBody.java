@@ -14,7 +14,7 @@ public abstract class RequestBody {
     /**
      * Returns the Content-Type header for this body.
      */
-    public abstract top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType();
+    public abstract MediaType contentType();
 
     /**
      * Returns the number of bytes that will be written to {@code out} in a call to {@link #writeTo},
@@ -33,13 +33,13 @@ public abstract class RequestBody {
      * Returns a new request body that transmits {@code content}. If {@code contentType} is non-null
      * and lacks a charset, this will use UTF-8.
      */
-    public static top.shixinzhang.sxframework.network.third.okhttp3.RequestBody create(top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType, String content) {
+    public static RequestBody create(MediaType contentType, String content) {
         Charset charset = Util.UTF_8;
         if (contentType != null) {
             charset = contentType.charset();
             if (charset == null) {
                 charset = Util.UTF_8;
-                contentType = top.shixinzhang.sxframework.network.third.okhttp3.MediaType.parse(contentType + "; charset=utf-8");
+                contentType = MediaType.parse(contentType + "; charset=utf-8");
             }
         }
         byte[] bytes = content.getBytes(charset);
@@ -49,10 +49,10 @@ public abstract class RequestBody {
     /**
      * Returns a new request body that transmits {@code content}.
      */
-    public static top.shixinzhang.sxframework.network.third.okhttp3.RequestBody create(final top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType, final ByteString content) {
-        return new top.shixinzhang.sxframework.network.third.okhttp3.RequestBody() {
+    public static RequestBody create(final MediaType contentType, final ByteString content) {
+        return new RequestBody() {
             @Override
-            public top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType() {
+            public MediaType contentType() {
                 return contentType;
             }
 
@@ -71,20 +71,20 @@ public abstract class RequestBody {
     /**
      * Returns a new request body that transmits {@code content}.
      */
-    public static top.shixinzhang.sxframework.network.third.okhttp3.RequestBody create(final top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType, final byte[] content) {
+    public static RequestBody create(final MediaType contentType, final byte[] content) {
         return create(contentType, content, 0, content.length);
     }
 
     /**
      * Returns a new request body that transmits {@code content}.
      */
-    public static top.shixinzhang.sxframework.network.third.okhttp3.RequestBody create(final top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType, final byte[] content,
-                                                                                       final int offset, final int byteCount) {
+    public static RequestBody create(final MediaType contentType, final byte[] content,
+                                     final int offset, final int byteCount) {
         if (content == null) throw new NullPointerException("content == null");
         Util.checkOffsetAndCount(content.length, offset, byteCount);
-        return new top.shixinzhang.sxframework.network.third.okhttp3.RequestBody() {
+        return new RequestBody() {
             @Override
-            public top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType() {
+            public MediaType contentType() {
                 return contentType;
             }
 
@@ -103,10 +103,10 @@ public abstract class RequestBody {
     /**
      * Returns a new request body that transmits the content of {@code file}.
      */
-    public static top.shixinzhang.sxframework.network.third.okhttp3.RequestBody create(final top.shixinzhang.sxframework.network.third.okhttp3.MediaType contentType, final File file) {
+    public static RequestBody create(final MediaType contentType, final File file) {
         if (file == null) throw new NullPointerException("content == null");
 
-        return new top.shixinzhang.sxframework.network.third.okhttp3.RequestBody() {
+        return new RequestBody() {
             @Override
             public MediaType contentType() {
                 return contentType;

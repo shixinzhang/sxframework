@@ -36,6 +36,8 @@ import okio.Sink;
 import okio.Source;
 
 /**
+ * 缓存 HTTP 和 HTTPS 信息，使用 DisLruCache
+ * <p>
  * Caches HTTP and HTTPS responses to the filesystem so they may be reused, saving time and
  * bandwidth.
  * <p>
@@ -126,35 +128,38 @@ public final class Cache implements Closeable, Flushable {
     private static final int ENTRY_BODY = 1;
     private static final int ENTRY_COUNT = 2;
 
+    /**
+     * 异步请求实际的缓存
+     */
     final InternalCache internalCache = new InternalCache() {
         @Override
         public Response get(Request request) throws IOException {
-            return top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.get(request);
+            return Cache.this.get(request);
         }
 
         @Override
         public CacheRequest put(Response response) throws IOException {
-            return top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.put(response);
+            return Cache.this.put(response);
         }
 
         @Override
         public void remove(Request request) throws IOException {
-            top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.remove(request);
+            Cache.this.remove(request);
         }
 
         @Override
         public void update(Response cached, Response network) {
-            top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.update(cached, network);
+            Cache.this.update(cached, network);
         }
 
         @Override
         public void trackConditionalCacheHit() {
-            top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.trackConditionalCacheHit();
+            Cache.this.trackConditionalCacheHit();
         }
 
         @Override
         public void trackResponse(CacheStrategy cacheStrategy) {
-            top.shixinzhang.sxframework.network.third.okhttp3.Cache.this.trackResponse(cacheStrategy);
+            Cache.this.trackResponse(cacheStrategy);
         }
     };
 
@@ -179,8 +184,14 @@ public final class Cache implements Closeable, Flushable {
         return Util.md5Hex(request.url().toString());
     }
 
+    /**
+     * 从 DisLruCache 中取数据，看有没有缓存
+     *
+     * @param request
+     * @return
+     */
     Response get(Request request) {
-        String key = urlToKey(request);
+        String key = urlToKey(request); //MD5 加密求出对应的 key
         DiskLruCache.Snapshot snapshot;
         Entry entry;
         try {
@@ -436,7 +447,7 @@ public final class Cache implements Closeable, Flushable {
             this.body = new ForwardingSink(cacheOut) {
                 @Override
                 public void close() throws IOException {
-                    synchronized (top.shixinzhang.sxframework.network.third.okhttp3.Cache.this) {
+                    synchronized (Cache.this) {
                         if (done) {
                             return;
                         }
@@ -451,7 +462,7 @@ public final class Cache implements Closeable, Flushable {
 
         @Override
         public void abort() {
-            synchronized (top.shixinzhang.sxframework.network.third.okhttp3.Cache.this) {
+            synchronized (Cache.this) {
                 if (done) {
                     return;
                 }
@@ -583,7 +594,7 @@ public final class Cache implements Closeable, Flushable {
                     CipherSuite cipherSuite = CipherSuite.forJavaName(cipherSuiteString);
                     List<Certificate> peerCertificates = readCertificateList(source);
                     List<Certificate> localCertificates = readCertificateList(source);
-                    top.shixinzhang.sxframework.network.third.okhttp3.TlsVersion tlsVersion = !source.exhausted()
+                    TlsVersion tlsVersion = !source.exhausted()
                             ? TlsVersion.forJavaName(source.readUtf8LineStrict())
                             : null;
                     handshake = Handshake.get(tlsVersion, cipherSuite, peerCertificates, localCertificates);
