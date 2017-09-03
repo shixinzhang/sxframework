@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import top.shixinzhang.sxframework.network.third.okhttp3.internal.http.HttpHeaders;
 
 /**
+ * 控制策略
+ * <p>
  * A Cache-Control header with cache directives from a server or client. These directives set policy
  * on what responses can be stored, and which requests can be satisfied by those stored responses.
  * <p>

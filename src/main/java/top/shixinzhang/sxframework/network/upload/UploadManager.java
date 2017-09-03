@@ -23,15 +23,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import top.shixinzhang.sxframework.network.third.okhttp3.Call;
+import top.shixinzhang.sxframework.network.third.okhttp3.Callback;
+import top.shixinzhang.sxframework.network.third.okhttp3.Headers;
+import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
+import top.shixinzhang.sxframework.network.third.okhttp3.MultipartBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
 import top.shixinzhang.utils.LogUtils;
 
 /**

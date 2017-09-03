@@ -77,7 +77,7 @@ dependencies {
 //    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 //    compile 'com.hwangjr.rxbus:rxbus:1.0.5'
 //    compile 'com.squareup.picasso:picasso:2.5.2'
-//    compile 'com.squareup.okhttp:okhttp:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.3.0'
 }
 
 //def siteUrl = 'https://github.com/shixinzhang/android-framework'

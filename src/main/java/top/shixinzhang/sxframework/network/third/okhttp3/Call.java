@@ -3,6 +3,8 @@ package top.shixinzhang.sxframework.network.third.okhttp3;
 import java.io.IOException;
 
 /**
+ * Call 是一个等待执行的请求，可以被取消，只能被执行一次！
+ * <p>
  * A call is a request that has been prepared for execution. A call can be canceled. As this object
  * represents a single request/response pair (stream), it cannot be executed twice.
  */

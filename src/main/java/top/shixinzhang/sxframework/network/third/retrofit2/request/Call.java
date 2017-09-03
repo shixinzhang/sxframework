@@ -6,6 +6,8 @@ import top.shixinzhang.sxframework.network.third.okhttp3.Request;
 
 
 /**
+ * Retrofit 的请求信息，每次 Call 都有自己的请求信息和响应信息，可以被同步或者异步执行
+ *
  * An invocation of a Retrofit method that sends a request to a webserver and returns a response.
  * Each call yields its own HTTP request and response pair. Use {@link #clone} to make multiple
  * calls with the same parameters to the same webserver; this may be used to implement polling or

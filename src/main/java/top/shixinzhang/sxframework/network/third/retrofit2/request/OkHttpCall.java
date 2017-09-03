@@ -13,6 +13,10 @@ import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
 import top.shixinzhang.sxframework.network.third.okhttp3.Request;
 import top.shixinzhang.sxframework.network.third.okhttp3.ResponseBody;
 
+/**
+ * 使用 OkHttp 实现的请求
+ * @param <T>
+ */
 final class OkHttpCall<T> implements Call<T> {
     private final ServiceMethod<T> serviceMethod;
     private final Object[] args;
@@ -92,6 +96,7 @@ final class OkHttpCall<T> implements Call<T> {
             call.cancel();
         }
 
+        //请求入队，异步执行
         call.enqueue(new top.shixinzhang.sxframework.network.third.okhttp3.Callback() {
             @Override
             public void onResponse(top.shixinzhang.sxframework.network.third.okhttp3.Call call, @NonNull top.shixinzhang.sxframework.network.third.okhttp3.Response rawResponse) {
@@ -181,6 +186,12 @@ final class OkHttpCall<T> implements Call<T> {
         return call;
     }
 
+    /**
+     * 解析结果
+     * @param rawResponse
+     * @return
+     * @throws IOException
+     */
     @Nullable
     Response<T> parseResponse(@NonNull top.shixinzhang.sxframework.network.third.okhttp3.Response rawResponse) throws IOException {
         ResponseBody rawBody = rawResponse.body();
@@ -191,7 +202,7 @@ final class OkHttpCall<T> implements Call<T> {
                 .build();
 
         int code = rawResponse.code();
-        if (code < 200 || code >= 300) {
+        if (code < 200 || code >= 300) {    //执行错误
             try {
                 // Buffer the entire body to avoid future I/O.
                 ResponseBody bufferedBody = Utils.buffer(rawBody);
@@ -201,12 +212,13 @@ final class OkHttpCall<T> implements Call<T> {
             }
         }
 
-        if (code == 204 || code == 205) {
+        if (code == 204 || code == 205) {   //请求执行成功，但是没有数据
             return Response.success(null, rawResponse);
         }
 
         ExceptionCatchingRequestBody catchingBody = new ExceptionCatchingRequestBody(rawBody);
         try {
+            //交给上层解析
             T body = serviceMethod.toResponse(catchingBody);
             return Response.success(body, rawResponse);
         } catch (RuntimeException e) {

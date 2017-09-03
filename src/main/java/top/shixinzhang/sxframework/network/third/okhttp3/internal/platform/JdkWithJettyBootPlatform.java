@@ -40,7 +40,7 @@ class JdkWithJettyBootPlatform extends Platform {
         List<String> names = alpnProtocolNames(protocols);
 
         try {
-            Object provider = Proxy.newProxyInstance(okhttp3.internal.platform.Platform.class.getClassLoader(),
+            Object provider = Proxy.newProxyInstance(Platform.class.getClassLoader(),
                     new Class[]{clientProviderClass, serverProviderClass}, new JettyNegoProvider(names));
             putMethod.invoke(null, sslSocket, provider);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -65,7 +65,7 @@ class JdkWithJettyBootPlatform extends Platform {
             JettyNegoProvider provider =
                     (JettyNegoProvider) Proxy.getInvocationHandler(getMethod.invoke(null, socket));
             if (!provider.unsupported && provider.selected == null) {
-                okhttp3.internal.platform.Platform.get().log(INFO, "ALPN callback dropped: SPDY and HTTP/2 are disabled. "
+                Platform.get().log(INFO, "ALPN callback dropped: SPDY and HTTP/2 are disabled. "
                         + "Is alpn-boot on the boot class path?", null);
                 return null;
             }

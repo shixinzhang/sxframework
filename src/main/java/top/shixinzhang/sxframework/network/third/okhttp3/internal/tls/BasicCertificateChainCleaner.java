@@ -11,13 +11,13 @@ import java.util.List;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import okhttp3.internal.tls.TrustRootIndex;
+import top.shixinzhang.sxframework.network.third.okhttp3.internal.tls.TrustRootIndex;
 
 /**
  * A certificate chain cleaner that uses a set of trusted root certificates to build the trusted
  * chain. This class duplicates the clean chain building performed during the TLS handshake. We
  * prefer other mechanisms where they exist, such as with
- * {@code okhttp3.internal.platform.AndroidPlatform.AndroidCertificateChainCleaner}.
+ * {@code top.shixinzhang.sxframework.network.third.okhttp3.internal.platform.AndroidPlatform.AndroidCertificateChainCleaner}.
  * <p>
  * <p>This class includes code from <a href="https://conscrypt.org/">Conscrypt's</a> {@code
  * TrustManagerImpl} and {@code TrustedCertificateIndex}.
@@ -28,7 +28,7 @@ public final class BasicCertificateChainCleaner extends CertificateChainCleaner 
      */
     private static final int MAX_SIGNERS = 9;
 
-    private final okhttp3.internal.tls.TrustRootIndex trustRootIndex;
+    private final top.shixinzhang.sxframework.network.third.okhttp3.internal.tls.TrustRootIndex trustRootIndex;
 
     public BasicCertificateChainCleaner(TrustRootIndex trustRootIndex) {
         this.trustRootIndex = trustRootIndex;

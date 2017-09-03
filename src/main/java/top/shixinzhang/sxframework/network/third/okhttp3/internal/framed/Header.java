@@ -43,8 +43,8 @@ public final class Header {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof okhttp3.internal.framed.Header) {
-            okhttp3.internal.framed.Header that = (okhttp3.internal.framed.Header) other;
+        if (other instanceof Header) {
+            Header that = (Header) other;
             return this.name.equals(that.name)
                     && this.value.equals(that.value);
         }

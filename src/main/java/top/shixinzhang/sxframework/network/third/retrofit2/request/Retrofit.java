@@ -26,6 +26,8 @@ import static java.util.Collections.unmodifiableList;
 import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.checkNotNull;
 
 /**
+ * Retrofit 将注解修饰的 Java 接口方法转换成 HTTP 请求
+ *
  * Retrofit adapts a Java interface to HTTP calls by using annotations on the declared methods to
  * define how requests are made. Create instances using {@linkplain Builder
  * the builder} and pass your interface to {@link #create} to generate an implementation.
@@ -45,9 +47,11 @@ import static top.shixinzhang.sxframework.network.third.retrofit2.request.Utils.
  * @author Jake Wharton (jw@squareup.com)
  */
 public final class Retrofit {
+    //方法和对应的请求映射表
     private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
 
-    private final top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory;     //指定请求执行器，默认为 OkHttpClient
+    //请求执行器，默认为 OkHttpClient
+    private final top.shixinzhang.sxframework.network.third.okhttp3.Call.Factory callFactory;
     private final HttpUrl baseUrl;
     private final List<Converter.Factory> converterFactories;
     private final List<CallAdapter.Factory> adapterFactories;
@@ -119,6 +123,7 @@ public final class Retrofit {
             eagerlyValidateMethods(service);
         }
         return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class<?>[]{service},
+                //实现 InvocationHandler 接口，动态代理创建接口实现
                 new InvocationHandler() {
                     @Nullable
                     private final Platform platform = Platform.get();
@@ -133,8 +138,11 @@ public final class Retrofit {
                         if (platform.isDefaultMethod(method)) {
                             return platform.invokeDefaultMethod(method, service, proxy, args);
                         }
+                        //创建请求信息
                         ServiceMethod serviceMethod = loadServiceMethod(method);
+                        //封装到 OkHttp 的请求信息
                         OkHttpCall okHttpCall = new OkHttpCall<>(serviceMethod, args);
+                        //返回在接口中声明的返回类型，这里的 callAdapter 在创建 ServiceMethod 时就已经根据返回值找到对应的转换器了
                         return serviceMethod.callAdapter.adapt(okHttpCall);
                     }
                 });

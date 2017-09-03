@@ -6,7 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static okhttp3.internal.Util.UTC;
+import static top.shixinzhang.sxframework.network.third.okhttp3.internal.Util.UTC;
+
 
 /**
  * Best-effort parser for HTTP dates.

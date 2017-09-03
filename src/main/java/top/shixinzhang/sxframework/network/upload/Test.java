@@ -19,9 +19,10 @@ package top.shixinzhang.sxframework.network.upload;
 import java.io.File;
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import top.shixinzhang.sxframework.network.third.okhttp3.Call;
+import top.shixinzhang.sxframework.network.third.okhttp3.Callback;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
+
 
 /**
  * <br> Description:

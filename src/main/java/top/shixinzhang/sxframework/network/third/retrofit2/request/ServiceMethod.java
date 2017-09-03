@@ -25,6 +25,8 @@ import top.shixinzhang.sxframework.network.third.retrofit2.converter.Converter;
 import top.shixinzhang.sxframework.network.third.retrofit2.http.*;
 
 /**
+ * 将接口方法转换成 HTTP
+ * <p>
  * Adapts an invocation of an interface method into an HTTP call.
  */
 final class ServiceMethod<T> {
@@ -134,6 +136,7 @@ final class ServiceMethod<T> {
 
         @NonNull
         public ServiceMethod build() {
+            //创建请求适配器
             callAdapter = createCallAdapter();
             responseType = callAdapter.responseType();
             if (responseType == Response.class || responseType == Response.class) {
@@ -141,9 +144,11 @@ final class ServiceMethod<T> {
                         + Utils.getRawType(responseType).getName()
                         + "' is not a valid response body type. Did you mean ResponseBody?");
             }
+            //创建返回转换器
             responseConverter = createResponseConverter();
 
             for (Annotation annotation : methodAnnotations) {
+                //解析方法上的注解
                 parseMethodAnnotation(annotation);
             }
 
@@ -195,7 +200,12 @@ final class ServiceMethod<T> {
             return new ServiceMethod<>(this);
         }
 
+        /**
+         * 创建 CallAdapter
+         * @return
+         */
         private CallAdapter<?, ?> createCallAdapter() {
+            //首先拿到方法的返回值
             Type returnType = method.getGenericReturnType();
             if (Utils.hasUnresolvableType(returnType)) {
                 throw methodError(
@@ -204,6 +214,7 @@ final class ServiceMethod<T> {
             if (returnType == void.class) {
                 throw methodError("Service methods cannot return void.");
             }
+            //然后拿到方法的接口
             Annotation[] annotations = method.getAnnotations();
             try {
                 return retrofit.callAdapter(returnType, annotations);
@@ -212,6 +223,10 @@ final class ServiceMethod<T> {
             }
         }
 
+        /**
+         * 解析方法上的注解类型
+         * @param annotation
+         */
         private void parseMethodAnnotation(Annotation annotation) {
             if (annotation instanceof DELETE) {
                 parseHttpMethodAndPath("DELETE", ((DELETE) annotation).value(), false);

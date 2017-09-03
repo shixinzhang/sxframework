@@ -11,11 +11,13 @@ import top.shixinzhang.sxframework.network.third.okhttp3.Response;
 import top.shixinzhang.sxframework.network.third.okhttp3.internal.connection.StreamAllocation;
 
 /**
+ * 真实的拦截器链，携带了所有拦截器
+ * <p>
  * A concrete interceptor chain that carries the entire interceptor chain: all application
  * interceptors, the OkHttp core, all network interceptors, and finally the network caller.
  */
 public final class RealInterceptorChain implements Interceptor.Chain {
-    private final List<Interceptor> interceptors;
+    private final List<Interceptor> interceptors;   //所有的拦截器
     private final StreamAllocation streamAllocation;
     private final HttpStream httpStream;
     private final Connection connection;
