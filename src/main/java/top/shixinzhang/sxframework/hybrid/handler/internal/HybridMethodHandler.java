@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.sxframework.network;
+package top.shixinzhang.sxframework.hybrid.handler.internal;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * <br> Description:
+ * <br/> Description:
  * <p>
- * <br> Created by shixinzhang on 17/4/24.
+ * <br/> Created by shixinzhang on 16/12/24.
  * <p>
- * <br> Email: shixinzhang2016@gmail.com
+ * <br/> Email: shixinzhang2016@gmail.com
  * <p>
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class Test1 {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface HybridMethodHandler {
+    String path();
 }
